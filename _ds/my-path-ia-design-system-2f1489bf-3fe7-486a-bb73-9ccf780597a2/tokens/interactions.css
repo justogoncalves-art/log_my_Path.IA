@@ -1,0 +1,39 @@
+/* MY PATH.IA — Interaction states
+ * Inline styles can't express :hover/:focus/:active, so component interaction
+ * states live here (shipped in the global closure). Keyed to component classes. */
+
+/* ── Buttons ── */
+.mp-btn:not([disabled]):not([aria-disabled='true']):hover { transform: translateY(-1px); }
+.mp-btn:not([disabled]):not([aria-disabled='true']):active { transform: translateY(0); }
+.mp-btn--primary:not([disabled]):hover,
+.mp-btn--pill:not([disabled]):hover { opacity: 0.90; }
+.mp-btn--primary:not([disabled]):active,
+.mp-btn--pill:not([disabled]):active { opacity: 0.85; }
+.mp-btn--secondary:not([disabled]):hover { background: var(--navy); color: var(--white); }
+.mp-btn--ghost:not([disabled]):hover { background: var(--on-dark-08, rgba(253,253,253,0.08)); }
+.mp-btn--text { transform: none !important; }
+.mp-btn--text:hover { text-decoration: underline; }
+
+/* ── Cards ── */
+.mp-card--standard:hover,
+.mp-card--feature:hover { transform: translateY(-2px); border-color: rgba(6,7,84,0.15); }
+.mp-card--dark:hover { border-color: var(--dark-border-hover); }
+
+/* ── Inputs / Select ── */
+.mp-input:focus,
+.mp-input:focus-visible {
+  border-color: var(--grad-2) !important;
+  box-shadow: var(--shadow-focus-light);
+}
+.mp-input[aria-invalid='true']:focus { box-shadow: var(--shadow-focus-error); }
+
+/* ── Focus ring for all interactive elements ── */
+.mp-btn:focus-visible,
+.mp-badge:focus-visible {
+  outline: 2px solid var(--focus-ring-light);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mp-btn, .mp-card--standard, .mp-card--feature, .mp-card--dark { transition: none !important; transform: none !important; }
+}

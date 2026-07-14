@@ -1,0 +1,32 @@
+/* MY PATH.IA — Typography
+ * Syncopate (display/logo, parent only) · Space Grotesk (headings/UI)
+ * Quicksand (body) · DM Mono (data/labels) */
+
+:root {
+  /* ── Families ── */
+  --font-display: 'Syncopate', sans-serif;      /* logo, hero, tagline — parent brand only */
+  --font-heading: 'Space Grotesk', sans-serif;  /* H1–H4, UI, buttons, nav */
+  --font-body: 'Quicksand', sans-serif;         /* body, long-form, all sub-brands */
+  --font-mono: 'DM Mono', monospace;            /* labels, metadata, hex, versions */
+
+  /* ── Weights ── */
+  --fw-light: 300;    /* @kind font */
+  --fw-regular: 400;  /* @kind font */
+  --fw-medium: 500;   /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700;     /* @kind font */
+
+  /* ── Type scale (role tokens: size / line-height / tracking) ── */
+  --fs-display: 68px;   --lh-display: 1.0/* @kind font */;  --tr-display: 0/* @kind font */;
+  --fs-h1: 40px;        --lh-h1: 1.1/* @kind font */;       --tr-h1: -0.5px;
+  --fs-h2: 30px;        --lh-h2: 1.2/* @kind font */;       --tr-h2: -0.25px;
+  --fs-h3: 20px;        --lh-h3: 1.3/* @kind font */;       --tr-h3: 0/* @kind font */;
+  --fs-h4: 16px;        --lh-h4: 1.4/* @kind font */;       --tr-h4: 0/* @kind font */;
+  --fs-body-l: 16px;    --lh-body-l: 1.8/* @kind font */;
+  --fs-body-m: 15px;    --lh-body-m: 1.75/* @kind font */;
+  --fs-body-s: 13px;    --lh-body-s: 1.7/* @kind font */;
+  --fs-caption: 12px;   --lh-caption: 1.6/* @kind font */;
+  --fs-label: 10px;     --lh-label: 1.0/* @kind font */;    --tr-label: 4px;
+  --fs-button: 14px;    --tr-button: 0.5px;
+  --fs-tagline: 15px;   --lh-tagline: 1.2/* @kind font */;  --tr-tagline: 1px;
+}

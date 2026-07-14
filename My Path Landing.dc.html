@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/tokens/motion.css">
+  <link rel="stylesheet" href="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/tokens/interactions.css">
+  <link rel="stylesheet" href="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/styles.css">
+  <script src="_ds/my-path-ia-design-system-2f1489bf-3fe7-486a-bb73-9ccf780597a2/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: #F6F0EC; }
+    a { color: #399AB8; text-decoration: none; }
+    a:hover { color: #133039; }
+    input::placeholder { color: #8A9EA5; }
+    @keyframes mpFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes mpTileIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes mpDraw { from { stroke-dashoffset: 620; } to { stroke-dashoffset: 0; } }
+    @keyframes mpTravel { 0% { offset-distance: 0%; } 50% { offset-distance: 100%; } 100% { offset-distance: 0%; } }
+    @keyframes mpPulse { 0%, 100% { opacity: 0.35; transform: scale(1); } 50% { opacity: 1; transform: scale(1.25); } }
+    @keyframes mpBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @keyframes mpModalIn { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes mpOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</helmet>
+
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Login" style="min-height: 100vh; display: flex; flex-wrap: wrap; font-family: 'Quicksand', sans-serif; background: #F6F0EC;">
+
+  <!-- ===== Mitad izquierda: carrusel de citas ===== -->
+  <div style="flex: 1 1 480px; min-height: 100vh; background: #133039; position: relative; overflow: hidden;">
+    <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="1">
+      <div style="position: absolute; inset: 0; background-image: url('{{ q.img }}'); background-size: cover; background-position: {{ q.pos }}; opacity: {{ q.opacity }}; z-index: {{ q.z }}; transition: opacity 1.2s ease;">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19,48,57,0.45) 0%, rgba(19,48,57,0.35) 45%, rgba(19,48,57,0.9) 100%);"></div>
+      </div>
+    </sc-for>
+
+    <div style="position: relative; z-index: 5; min-height: 100vh; box-sizing: border-box; padding: 64px 56px;">
+      <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="1">
+        <div style="position: absolute; left: 56px; right: 56px; bottom: 104px; opacity: {{ q.opacity }}; transition: opacity 1.2s ease; pointer-events: none;">
+          <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 27px; line-height: 1.45; color: #F6F0EC; text-shadow: 0 2px 26px rgba(0,0,0,0.7); max-width: 470px;">{{ q.text }}</div>
+          <div style="margin-top: 18px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: rgba(246,240,236,0.92); text-shadow: 0 2px 16px rgba(0,0,0,0.8);">— {{ q.author }}</div>
+        </div>
+      </sc-for>
+      <div style="position: absolute; left: 56px; bottom: 56px; display: flex; gap: 8px; z-index: 6;">
+        <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="1">
+          <span style="width: {{ q.dotW }}; height: 4px; border-radius: 9999px; background: {{ q.dotBg }}; transition: width 0.4s ease, background 0.4s ease;"></span>
+        </sc-for>
+      </div>
+      <div style="position: absolute; right: 56px; top: 64px; font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(246,240,236,0.6); text-shadow: 0 2px 14px rgba(0,0,0,0.7);">Build your tomorrow.</div>
+    </div>
+  </div>
+
+  <!-- ===== Mitad derecha: acceso ===== -->
+  <div style="flex: 1 1 480px; min-height: 100vh; background: {{ panelBg }}; display: flex; align-items: center; justify-content: center; padding: 56px 48px; box-sizing: border-box; transition: background 0.4s ease;">
+    <div style="width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 26px; animation: mpFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;">
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #4D6A73;">Ecosistema psicopedagógico</div>
+        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 27px; line-height: 1.3; color: #151111;">Bienvenido al ecosistema<br><span style="font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: 2px; white-space: nowrap; color: #151111;">MY&nbsp;PATH.IA</span></h1>
+        <span style="display: block; width: 48px; height: 2px; background: #399AB8; border-radius: 9999px; margin-top: 4px;"></span>
+        <p style="margin: 6px 0 0; font-size: 14.5px; line-height: 1.8; color: #4D6A73;">Claridad, acompañamiento y propósito. Un solo camino que reúne cada herramienta para acompañarte de verdad.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="position: relative; display: grid; grid-template-columns: 1fr 1fr; background: #F8F8F8; border: 1px solid #DFD8D1; border-radius: 9999px; padding: 4px;">
+          <div style="position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 9999px; background: #133039; transform: translateX({{ segX }}); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+          <button onClick="{{ pickAlumno }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 11px 8px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14px; color: {{ alumnoSegColor }}; transition: color 0.3s;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 L12 5 L2 10 L12 15 Z"></path><path d="M6 12 v5 c0 1.5 2.5 3 6 3 s6 -1.5 6 -3 v-5"></path></svg>
+            Alumno
+          </button>
+          <button onClick="{{ pickProfesional }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 11px 8px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14px; color: {{ profSegColor }}; transition: color 0.3s;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7 V5 a2 2 0 0 1 2 -2 h4 a2 2 0 0 1 2 2 v2"></path><path d="M3 13 h18"></path></svg>
+            Docente
+          </button>
+        </div>
+      </div>
+
+      <div style="background: #F8F8F8; border: 1px solid #DFD8D1; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="height: 108px; position: relative; background-image: url('{{ roleImg }}'); background-size: cover; background-position: {{ roleImgPos }};">
+          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19,48,57,0.25) 0%, rgba(19,48,57,0.72) 100%);"></div>
+          <div style="position: absolute; left: 20px; bottom: 14px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(246,240,236,0.9);">{{ roleKicker }}</div>
+        </div>
+        <div style="padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 18px; color: #151111;">{{ loginTitle }}</div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button onClick="{{ loginGoogle }}" style="cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: #F8F8F8; border: 1px solid #DFD8D1; border-radius: 8px; padding: 11px 20px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14px; color: #151111; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s;" style-hover="transform: translateY(-1px); border-color: #399AB8;" style-active="transform: translateY(0); opacity: 0.85;">
+              <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.4 17.7 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.5 24.5c0-1.7-.2-3.3-.5-4.9H24v9.3h12.7c-.6 3-2.3 5.6-4.8 7.3l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"></path><path fill="#FBBC05" d="M10.4 28.7a14.5 14.5 0 0 1 0-9.4l-7.8-6.1a24 24 0 0 0 0 21.6l7.8-6.1z"></path><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2.1 1.4-4.7 2.2-7.7 2.2-6.3 0-11.7-3.9-13.6-9.4l-7.8 6.1C6.5 42.6 14.6 48 24 48z"></path></svg>
+              Continuar con Google
+            </button>
+            <button onClick="{{ loginGoogle }}" style="cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: #F8F8F8; border: 1px solid #DFD8D1; border-radius: 8px; padding: 11px 20px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14px; color: #151111; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s;" style-hover="transform: translateY(-1px); border-color: #399AB8;" style-active="transform: translateY(0); opacity: 0.85;">
+              <img src="uploads/M (29).png" alt="" style="width: 22px; height: auto;">
+              Usuario MY PATH.IA
+            </button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="flex: 1; height: 1px; background: #DFD8D1;"></div>
+            <span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; color: #4D6A73;">O CON TU MAIL</span>
+            <div style="flex: 1; height: 1px; background: #DFD8D1;"></div>
+          </div>
+
+          <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+            <input type="text" value="{{ signupName }}" onChange="{{ onSignupName }}" placeholder="Tu nombre" style="box-sizing: border-box; width: 100%; padding: 12px 16px; border: 1px solid #DFD8D1; border-radius: 8px; font-family: 'Quicksand', sans-serif; font-size: 14px; color: #151111; background: #F8F8F8; outline: none; transition: border-color 0.2s, box-shadow 0.2s;" style-focus="border-color: #399AB8; box-shadow: 0 0 0 3px rgba(57,154,184,0.10);">
+          </sc-if>
+
+          <input type="email" value="{{ email }}" onChange="{{ onEmail }}" placeholder="nombre@mento.ia" style="box-sizing: border-box; width: 100%; padding: 12px 16px; border: 1px solid #DFD8D1; border-radius: 8px; font-family: 'Quicksand', sans-serif; font-size: 14px; color: #151111; background: #F8F8F8; outline: none; transition: border-color 0.2s, box-shadow 0.2s;" style-focus="border-color: #399AB8; box-shadow: 0 0 0 3px rgba(57,154,184,0.10);">
+
+          <button onClick="{{ login }}" style="cursor: pointer; align-self: center; width: 78%; margin-top: 2px; padding: 11px 24px; background: transparent; border: 1px solid #133039; border-radius: 9999px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14px; color: #133039; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s, color 0.15s;" style-hover="transform: translateY(-1px); background: #133039; color: #F6F0EC;" style-active="transform: translateY(0); opacity: 0.9;">{{ ctaLabel }}</button>
+
+          <div style="font-size: 12.5px; line-height: 1.6; color: #4D6A73; text-align: center;">{{ signupPrompt }} <a href="#" onClick="{{ toggleSignup }}" style="font-weight: 600;">{{ signupAction }}</a></div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: center; padding-top: 2px;">
+        <img src="uploads/M (31).png" alt="MY PATH.IA — Build your tomorrow." style="width: 200px; height: auto;">
+      </div>
+
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ======================= HOME ======================= -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Home" style="min-height: 100vh; font-family: 'Quicksand', sans-serif; background: {{ pageBg }}; transition: background 0.4s ease;">
+
+  <!-- Header -->
+  <header style="position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 12px 32px; background: {{ headerBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ headerBorder }}; transition: background 0.4s, border-color 0.4s;">
+    <img src="uploads/M (31).png" alt="MY PATH.IA — Build your tomorrow." style="height: 42px; width: auto; filter: {{ headerLogoFilter }};">
+    <div style="display: flex; align-items: center; gap: 12px;">
+
+      <!-- Nombre -->
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ avatarBg }}; border: 1px solid {{ ctrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ avatarText }};">{{ initial }}</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ nameColor }}; line-height: 1;">{{ name }}</span>
+          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ roleColor }}; line-height: 1;">{{ roleLabel }}</span>
+        </div>
+      </div>
+
+      <!-- Idioma ES / EN -->
+      <div style="position: relative; display: flex; align-items: center; background: {{ langTrackBg }}; border: 1px solid {{ ctrlBorder }}; border-radius: 9999px; padding: 3px;">
+        <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #133039; transform: translateX({{ langX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+        <button onClick="{{ setEs }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ esColor }}; transition: color 0.3s;">ES</button>
+        <button onClick="{{ setEn }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ enColor }}; transition: color 0.3s;">EN</button>
+      </div>
+
+      <!-- Oscurecer / claro -->
+      <button onClick="{{ toggleDark }}" title="{{ t_theme }}" style="cursor: pointer; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ ctrlBorder }}; background: {{ darkBtnBg }}; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s, background 0.2s;" style-hover="border-color: #399AB8; transform: translateY(-1px);">
+        <sc-if value="{{ dark }}" hint-placeholder-val="{{ false }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2 v2 M12 20 v2 M2 12 h2 M20 12 h2 M4.9 4.9 l1.4 1.4 M17.7 17.7 l1.4 1.4 M19.1 4.9 l-1.4 1.4 M6.3 17.7 l-1.4 1.4"></path></svg>
+        </sc-if>
+        <sc-if value="{{ light }}" hint-placeholder-val="{{ true }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ ctrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8 A9 9 0 1 1 11.2 3 a7 7 0 0 0 9.8 9.8 Z"></path></svg>
+        </sc-if>
+      </button>
+
+      <!-- Salida (bordó) -->
+      <button onClick="{{ logout }}" title="{{ t_exit }}" style="cursor: pointer; height: 36px; padding: 0 14px; border-radius: 8px; border: none; background: #7A2230; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: #F6F0EC; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21 H5 a2 2 0 0 1 -2 -2 V5 a2 2 0 0 1 2 -2 h4"></path><path d="M16 17 L21 12 L16 7"></path><path d="M21 12 H9"></path></svg>
+        {{ t_exit }}
+      </button>
+    </div>
+  </header>
+
+  <!-- Bienvenida -->
+  <section style="background: {{ heroBg }}; padding: 56px 32px 48px; transition: background 0.4s;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; animation: mpFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;">
+      <div style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: {{ heroKicker }};">{{ heroKickerText }}</div>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(30px, 4vw, 44px); line-height: 1.15; color: {{ heroText }}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ heroGreeting }}</h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.8; color: {{ heroSub }}; max-width: 560px;">{{ heroSubText }}</p>
+      <div style="margin-top: 4px;"><span style="display: block; width: 48px; height: 2px; background: #399AB8; border-radius: 9999px;"></span></div>
+    </div>
+  </section>
+
+  <!-- Mosaico de productos -->
+  <section style="padding: 40px 32px 96px;">
+    <div style="max-width: 1200px; margin: 0 auto 20px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+      <span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: {{ sectionLabel }};">{{ t_explore }}</span>
+      <span style="font-family: 'Quicksand', sans-serif; font-size: 13px; color: {{ sectionLabel }};">{{ t_exploreSub }}</span>
+    </div>
+    <div style="max-width: 1200px; margin: 0 auto; position: relative;">
+      <div style="display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: 380px 232px; gap: 20px;">
+        <sc-for list="{{ products }}" as="p" hint-placeholder-count="5">
+          <div onClick="{{ p.open }}" style="grid-column: {{ p.col }}; grid-row: {{ p.row }}; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid #DFD8D1; background-image: url('{{ p.img }}'); background-size: cover; background-position: {{ p.imgPos }}; cursor: pointer; filter: {{ p.filter }}; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s, filter 0.25s; animation: mpTileIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) {{ p.delay }} both;" style-hover="transform: translateY(-3px); border-color: #399AB8; filter: none;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19,48,57,0.15) 0%, rgba(19,48,57,0.5) 55%, rgba(19,48,57,0.9) 100%);"></div>
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #399AB8;"></div>
+
+            <!-- Badge estado -->
+            <div style="position: absolute; top: 16px; right: 16px; display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 9999px; background: {{ p.badgeBg }}; border: 1px solid {{ p.badgeBorder }}; backdrop-filter: blur(4px);">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ p.badgeDot }};"></span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ p.badgeText }};">{{ p.badgeLabel }}</span>
+            </div>
+
+            <div style="position: relative; height: 100%; box-sizing: border-box; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;">
+              <div style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: rgba(19,48,57,0.4); border: 1px solid rgba(246,240,236,0.3); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.icon }}"></path><path d="{{ p.icon2 }}"></path></svg>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 22px; color: #F6F0EC;">{{ p.name }}</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#399AB8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 H19"></path><path d="M13 6 L19 12 L13 18"></path></svg>
+                </div>
+                <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(246,240,236,0.88); max-width: 480px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;">{{ p.sub }}</p>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- Globo de texto sutil -->
+      <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+        <div style="position: relative; display: inline-flex; align-items: center; gap: 9px; padding: 9px 16px; border-radius: 9999px; background: {{ tooltipBg }}; border: 1px solid {{ tooltipBorder }}; animation: mpBob 3.2s ease-in-out infinite; opacity: 0.92;">
+          <span style="position: absolute; top: -6px; right: 30px; width: 11px; height: 11px; background: {{ tooltipBg }}; border-left: 1px solid {{ tooltipBorder }}; border-top: 1px solid {{ tooltipBorder }}; transform: rotate(45deg);"></span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#399AB8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11 l3 8 l2 -5 l5 -2 Z"></path><path d="M5 3 v3 M3 5 h3 M4 12 h2"></path></svg>
+          <span style="font-family: 'Quicksand', sans-serif; font-size: 12.5px; color: {{ tooltipText }};">{{ t_tooltip }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pop-up producto -->
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position: fixed; inset: 0; z-index: 120; background: rgba(19,48,57,0.55); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 24px; animation: mpOverlayIn 0.25s ease both;">
+      <div onClick="{{ stop }}" style="width: 100%; max-width: 520px; background: {{ modalBg }}; border: 1px solid {{ modalBorder }}; border-radius: 20px; overflow: hidden; animation: mpModalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
+        <div style="height: 4px; background: #399AB8;"></div>
+        <div style="padding: 32px 34px 34px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #399AB8;">MY PATH.IA · {{ t_ecosystem }}</div>
+              <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 26px; color: {{ modalText }};">{{ modal.name }}</h2>
+              <a href="https://{{ modal.web }}" target="_blank" rel="noopener" style="font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; color: #399AB8;">{{ modal.web }}</a>
+            </div>
+            <button onClick="{{ closeModal }}" title="{{ t_close }}" style="cursor: pointer; flex-shrink: 0; width: 34px; height: 34px; border-radius: 8px; border: 1px solid {{ modalBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s;" style-hover="border-color: #7A2230;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{ modalText }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6 L18 18 M18 6 L6 18"></path></svg>
+            </button>
+          </div>
+          <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 15px; line-height: 1.8; color: {{ modalBody }};">{{ modal.long }}</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 2px;">
+            <a href="https://{{ modal.web }}" target="_blank" rel="noopener" style="cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 9px; padding: 13px 24px; border: 1px solid {{ modalWebBorder }}; border-radius: 9999px; background: transparent; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ modalText }}; transition: border-color 0.15s, transform 0.15s;" style-hover="border-color: #399AB8; transform: translateY(-1px);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#399AB8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12 h18"></path><path d="M12 3 a15 15 0 0 1 0 18 a15 15 0 0 1 0 -18"></path></svg>
+              {{ t_visit }}
+            </a>
+            <button onClick="{{ modalSubscribe }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 9px; padding: 13px 26px; border: none; border-radius: 9999px; background: #399AB8; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: #F6F0EC; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
+              {{ t_subscribe }}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 H19"></path><path d="M13 6 L19 12 L13 18"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Chatbot -->
+  <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; left: 24px; bottom: 96px; z-index: 90; width: 320px; background: {{ chatSurface }}; border: 1px solid {{ chatBorder }}; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; animation: mpFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
+      <div style="background: #133039; padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
+        <div style="width: 8px; height: 8px; border-radius: 50%; background: #399AB8;"></div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: #F6F0EC;">{{ t_chatTitle }}</span>
+        <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(246,240,236,0.5); margin-left: auto;">IA</span>
+      </div>
+      <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 260px; overflow-y: auto;">
+        <sc-for list="{{ chat }}" as="m" hint-placeholder-count="2">
+          <div style="align-self: {{ m.align }}; max-width: 85%; background: {{ m.bg }}; color: {{ m.color }}; border: 1px solid {{ m.border }}; border-radius: 12px; padding: 10px 14px; font-size: 13px; line-height: 1.6;">{{ m.text }}</div>
+        </sc-for>
+      </div>
+      <div style="display: flex; gap: 8px; padding: 12px; border-top: 1px solid {{ chatBorder }};">
+        <input value="{{ chatInput }}" onChange="{{ onChatInput }}" onKeyDown="{{ onChatKey }}" placeholder="{{ t_chatPlaceholder }}" style="flex: 1; min-width: 0; padding: 10px 14px; border: 1px solid {{ chatBorder }}; border-radius: 8px; font-family: 'Quicksand', sans-serif; font-size: 13px; color: {{ chatInputText }}; background: {{ chatInputBg }}; outline: none; transition: border-color 0.2s, box-shadow 0.2s;" style-focus="border-color: #399AB8; box-shadow: 0 0 0 3px rgba(57,154,184,0.10);">
+        <button onClick="{{ sendChat }}" title="{{ t_send }}" style="cursor: pointer; width: 40px; height: 40px; border-radius: 8px; border: none; background: #133039; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 L11 13"></path><path d="M22 2 L15 22 L11 13 L2 9 Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </sc-if>
+  <button onClick="{{ toggleChat }}" title="{{ t_chatTitle }}" style="position: fixed; left: 24px; bottom: 24px; z-index: 91; width: 56px; height: 56px; border-radius: 9999px; border: none; background: #133039; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;" style-hover="transform: translateY(-2px); opacity: 0.92;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5 a8.5 8.5 0 0 1 -8.5 8.5 c-1.5 0 -2.9 -0.4 -4.1 -1 L3 20 l1 -5.4 A8.5 8.5 0 1 1 21 11.5 Z"></path></svg>
+    <span style="position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: #399AB8; border: 2px solid #133039;"></span>
+  </button>
+
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;defaultRole&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;alumno&quot;, &quot;profesional&quot;], &quot;default&quot;: &quot;alumno&quot;, &quot;tsType&quot;: &quot;'alumno' | 'profesional'&quot;, &quot;section&quot;: &quot;Comportamiento&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    screen: 'login',
+    role: 'alumno',
+    lang: 'es',
+    dark: false,
+    email: '',
+    name: 'Alex',
+    activeQuote: 0,
+    isSignup: false,
+    signupName: '',
+    modalOpen: false,
+    modalProduct: null,
+    chatOpen: false,
+    chatInput: '',
+    chat: null,
+    botIdx: 0
+  };
+
+  componentDidMount() {
+    const r = this.props.defaultRole;
+    if (r === 'alumno' || r === 'profesional') this.setState({ role: r });
+    this.setState({ chat: [{ from: 'bot', text: this.greeting() }] });
+    this._qi = setInterval(() => {
+      this.setState(s => ({ activeQuote: (s.activeQuote + 1) % this.quotesData().length }));
+    }, 10000);
+  }
+
+  quotesData() {
+    return [
+      { text: '\u201CNo es el m\u00e1s fuerte el que sobrevive, ni el m\u00e1s inteligente. Es el que mejor se adapta al cambio.\u201D', author: 'Charles Darwin', img: 'uploads/Works globe.jpeg', pos: 'center' },
+      { text: '\u201CEl \u00e9xito es la suma de peque\u00f1os esfuerzos repetidos d\u00eda tras d\u00eda.\u201D', author: 'Robert Collier', img: 'uploads/_ (10).jpeg', pos: 'center 40%' },
+      { text: '\u201CNo es que tengamos un problema dif\u00edcil; es que tenemos un problema f\u00e1cil que estamos resolviendo de forma dif\u00edcil.\u201D', author: 'Albert Einstein', img: 'uploads/pexels-filip-aurel-vlcek-350223250-35730384.jpg', pos: 'center 30%' },
+      { text: '\u201CEl que tiene un porqu\u00e9 para vivir, puede soportar casi cualquier c\u00f3mo.\u201D', author: 'Friedrich Nietzsche', img: 'uploads/_ (6).jpeg', pos: 'center 40%' },
+      { text: '\u201CNo te rindas. Sufre ahora y vivir\u00e1s el resto de tu vida como un campe\u00f3n.\u201D', author: 'Muhammad Ali', img: 'uploads/48 Hours in Berlin _ Sarah Michiko.jpeg', pos: 'center 45%' }
+    ];
+  }
+
+  T(es, en) { return this.state.lang === 'es' ? es : en; }
+
+  greeting() {
+    return this.T(
+      'Hola, soy Path. Estoy aquí para acompañarte. ¿Qué necesitas hoy?',
+      'Hi, I\u2019m Path. I\u2019m here to guide you. What do you need today?'
+    );
+  }
+
+  doLogin() {
+    const prefix = (this.state.email || '').split('@')[0].replace(/[._-]+/g, ' ').trim();
+    const name = this.state.signupName.trim()
+      ? this.state.signupName.trim()
+      : prefix
+        ? prefix.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+        : 'Alex';
+    this.setState({ screen: 'home', name, chatOpen: false, chat: [{ from: 'bot', text: this.greeting() }], botIdx: 0 });
+  }
+
+  setLang(lang) {
+    this.setState({ lang }, () => {
+      // refresh initial bot greeting if it is the only message
+      if (this.state.chat && this.state.chat.length === 1 && this.state.chat[0].from === 'bot') {
+        this.setState({ chat: [{ from: 'bot', text: this.greeting() }] });
+      }
+    });
+  }
+
+  productsFor(role, lang) {
+    const es = lang === 'es';
+    const arrow = { icon: 'M5 12 H19', icon2: 'M13 6 L19 12 L13 18' };
+    return [
+      {
+        id: 'mento', name: 'Mento.IA',
+        sub: es ? 'Orientación vocacional con IA. Vamos a descubrir tu futuro profesional.'
+                : 'AI-powered vocational guidance. Let\u2019s discover your professional future.',
+        active: true, action: 'link', url: 'https://mentoia.app/',
+        col: '1 / span 3', row: '1', delay: '0.05s',
+        img: 'uploads/image-1776420963165.png', imgPos: 'center 25%',
+        icon: 'M12 2 a10 10 0 1 0 0 20 a10 10 0 0 0 0 -20 Z', icon2: 'M15.5 8.5 L13.5 13.5 L8.5 15.5 L10.5 10.5 Z'
+      },
+      {
+        id: 'campus', name: 'My Campus.IA',
+        sub: es ? 'El buscador académico más potente del mundo en tus manos. Universidades, programas y mucho más.'
+                : 'The world\u2019s most powerful academic search engine, in your hands. Universities, programs and much more.',
+        active: true, action: 'link', url: 'https://www.mycampusia.app/',
+        col: '4 / span 3', row: '1', delay: '0.12s',
+        img: 'uploads/Imagen_My.Unni.jpg', imgPos: 'center 60%',
+        icon: 'M3 21 h18 M5 21 V8 l7 -5 l7 5 v13', icon2: 'M9 21 v-6 h6 v6'
+      },
+      {
+        id: 'mind', name: 'My Mind.IA',
+        sub: es ? 'Acompañamiento psicológico y neurológico para niños de 6 a 12 años.'
+                : 'Psychological and neurological support for children aged 6 to 12.',
+        active: false, action: 'modal', web: 'www.mymindia.com',
+        long: es
+          ? 'My.Mind es un programa de detección y acompañamiento psicológico y neurológico diseñado para la etapa escolar. A través de protocolos validados científicamente, identifica de forma temprana neurodivergencias, estados emocionales y situaciones de riesgo, construyendo un perfil longitudinal del alumno que alimenta su proceso de orientación vital en la adolescencia.'
+          : 'My.Mind is a psychological and neurological screening and support program designed for the school years. Through scientifically validated protocols, it identifies neurodivergences, emotional states and risk situations early, building a longitudinal profile of the student that feeds their life-orientation process in adolescence.',
+        col: '1 / span 2', row: '2', delay: '0.19s',
+        img: 'uploads/Imagen_My.Mind.jpg', imgPos: 'center 20%',
+        icon: 'M12 21 C6 16 3 12.5 3 9 a5 5 0 0 1 9 -3 a5 5 0 0 1 9 3 c0 3.5 -3 7 -9 12 Z', icon2: ''
+      },
+      {
+        id: 'cognition', name: 'My Cognition.IA',
+        sub: es ? 'Plataforma de rehabilitación neurocognitiva para niños y adolescentes.'
+                : 'Neurocognitive rehabilitation platform for children and adolescents.',
+        active: false, action: 'modal', web: 'www.mycognitionia.com',
+        long: es
+          ? 'My.Cognition es el primer protocolo digital de rehabilitación neurocognitiva para niños y adolescentes cuyo cerebro ha sido afectado por tratamientos médicos agresivos — quimioterapia, epilepsia, traumatismos craneales — usando inteligencia artificial adaptativa para devolver, sesión a sesión, las capacidades cognitivas que el tratamiento les quitó.'
+          : 'My.Cognition is the first digital neurocognitive rehabilitation protocol for children and adolescents whose brains have been affected by aggressive medical treatments — chemotherapy, epilepsy, head trauma — using adaptive artificial intelligence to restore, session by session, the cognitive abilities the treatment took from them.',
+        col: '3 / span 2', row: '2', delay: '0.26s',
+        img: 'uploads/pexels-ruben-boekeloo-521336009-29626802.jpg', imgPos: 'center',
+        icon: 'M9.5 3 a3.5 3.5 0 0 0 -3.5 3.5 c-2 0.5 -3 2 -3 4 c0 1.5 0.8 2.8 2 3.5 c-0.3 2.5 1.5 4.5 4 4.5 c0.5 1 1.5 2 3 2 V3.5 A3.5 3.5 0 0 0 9.5 3 Z', icon2: 'M14.5 3 a3.5 3.5 0 0 1 3.5 3.5 c2 0.5 3 2 3 4 c0 1.5 -0.8 2.8 -2 3.5 c0.3 2.5 -1.5 4.5 -4 4.5 c-0.5 1 -1.5 2 -3 2'
+      },
+      {
+        id: 'linno', name: 'Linno',
+        sub: es ? 'Encuentra el profesional que buscas.'
+                : 'Find the professional you\u2019re looking for.',
+        active: false, action: 'modal', web: 'www.linno.com',
+        long: es
+          ? 'Primera plataforma para encontrar el profesional que necesites. Psicólogos, pedagogos, orientadores, ¡y más!'
+          : 'The first platform to find the professional you need. Psychologists, pedagogues, counselors, and more!',
+        col: '5 / span 2', row: '2', delay: '0.33s',
+        img: 'uploads/Imagen_My Path - Healtcare.avif', imgPos: 'center 30%',
+        icon: 'M12 3 l1.9 5.1 L19 10 l-5.1 1.9 L12 17 l-1.9 -5.1 L5 10 l5.1 -1.9 Z', icon2: 'M18 15 l0.9 2.1 L21 18 l-2.1 0.9 L18 21 l-0.9 -2.1 L15 18 l2.1 -0.9 Z'
+      }
+    ];
+  }
+
+  openProduct(p) {
+    if (p.action === 'link') {
+      window.open(p.url, '_blank', 'noopener');
+    } else {
+      this.setState({ modalOpen: true, modalProduct: p });
+    }
+  }
+
+  botReply() {
+    const alumno = this.state.role === 'alumno';
+    const es = this.state.lang === 'es';
+    const replies = alumno
+      ? (es ? [
+          'Buena pregunta. Te sugiero empezar por Mento.IA: te ayuda a ganar claridad sobre tu camino.',
+          'Puedo acompañarte con eso. ¿Quieres que te muestre tu progreso en My Campus.IA?',
+          'Anotado. Recuerda que en My Mind.IA tienes un espacio para hacer una pausa cuando lo necesites.'
+        ] : [
+          'Good question. I\u2019d start with Mento.IA: it helps you gain clarity about your path.',
+          'I can help with that. Want me to show your progress in My Campus.IA?',
+          'Noted. Remember My Mind.IA is a space to pause whenever you need it.'
+        ])
+      : (es ? [
+          'Claro. En My Cognition.IA encuentras los perfiles cognitivos de tus grupos, listos para revisar.',
+          'Puedo ayudarte con eso. My Campus.IA reúne el seguimiento de tus cohortes en un solo lugar.',
+          'Entendido. Si buscas señales de bienestar, My Mind.IA muestra la vista de tus grupos.'
+        ] : [
+          'Sure. In My Cognition.IA you\u2019ll find your groups\u2019 cognitive profiles, ready to review.',
+          'I can help with that. My Campus.IA brings your cohort tracking together in one place.',
+          'Understood. For wellbeing signals, My Mind.IA shows the view of your groups.'
+        ]);
+    return replies[this.state.botIdx % replies.length];
+  }
+
+  sendChatMsg() {
+    const text = this.state.chatInput.trim();
+    if (!text) return;
+    const chat = [...(this.state.chat || []), { from: 'user', text }];
+    this.setState({ chat, chatInput: '' });
+    clearTimeout(this._bt);
+    this._bt = setTimeout(() => {
+      this.setState({
+        chat: [...(this.state.chat || []), { from: 'bot', text: this.botReply() }],
+        botIdx: this.state.botIdx + 1
+      });
+    }, 700);
+  }
+
+  componentWillUnmount() { clearTimeout(this._bt); clearInterval(this._qi); }
+
+  renderVals() {
+    const s = this.state;
+    const alumno = s.role === 'alumno';
+    const es = s.lang === 'es';
+    const dark = s.dark;
+    const T = (a, b) => this.T(a, b);
+
+    // theme tokens
+    const chatSurface = dark ? '#133039' : '#F8F8F8';
+    const chatBorder = dark ? 'rgba(246,240,236,0.12)' : '#DFD8D1';
+    const botBubbleBg = dark ? '#0E2229' : '#F6F0EC';
+    const botBubbleText = dark ? '#F6F0EC' : '#151111';
+    const botBubbleBorder = dark ? 'rgba(246,240,236,0.12)' : '#DFD8D1';
+
+    const chat = (s.chat || []).map(m => ({
+      text: m.text,
+      align: m.from === 'user' ? 'flex-end' : 'flex-start',
+      bg: m.from === 'user' ? '#133039' : botBubbleBg,
+      color: m.from === 'user' ? '#F6F0EC' : botBubbleText,
+      border: m.from === 'user' ? '#133039' : botBubbleBorder
+    }));
+
+    const products = this.productsFor(s.role, s.lang).map(p => ({
+      ...p,
+      open: () => this.openProduct(p),
+      filter: p.active ? 'none' : 'grayscale(0.35) brightness(0.68)',
+      badgeLabel: p.active ? T('Activo', 'Active') : T('Inactivo', 'Inactive'),
+      badgeBg: p.active ? 'rgba(45,130,112,0.22)' : 'rgba(19,48,57,0.55)',
+      badgeBorder: p.active ? 'rgba(45,130,112,0.6)' : 'rgba(246,240,236,0.28)',
+      badgeDot: p.active ? '#3FBF9A' : '#8A9EA5',
+      badgeText: p.active ? '#F6F0EC' : 'rgba(246,240,236,0.75)'
+    }));
+
+    const mp = s.modalProduct || {};
+
+    const quotes = this.quotesData().map((q, i) => ({
+      ...q,
+      opacity: i === s.activeQuote ? 1 : 0,
+      z: i === s.activeQuote ? 2 : 1,
+      dotW: i === s.activeQuote ? '22px' : '8px',
+      dotBg: i === s.activeQuote ? '#399AB8' : 'rgba(246,240,236,0.4)'
+    }));
+
+    return {
+      quotes,
+      isLogin: s.screen === 'login',
+      isHome: s.screen === 'home',
+      // login
+      email: s.email,
+      onEmail: e => this.setState({ email: e.target.value }),
+      login: () => this.doLogin(),
+      loginGoogle: () => this.doLogin(),
+      pickAlumno: () => this.setState({ role: 'alumno' }),
+      pickProfesional: () => this.setState({ role: 'profesional' }),
+      segX: alumno ? '0%' : '100%',
+      alumnoSegColor: alumno ? '#F6F0EC' : '#151111',
+      profSegColor: !alumno ? '#F6F0EC' : '#151111',
+      panelBg: alumno ? '#F6F0EC' : '#EFE9E4',
+      roleImg: alumno ? 'uploads/image-1776420963165.png' : 'uploads/Imagen_My.Unni.jpg',
+      roleImgPos: alumno ? 'center 25%' : 'center 55%',
+      roleKicker: alumno ? 'Acceso · Alumnos' : 'Acceso · Docentes',
+      loginTitle: s.isSignup
+        ? (alumno ? 'Crea tu cuenta de alumno' : 'Crea tu cuenta docente')
+        : (alumno ? 'Ingresa como alumno' : 'Ingresa como docente'),
+      isSignup: s.isSignup,
+      signupName: s.signupName,
+      onSignupName: e => this.setState({ signupName: e.target.value }),
+      toggleSignup: e => { e.preventDefault(); this.setState({ isSignup: !s.isSignup }); },
+      signupPrompt: s.isSignup ? '¿Ya tienes cuenta?' : '¿Primera vez en MY PATH.IA?',
+      signupAction: s.isSignup ? 'Ingresa aquí' : 'Crea tu cuenta',
+      ctaLabel: s.isSignup ? 'Crear cuenta' : 'Ingresar',
+
+      // home — identity
+      name: s.name,
+      initial: (s.name || 'A').charAt(0).toUpperCase(),
+      roleLabel: alumno ? T('Alumno', 'Student') : T('Docente', 'Teacher'),
+      headerLogoFilter: dark ? 'brightness(0) invert(1)' : 'none',
+
+      // home — controls / lang / theme
+      lang: s.lang,
+      dark: dark,
+      light: !dark,
+      toggleDark: () => this.setState({ dark: !s.dark }),
+      setEs: () => this.setLang('es'),
+      setEn: () => this.setLang('en'),
+      langX: es ? '0%' : '100%',
+      esColor: es ? '#F6F0EC' : (dark ? 'rgba(246,240,236,0.6)' : '#4D6A73'),
+      enColor: !es ? '#F6F0EC' : (dark ? 'rgba(246,240,236,0.6)' : '#4D6A73'),
+      langTrackBg: dark ? 'rgba(246,240,236,0.06)' : '#F8F8F8',
+      darkBtnBg: dark ? 'rgba(57,154,184,0.18)' : 'transparent',
+      logout: () => this.setState({ screen: 'login', email: '', chatOpen: false, modalOpen: false }),
+      t_exit: T('Salir', 'Log out'),
+      t_settings: T('Configuración', 'Settings'),
+      t_theme: dark ? T('Modo claro', 'Light mode') : T('Modo oscuro', 'Dark mode'),
+
+      // home — theme tokens
+      pageBg: dark ? '#0E2229' : '#F6F0EC',
+      headerBg: dark ? 'rgba(14,34,41,0.9)' : 'rgba(246,240,236,0.88)',
+      headerBorder: dark ? 'rgba(246,240,236,0.12)' : '#DFD8D1',
+      ctrlBorder: dark ? 'rgba(246,240,236,0.18)' : '#DFD8D1',
+      ctrlIcon: dark ? '#F6F0EC' : '#151111',
+      avatarBg: dark ? 'rgba(57,154,184,0.2)' : 'rgba(57,154,184,0.12)',
+      avatarText: dark ? '#F6F0EC' : '#133039',
+      nameColor: dark ? '#F6F0EC' : '#151111',
+      roleColor: dark ? 'rgba(246,240,236,0.6)' : '#4D6A73',
+      sectionLabel: dark ? 'rgba(246,240,236,0.6)' : '#4D6A73',
+      tooltipBg: dark ? '#133039' : '#F8F8F8',
+      tooltipText: dark ? '#F6F0EC' : '#151111',
+      tooltipBorder: dark ? 'rgba(246,240,236,0.15)' : '#DFD8D1',
+
+      // home — hero
+      heroBg: dark ? '#0E2229' : (alumno ? '#F6F0EC' : '#133039'),
+      heroText: dark ? '#F6F0EC' : (alumno ? '#151111' : '#F6F0EC'),
+      heroSub: dark ? 'rgba(246,240,236,0.72)' : (alumno ? '#4D6A73' : 'rgba(246,240,236,0.72)'),
+      heroKicker: dark ? 'rgba(246,240,236,0.55)' : (alumno ? '#4D6A73' : 'rgba(246,240,236,0.55)'),
+      heroKickerText: alumno
+        ? T('Tu espacio · Ecosistema MY PATH.IA', 'Your space · MY PATH.IA ecosystem')
+        : T('Panel profesional · Ecosistema MY PATH.IA', 'Professional panel · MY PATH.IA ecosystem'),
+      heroGreeting: T('Bienvenido, ' + s.name + '.', 'Welcome, ' + s.name + '.'),
+      heroSubText: alumno
+        ? T('Este es tu espacio para aprender, conocerte y avanzar. Elige por dónde quieres continuar hoy.',
+            'This is your space to learn, know yourself and move forward. Choose where you want to continue today.')
+        : T('Todo tu ecosistema de trabajo en un solo lugar. Datos precisos para acompañar mejor a cada persona.',
+            'Your whole working ecosystem in one place. Precise data to better support each person.'),
+
+      // home — mosaic labels
+      t_explore: T('Explora tu ecosistema', 'Explore your ecosystem'),
+      t_exploreSub: T('5 espacios, un solo camino.', '5 spaces, one path.'),
+      t_tooltip: T('Haz clic para saber más del ecosistema', 'Click to learn more about the ecosystem'),
+      products,
+
+      // modal
+      modalOpen: s.modalOpen,
+      modal: { name: mp.name, web: mp.web, long: mp.long },
+      closeModal: () => this.setState({ modalOpen: false }),
+      stop: e => e.stopPropagation(),
+      modalSubscribe: () => { if (mp.web) window.open('https://' + mp.web, '_blank', 'noopener'); },
+      modalBg: dark ? '#133039' : '#F8F8F8',
+      modalBorder: dark ? 'rgba(246,240,236,0.12)' : '#DFD8D1',
+      modalText: dark ? '#F6F0EC' : '#151111',
+      modalBody: dark ? 'rgba(246,240,236,0.82)' : '#4D6A73',
+      modalWebBorder: dark ? 'rgba(246,240,236,0.28)' : '#DFD8D1',
+      t_ecosystem: T('Ecosistema', 'Ecosystem'),
+      t_close: T('Cerrar', 'Close'),
+      t_visit: T('Ir a la web', 'Visit website'),
+      t_subscribe: T('Suscríbete y comienza', 'Subscribe and start'),
+
+      // chat
+      chatOpen: s.chatOpen,
+      toggleChat: () => this.setState({ chatOpen: !s.chatOpen }),
+      chat,
+      chatSurface, chatBorder,
+      chatInputBg: dark ? '#0E2229' : '#F6F0EC',
+      chatInputText: dark ? '#F6F0EC' : '#151111',
+      chatInput: s.chatInput,
+      onChatInput: e => this.setState({ chatInput: e.target.value }),
+      onChatKey: e => { if (e.key === 'Enter') this.sendChatMsg(); },
+      sendChat: () => this.sendChatMsg(),
+      t_chatTitle: T('Path — tu guía', 'Path — your guide'),
+      t_chatPlaceholder: T('Escribe tu pregunta…', 'Type your question…'),
+      t_send: T('Enviar', 'Send')
+    };
+  }
+}
+</script>
+</body>
+</html>
