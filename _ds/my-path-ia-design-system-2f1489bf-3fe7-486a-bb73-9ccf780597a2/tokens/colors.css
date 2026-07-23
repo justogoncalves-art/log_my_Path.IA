@@ -1,0 +1,61 @@
+/* MY PATH.IA — Color System
+ * Restraint over decoration. Color signals, never shouts. */
+
+:root {
+  /* ── Primary palette ── */
+  --navy: #060754;          /* primary text, dark surfaces, hero, footer */
+  --white: #fdfdfd;         /* main background, text on dark */
+  --ice-blue: #f0f6ff;      /* card bg, secondary surface, alt rows */
+
+  /* ── The signature gradient (90°) ── */
+  --grad-1: #f95bf6;        /* magenta */
+  --grad-2: #532cf9;        /* violet */
+  --grad-3: #03f7eb;        /* cyan */
+  --gradient: linear-gradient(90deg, #f95bf6, #532cf9, #03f7eb); /* @kind color */
+
+  /* ── Secondary palette ── */
+  --mid-gray: #737373;      /* secondary text — light bg only */
+  --light-gray: #d9d9d9;    /* support text — navy only */
+  --border: #e8edf5;        /* card borders, dividers, table lines */
+  --border-ice: #dce8ff;    /* border for ice cards */
+
+  /* ── On-dark alphas (text is always white on navy) ── */
+  --on-dark: #fdfdfd;
+  --on-dark-70: rgba(253, 253, 253, 0.70);
+  --on-dark-65: rgba(253, 253, 253, 0.65);
+  --on-dark-50: rgba(253, 253, 253, 0.50);
+  --on-dark-45: rgba(253, 253, 253, 0.45);
+  --on-dark-40: rgba(253, 253, 253, 0.40);
+  --on-dark-28: rgba(253, 253, 253, 0.28);
+  --on-dark-25: rgba(253, 253, 253, 0.25);
+  --on-dark-18: rgba(253, 253, 253, 0.18);
+  --dark-surface: rgba(255, 255, 255, 0.04);
+  --dark-border: rgba(255, 255, 255, 0.10);
+  --dark-border-hover: rgba(255, 255, 255, 0.20);
+  --dark-divider: rgba(255, 255, 255, 0.07);
+
+  /* ── Status ── */
+  --status-success: #22c55e;
+  --status-warning: #f59e0b;
+  --status-error: #ef4444;
+  --status-info: #3b82f6;
+  --input-error: #e53e3e;
+
+  /* ── Semantic aliases ── */
+  --text-primary: var(--navy);
+  --text-secondary: var(--mid-gray);
+  --text-on-dark: var(--white);
+  --surface-page: var(--white);
+  --surface-card: var(--white);
+  --surface-secondary: var(--ice-blue);
+  --surface-dark: var(--navy);
+  --focus-ring-light: #532cf9;
+  --focus-ring-dark: #03f7eb;
+
+  /* ── Sub-brand gradients (replace parent gradient in sub-brand materials) ── */
+  --sub-mento: linear-gradient(90deg, #5de0e6, #004aad);    /* @kind color */
+  --sub-campus: linear-gradient(90deg, #0b3d2e, #1b1f23);   /* @kind color */
+  --sub-well: linear-gradient(90deg, #0097b2, #7ed957);     /* @kind color */
+  --sub-linno: linear-gradient(90deg, #62bfd4, #f1dd76);    /* @kind color */
+  --sub-cognition: linear-gradient(90deg, #ff66c4, #ffde59);/* @kind color */
+}

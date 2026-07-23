@@ -1,0 +1,42 @@
+/* MY PATH.IA — Spacing, Layout & Radius
+ * Base unit: 4px. All spacing is a multiple of 4. */
+
+:root {
+  /* ── Spacing scale ── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* ── Border radius ── */
+  --radius-none: 0px;
+  --radius-sm: 4px;    /* badges, tags */
+  --radius-md: 8px;    /* buttons, inputs, small cards */
+  --radius-lg: 12px;   /* cards, panels, dropdowns */
+  --radius-xl: 16px;   /* large cards, modals */
+  --radius-2xl: 24px;  /* feature cards, hero cards */
+  --radius-full: 9999px;
+
+  /* ── Layout ── */
+  --max-hero: 1200px;
+  --max-content: 1000px;
+  --max-text: 680px;
+  --gutter-desktop: 64px;
+  --gutter-tablet: 32px;
+  --gutter-mobile: 20px;
+  --grid-columns: 12; /* @kind other */
+  --grid-gutter: 24px;
+
+  /* ── Section rhythm ── */
+  --section-pad-y: 80px;
+  --hero-pad-y: 96px;
+
+  /* ── Elevation (borders provide definition; shadows are rare) ── */
+  --shadow-none: none;
+  --shadow-focus-light: 0 0 0 3px rgba(83, 44, 249, 0.08);
+  --shadow-focus-error: 0 0 0 3px rgba(229, 62, 62, 0.08);
+}
