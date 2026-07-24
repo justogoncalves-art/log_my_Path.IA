@@ -101,7 +101,7 @@
               Continuar con Google
             </button>
             <button onClick="{{ loginGoogle }}" style="cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: #F8F8F8; border: 1px solid #DFD8D1; border-radius: 8px; padding: 11px 20px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14px; color: #151111; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s;" style-hover="transform: translateY(-1px); border-color: #399AB8;" style-active="transform: translateY(0); opacity: 0.85;">
-              <img src="assets/mark-m-google.png" alt="" style="width: 22px; height: auto;">
+              <img src="uploads/M (29).png" alt="" style="width: 22px; height: auto;">
               Usuario MY PATH.IA
             </button>
           </div>
@@ -125,7 +125,7 @@
       </div>
 
       <div style="display: flex; justify-content: center; padding-top: 2px;">
-        <img src="assets/mark-m.png" alt="MY PATH.IA — Build your tomorrow." style="width: 200px; height: auto;">
+        <img src="uploads/M (31).png" alt="MY PATH.IA — Build your tomorrow." style="width: 200px; height: auto;">
       </div>
 
     </div>
@@ -139,7 +139,7 @@
 
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; background: {{ headerBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ headerBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <img src="assets/mark-m.png" alt="MY PATH.IA — Build your tomorrow." style="height: 40px; width: auto; filter: {{ headerLogoFilter }};">
+    <img src="uploads/M (31).png" alt="MY PATH.IA — Build your tomorrow." style="height: 40px; width: auto; filter: {{ headerLogoFilter }};">
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
 
       <!-- Nombre -->
@@ -264,31 +264,7 @@
     </div>
   </sc-if>
 
-  <!-- Chatbot -->
-  <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position: fixed; left: 24px; bottom: 96px; z-index: 90; width: 320px; background: {{ chatSurface }}; border: 1px solid {{ chatBorder }}; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; animation: mpFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
-      <div style="background: #133039; padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
-        <div style="width: 8px; height: 8px; border-radius: 50%; background: #399AB8;"></div>
-        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: #F6F0EC;">{{ t_chatTitle }}</span>
-        <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(246,240,236,0.5); margin-left: auto;">IA</span>
-      </div>
-      <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 260px; overflow-y: auto;">
-        <sc-for list="{{ chat }}" as="m" hint-placeholder-count="2">
-          <div style="align-self: {{ m.align }}; max-width: 85%; background: {{ m.bg }}; color: {{ m.color }}; border: 1px solid {{ m.border }}; border-radius: 12px; padding: 10px 14px; font-size: 13px; line-height: 1.6;">{{ m.text }}</div>
-        </sc-for>
-      </div>
-      <div style="display: flex; gap: 8px; padding: 12px; border-top: 1px solid {{ chatBorder }};">
-        <input value="{{ chatInput }}" onChange="{{ onChatInput }}" onKeyDown="{{ onChatKey }}" placeholder="{{ t_chatPlaceholder }}" style="flex: 1; min-width: 0; padding: 10px 14px; border: 1px solid {{ chatBorder }}; border-radius: 8px; font-family: 'Quicksand', sans-serif; font-size: 13px; color: {{ chatInputText }}; background: {{ chatInputBg }}; outline: none; transition: border-color 0.2s, box-shadow 0.2s;" style-focus="border-color: #399AB8; box-shadow: 0 0 0 3px rgba(57,154,184,0.10);">
-        <button onClick="{{ sendChat }}" title="{{ t_send }}" style="cursor: pointer; width: 40px; height: 40px; border-radius: 8px; border: none; background: #133039; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 L11 13"></path><path d="M22 2 L15 22 L11 13 L2 9 Z"></path></svg>
-        </button>
-      </div>
-    </div>
-  </sc-if>
-  <button onClick="{{ toggleChat }}" title="{{ t_chatTitle }}" style="position: fixed; left: 24px; bottom: 24px; z-index: 91; width: 56px; height: 56px; border-radius: 9999px; border: none; background: #133039; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;" style-hover="transform: translateY(-2px); opacity: 0.92;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5 a8.5 8.5 0 0 1 -8.5 8.5 c-1.5 0 -2.9 -0.4 -4.1 -1 L3 20 l1 -5.4 A8.5 8.5 0 1 1 21 11.5 Z"></path></svg>
-    <span style="position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: #399AB8; border: 2px solid #133039;"></span>
-  </button>
+  <!-- Chatbot y botones flotantes: ver stack global al final -->
 
 </div>
 </sc-if>
@@ -300,7 +276,7 @@
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
     <div style="display: flex; align-items: center;">
-      <img onClick="{{ mBackHome }}" src="assets/mark-m.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <img onClick="{{ mBackHome }}" src="uploads/M (31).png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
     </div>
 
     <!-- Accesos rápidos (plataformas activas) -->
@@ -363,7 +339,7 @@
     <div style="max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
 
       <!-- Programa (foto estudiantes + 80%) -->
-      <div onClick="{{ mOpenChapter }}" style="grid-column: 1 / -1; min-height: 340px; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid {{ mCardBorder }}; background-image: url('assets/mento-hero.jpg'); background-size: cover; background-position: center 22%; cursor: pointer; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s; animation: mpTileIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;" style-hover="transform: translateY(-3px); border-color: #074292;">
+      <div onClick="{{ mOpenChapter }}" style="grid-column: 1 / -1; min-height: 340px; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid {{ mCardBorder }}; background-image: url('uploads/image-1776420963165.png'); background-size: cover; background-position: center 22%; cursor: pointer; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s; animation: mpTileIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;" style-hover="transform: translateY(-3px); border-color: #074292;">
         <div style="position: absolute; inset: 0; background: linear-gradient(105deg, rgba(7,66,146,0.9) 0%, rgba(7,66,146,0.55) 42%, rgba(4,25,59,0.35) 100%);"></div>
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
         <div style="position: relative; height: 100%; box-sizing: border-box; padding: 34px 38px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px;">
@@ -406,7 +382,7 @@
       </div>
 
       <!-- My Campus.IA -->
-      <div onClick="{{ mGoCampus }}" style="min-height: 260px; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid {{ mCardBorder }}; background-image: url('assets/Imagen_My.Unni.jpg'); background-size: cover; background-position: center 60%; cursor: pointer; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s; animation: mpTileIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;" style-hover="transform: translateY(-3px); border-color: #074292;">
+      <div onClick="{{ mGoCampus }}" style="min-height: 260px; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid {{ mCardBorder }}; background-image: url('uploads/Imagen_My.Unni.jpg'); background-size: cover; background-position: center 60%; cursor: pointer; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s; animation: mpTileIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;" style-hover="transform: translateY(-3px); border-color: #074292;">
         <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,25,59,0.2) 0%, rgba(4,25,59,0.55) 55%, rgba(4,25,59,0.9) 100%);"></div>
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
         <div style="position: relative; height: 100%; box-sizing: border-box; padding: 32px 34px; display: flex; flex-direction: column; justify-content: space-between; gap: 22px;">
@@ -439,7 +415,7 @@
   <!-- Header (barra superior de la app) -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
     <div style="display: flex; align-items: center;">
-      <img onClick="{{ mBackHome }}" src="assets/mark-m.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <img onClick="{{ mBackHome }}" src="uploads/M (31).png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ mGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: none; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: #ffffff; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.92; transform: translateY(-1px);">
@@ -1021,7 +997,7 @@
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
     <div style="display: flex; align-items: center;">
-      <img onClick="{{ mBackHome }}" src="assets/mark-m.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <img onClick="{{ mBackHome }}" src="uploads/M (31).png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ chBackMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: none; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: #ffffff; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.92; transform: translateY(-1px);">
@@ -1068,7 +1044,7 @@
           </div>
 
           <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden; border: 1px solid {{ mCardBorder }}; background: #000;">
-            <iframe onLoad="{{ ytListen }}" src="{{ videoSrc }}" title="Capítulo 9 — Mento.IA" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="true" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>
+            <iframe id="mpYtFrame" src="{{ videoSrc }}" title="Capítulo 9 — Mento.IA" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="true" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>
           </div>
 
           <sc-if value="{{ chVideoPhase }}" hint-placeholder-val="{{ true }}">
@@ -1154,7 +1130,7 @@
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
     <div style="display: flex; align-items: center;">
-      <img onClick="{{ mBackHome }}" src="assets/mark-m.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <img onClick="{{ mBackHome }}" src="uploads/M (31).png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ rGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: none; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: #ffffff; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.92; transform: translateY(-1px);">
@@ -1387,7 +1363,7 @@
   <!-- Header (banner superior de la app — no se reemplaza) -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
     <div style="display: flex; align-items: center;">
-      <img onClick="{{ mBackHome }}" src="assets/mark-m.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <img onClick="{{ mBackHome }}" src="uploads/M (31).png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ mGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: 1.5px solid #074292; background: transparent; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: {{ mHeroText }}; transition: border-color 0.15s, transform 0.15s, background 0.15s;" style-hover="transform: translateY(-1px); background: rgba(7,66,146,0.06);">
@@ -1440,7 +1416,7 @@
   <!-- Header (barra superior de la app — consistente con el resto) -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
     <div style="display: flex; align-items: center;">
-      <img onClick="{{ mBackHome }}" src="assets/mark-m.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <img onClick="{{ mBackHome }}" src="uploads/M (31).png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ mGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: 1.5px solid #074292; background: transparent; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: {{ mHeroText }}; transition: border-color 0.15s, transform 0.15s, background 0.15s;" style-hover="transform: translateY(-1px); background: rgba(7,66,146,0.06);">
@@ -1693,6 +1669,244 @@
 
 </div>
 </sc-if>
+<!-- ======================= INFORMACIÓN (FAQ / PRECIOS) ======================= -->
+<sc-if value="{{ isInfo }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Información" style="min-height: 100vh; font-family: 'Quicksand', sans-serif; background: {{ mPageBg }}; transition: background 0.4s ease;">
+
+  <!-- Header -->
+  <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
+    <div style="display: flex; align-items: center;">
+      <img onClick="{{ infoBack }}" src="uploads/M (31).png" alt="MY PATH.IA — volver" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+    </div>
+    <div style="justify-self: center; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ infoKicker }}</div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
+          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
+        </div>
+      </div>
+      <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
+        <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ langX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+        <button onClick="{{ setEs }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ mEsColor }}; transition: color 0.3s;">ES</button>
+        <button onClick="{{ setEn }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ mEnColor }}; transition: color 0.3s;">EN</button>
+      </div>
+      <button onClick="{{ toggleDark }}" title="{{ t_theme }}" style="cursor: pointer; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+        <sc-if value="{{ dark }}" hint-placeholder-val="{{ false }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2 v2 M12 20 v2 M2 12 h2 M20 12 h2 M4.9 4.9 l1.4 1.4 M17.7 17.7 l1.4 1.4 M19.1 4.9 l-1.4 1.4 M6.3 17.7 l-1.4 1.4"></path></svg>
+        </sc-if>
+        <sc-if value="{{ light }}" hint-placeholder-val="{{ true }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8 A9 9 0 1 1 11.2 3 a7 7 0 0 0 9.8 9.8 Z"></path></svg>
+        </sc-if>
+      </button>
+      <button onClick="{{ logout }}" title="{{ t_exit }}" style="cursor: pointer; height: 36px; padding: 0 14px; border-radius: 8px; border: none; background: #7A2230; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: #F6F0EC; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21 H5 a2 2 0 0 1 -2 -2 V5 a2 2 0 0 1 2 -2 h4"></path><path d="M16 17 L21 12 L16 7"></path><path d="M21 12 H9"></path></svg>
+        {{ t_exit }}
+      </button>
+    </div>
+  </header>
+
+  <!-- Dos botones centrados debajo del zócalo -->
+  <section style="padding: 44px 20px 8px;">
+    <div style="max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
+      <button onClick="{{ infoGoFaq }}" style="cursor: pointer; padding: 13px 30px; border-radius: 9999px; border: 1.5px solid {{ infoFaqBorder }}; background: {{ infoFaqBg }}; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; color: {{ infoFaqColor }}; transition: transform 0.15s, border-color 0.15s, background 0.15s;" style-hover="transform: translateY(-1px);">{{ infoFaqLabel }}</button>
+      <button onClick="{{ infoGoPrecios }}" style="cursor: pointer; padding: 13px 30px; border-radius: 9999px; border: 1.5px solid {{ infoPrecBorder }}; background: {{ infoPrecBg }}; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; color: {{ infoPrecColor }}; transition: transform 0.15s, border-color 0.15s, background 0.15s;" style-hover="transform: translateY(-1px);">{{ infoPreciosLabel }}</button>
+    </div>
+  </section>
+
+  <!-- Preguntas frecuentes -->
+  <sc-if value="{{ infoFaqOn }}" hint-placeholder-val="{{ true }}">
+    <section style="padding: 24px 20px 90px;">
+      <div style="max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: grid; grid-template-columns: {{ faqCols }}; gap: 18px; align-items: start;">
+          <sc-for list="{{ faqTop }}" as="f" hint-placeholder-count="4">
+            <div style="position: relative; height: 100%; box-sizing: border-box; border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mCardBg }}; padding: 26px 30px; animation: mpFadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;">
+              <div style="position: absolute; top: 0; left: 26px; right: 26px; height: 3px; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+              <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 8px;">{{ f.tag }}</div>
+              <h3 style="margin: 0 0 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(19px, 2.2vw, 23px); line-height: 1.2; color: {{ mHeroText }};">{{ f.title }}</h3>
+              <sc-if value="{{ f.hasHighlight }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;">
+                  <sc-for list="{{ f.highlights }}" as="h" hint-placeholder-count="1">
+                    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: rgba(7,66,146,0.09); border: 1px solid rgba(7,66,146,0.28); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.5px; font-weight: 500; color: #074292;">
+                      <span style="width: 6px; height: 6px; border-radius: 50%; background: #0de0e6;"></span>{{ h }}
+                    </span>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <sc-for list="{{ f.paras }}" as="p" hint-placeholder-count="1">
+                  <p style="margin: 0; font-size: 14.5px; line-height: 1.8; color: {{ mReportBody }};">{{ p }}</p>
+                </sc-for>
+              </div>
+              <sc-if value="{{ f.hasBullets }}" hint-placeholder-val="{{ false }}">
+                <ul style="margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                  <sc-for list="{{ f.bullets }}" as="b" hint-placeholder-count="1">
+                    <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.7; color: {{ mReportBody }};">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;"><path d="M5 12 l4 4 L19 6"></path></svg>
+                      <span>{{ b }}</span>
+                    </li>
+                  </sc-for>
+                </ul>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-for list="{{ faqBottom }}" as="f" hint-placeholder-count="1">
+          <div style="position: relative; border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mCardBg }}; padding: 30px 34px; animation: mpFadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;">
+            <div style="position: absolute; top: 0; left: 30px; right: 30px; height: 3px; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 8px;">{{ f.tag }}</div>
+            <h3 style="margin: 0 0 14px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(20px, 2.4vw, 26px); line-height: 1.2; color: {{ mHeroText }};">{{ f.title }}</h3>
+            <sc-if value="{{ f.hasLead }}" hint-placeholder-val="{{ false }}">
+              <p style="margin: 0 0 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 18px; line-height: 1.5; color: #074292;">{{ f.lead }}</p>
+            </sc-if>
+            <div style="display: grid; grid-template-columns: {{ faqCols }}; gap: 12px 26px;">
+              <sc-for list="{{ f.paras }}" as="p" hint-placeholder-count="1">
+                <p style="margin: 0; font-size: 15px; line-height: 1.8; color: {{ mReportBody }};">{{ p }}</p>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- Precios -->
+  <sc-if value="{{ infoPreciosOn }}" hint-placeholder-val="{{ false }}">
+    <section style="padding: 24px 20px 90px;">
+      <div style="max-width: 780px; margin: 0 auto; position: relative; border: 1px solid {{ mCardBorder }}; border-radius: 20px; background: {{ mCardBg }}; padding: 38px 40px; animation: mpFadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;">
+        <div style="position: absolute; top: 0; left: 40px; right: 40px; height: 3px; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+
+        <!-- Encabezado + toggle divisa -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 22px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ precPlan }}</span>
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 3vw, 32px); color: {{ mHeroText }};">Mento.IA + My Campus.IA</h3>
+          </div>
+          <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
+            <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ curX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+            <button onClick="{{ setUsd }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 6px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ usdColor }}; transition: color 0.3s;">USD</button>
+            <button onClick="{{ setEur }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 6px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ eurColor }}; transition: color 0.3s;">EUR</button>
+          </div>
+        </div>
+
+        <!-- Qué incluye -->
+        <ul style="margin: 0 0 26px; padding: 0; list-style: none; display: grid; grid-template-columns: {{ faqCols }}; gap: 12px 24px;">
+          <sc-for list="{{ precFeatures }}" as="f" hint-placeholder-count="4">
+            <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.6; color: {{ mReportBody }};">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M8 12 l2.5 2.5 L16 9"></path></svg>
+              <span>{{ f }}</span>
+            </li>
+          </sc-for>
+        </ul>
+
+        <!-- Precio destacado -->
+        <div style="border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mPageBg }}; padding: 26px 28px; margin-bottom: 26px;">
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 12px;">{{ precPerUser }}</div>
+          <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 14px;">
+            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 22px; color: {{ mSectionLabel }}; text-decoration: line-through; text-decoration-color: #7A2230;">{{ precWas }}</span>
+            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(38px, 5vw, 48px); line-height: 1; color: {{ mHeroText }};">{{ precNow }}</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(45,130,112,0.14); border: 1px solid rgba(45,130,112,0.45); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.5px; font-weight: 500; color: #1d6149;">{{ precBadge }}</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 18px; margin-top: 16px;">
+            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: {{ mReportBody }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7 v5 l3 2"></path></svg>{{ precOne }}</span>
+            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: {{ mReportBody }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2 v4 M16 2 v4 M3 10 h18"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect></svg>{{ precYear }}</span>
+          </div>
+        </div>
+
+        <!-- Simulador por franja de alumnos -->
+        <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 6px;">{{ precSimTitle }}</div>
+        <p style="margin: 0 0 22px; font-size: 14px; line-height: 1.7; color: {{ mReportBody }};">{{ precSimSub }}</p>
+
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; line-height: 1; color: {{ mHeroText }};">{{ simStudentsLabel }}</span>
+            <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ precStudentsCaption }}</span>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; line-height: 1; color: #074292;">{{ simPrice }}</span>
+            <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; color: #1d6149;">{{ simDisc }}</span>
+          </div>
+        </div>
+
+        <!-- Línea con bola arrastrable -->
+        <div ref="{{ trackRef }}" onPointerDown="{{ sliderDown }}" style="position: relative; height: 10px; border-radius: 9999px; background: {{ sliderTrackBg }}; cursor: pointer; margin: 6px 0 10px; touch-action: none;">
+          <div style="position: absolute; left: 0; top: 0; bottom: 0; width: {{ sliderPct }}; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #074292);"></div>
+          <div style="position: absolute; left: {{ sliderPct }}; top: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; border-radius: 50%; background: #074292; border: 3px solid #ffffff; box-shadow: 0 3px 10px rgba(7,66,146,0.45); cursor: grab;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; color: {{ mSectionLabel }}; margin-bottom: 26px;">
+          <span>10</span><span>200</span><span>500</span><span>700+</span>
+        </div>
+
+        <!-- Tabla de franjas -->
+        <div style="border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 1.4fr 1fr 1.2fr; background: #074292;">
+            <span style="padding: 11px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #ffffff;">{{ precColBand }}</span>
+            <span style="padding: 11px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #ffffff;">{{ precColPrice }}</span>
+            <span style="padding: 11px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #ffffff;">{{ precColDisc }}</span>
+          </div>
+          <sc-for list="{{ precTiers }}" as="t" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 1.4fr 1fr 1.2fr; background: {{ t.rowBg }}; border-top: 1px solid {{ mCardBorder }};">
+              <span style="padding: 13px 16px; font-family: 'Quicksand', sans-serif; font-size: 14px; font-weight: {{ t.weight }}; color: {{ mHeroText }};">{{ t.band }}</span>
+              <span style="padding: 13px 16px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: {{ t.priceColor }};">{{ t.price }}</span>
+              <span style="padding: 13px 16px; font-family: 'Quicksand', sans-serif; font-size: 13.5px; color: {{ mReportBody }};">{{ t.disc }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <a href="mailto:hola@mypathia.com" style="cursor: pointer; text-decoration: none; margin-top: 26px; display: inline-flex; align-items: center; gap: 9px; padding: 14px 30px; border: none; border-radius: 9999px; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: #ffffff; transition: transform 0.15s, opacity 0.15s;" style-hover="transform: translateY(-1px); opacity: 0.92;">
+          {{ precCta }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 H19"></path><path d="M13 6 L19 12 L13 18"></path></svg>
+        </a>
+      </div>
+    </section>
+  </sc-if>
+
+</div>
+</sc-if>
+
+<!-- ======================= FLOTANTES GLOBALES (chat + cohete + whatsapp) ======================= -->
+<sc-if value="{{ showRocket }}" hint-placeholder-val="{{ false }}">
+  <!-- Panel del chatbot -->
+  <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; right: 96px; bottom: 24px; z-index: 96; width: 320px; background: {{ chatSurface }}; border: 1px solid {{ chatBorder }}; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; animation: mpFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
+      <div style="background: #133039; padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
+        <div style="width: 8px; height: 8px; border-radius: 50%; background: #399AB8;"></div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: #F6F0EC;">{{ t_chatTitle }}</span>
+        <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(246,240,236,0.5); margin-left: auto;">IA</span>
+      </div>
+      <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 260px; overflow-y: auto;">
+        <sc-for list="{{ chat }}" as="m" hint-placeholder-count="2">
+          <div style="align-self: {{ m.align }}; max-width: 85%; background: {{ m.bg }}; color: {{ m.color }}; border: 1px solid {{ m.border }}; border-radius: 12px; padding: 10px 14px; font-size: 13px; line-height: 1.6;">{{ m.text }}</div>
+        </sc-for>
+      </div>
+      <div style="display: flex; gap: 8px; padding: 12px; border-top: 1px solid {{ chatBorder }};">
+        <input value="{{ chatInput }}" onChange="{{ onChatInput }}" onKeyDown="{{ onChatKey }}" placeholder="{{ t_chatPlaceholder }}" style="flex: 1; min-width: 0; padding: 10px 14px; border: 1px solid {{ chatBorder }}; border-radius: 8px; font-family: 'Quicksand', sans-serif; font-size: 13px; color: {{ chatInputText }}; background: {{ chatInputBg }}; outline: none; transition: border-color 0.2s, box-shadow 0.2s;" style-focus="border-color: #399AB8; box-shadow: 0 0 0 3px rgba(57,154,184,0.10);">
+        <button onClick="{{ sendChat }}" title="{{ t_send }}" style="cursor: pointer; width: 40px; height: 40px; border-radius: 8px; border: none; background: #133039; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 L11 13"></path><path d="M22 2 L15 22 L11 13 L2 9 Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Stack de botones (whatsapp org · chat · cohete) -->
+  <div style="position: fixed; right: 24px; bottom: 24px; z-index: 95; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+    <sc-if value="{{ showWhats }}" hint-placeholder-val="{{ false }}">
+      <a href="https://wa.me/34600000000" target="_blank" rel="noopener" title="{{ t_whats }}" style="width: 56px; height: 56px; border-radius: 9999px; border: none; background: #25D366; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 22px rgba(37,211,102,0.4); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;" style-hover="transform: translateY(-2px); opacity: 0.94;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M12.04 2 C6.58 2 2.13 6.45 2.13 11.91 c0 1.75 0.46 3.45 1.32 4.95 L2 22 l5.25 -1.38 c1.45 0.79 3.08 1.21 4.79 1.21 h0 c5.46 0 9.91 -4.45 9.91 -9.91 C21.95 6.45 17.5 2 12.04 2 Z M12.04 20.15 h0 c-1.53 0 -3.03 -0.41 -4.34 -1.19 l-0.31 -0.18 -3.12 0.82 0.83 -3.04 -0.2 -0.32 a8.2 8.2 0 0 1 -1.26 -4.36 c0 -4.54 3.7 -8.24 8.25 -8.24 4.54 0 8.24 3.7 8.24 8.25 0 4.54 -3.7 8.24 -8.24 8.24 Z M16.56 13.99 c-0.25 -0.12 -1.47 -0.72 -1.69 -0.81 -0.23 -0.08 -0.39 -0.12 -0.56 0.12 -0.17 0.25 -0.64 0.81 -0.79 0.97 -0.14 0.17 -0.29 0.19 -0.54 0.06 -0.25 -0.12 -1.05 -0.39 -2 -1.23 -0.74 -0.66 -1.24 -1.48 -1.38 -1.73 -0.14 -0.25 -0.02 -0.38 0.11 -0.5 0.11 -0.11 0.25 -0.29 0.37 -0.43 0.12 -0.14 0.17 -0.25 0.25 -0.41 0.08 -0.17 0.04 -0.31 -0.02 -0.43 -0.06 -0.12 -0.56 -1.34 -0.76 -1.84 -0.2 -0.48 -0.4 -0.42 -0.56 -0.43 l-0.48 -0.01 c-0.17 0 -0.43 0.06 -0.66 0.31 -0.23 0.25 -0.87 0.85 -0.87 2.07 0 1.22 0.89 2.4 1.01 2.56 0.12 0.17 1.75 2.67 4.23 3.74 0.59 0.26 1.05 0.41 1.41 0.52 0.59 0.19 1.13 0.16 1.56 0.1 0.48 -0.07 1.47 -0.6 1.67 -1.18 0.21 -0.58 0.21 -1.07 0.14 -1.18 -0.06 -0.11 -0.23 -0.17 -0.48 -0.29 Z"></path></svg>
+      </a>
+    </sc-if>
+    <button onClick="{{ toggleChat }}" title="{{ t_chatTitle }}" style="position: relative; width: 56px; height: 56px; border-radius: 9999px; border: none; background: #133039; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 22px rgba(19,48,57,0.35); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;" style-hover="transform: translateY(-2px); opacity: 0.92;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5 a8.5 8.5 0 0 1 -8.5 8.5 c-1.5 0 -2.9 -0.4 -4.1 -1 L3 20 l1 -5.4 A8.5 8.5 0 1 1 21 11.5 Z"></path></svg>
+      <span style="position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: #399AB8; border: 2px solid #133039;"></span>
+    </button>
+    <button onClick="{{ openInfo }}" title="{{ rocketTitle }}" style="width: 56px; height: 56px; border-radius: 9999px; border: none; background: #074292; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 22px rgba(7,66,146,0.35); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;" style-hover="transform: translateY(-2px); opacity: 0.94;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5 c-1.5 1.26 -2 5 -2 5 s3.74 -0.5 5 -2 c0.71 -0.84 0.7 -2.13 -0.09 -2.91 a2.18 2.18 0 0 0 -2.91 -0.09 Z"></path><path d="M12 15 l-3 -3 a22 22 0 0 1 2 -3.95 A12.88 12.88 0 0 1 22 2 c0 2.72 -0.78 7.5 -6 11 a22.35 22.35 0 0 1 -4 2 Z"></path><path d="M9 12 H4 s0.55 -3.03 2 -4 c1.62 -1.08 5 0 5 0"></path><path d="M12 15 v5 s3.03 -0.55 4 -2 c1.08 -1.62 0 -5 0 -5"></path></svg>
+    </button>
+  </div>
+</sc-if>
+
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{
   &quot;defaultRole&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;alumno&quot;, &quot;profesional&quot;], &quot;default&quot;: &quot;alumno&quot;, &quot;tsType&quot;: &quot;'alumno' | 'profesional'&quot;, &quot;section&quot;: &quot;Comportamiento&quot; }
@@ -1732,8 +1946,14 @@ class Component extends DCLogic {
     campusInitView: '',
     campusStudent: null,
     campusContact: 'none',
-    campusContactTarget: ''
+    campusContactTarget: '',
+    infoTab: 'faq',
+    infoFrom: 'home',
+    currency: 'usd',
+    students: 200
   };
+
+  _trackRef = (typeof React !== 'undefined' ? React.createRef() : { current: null });
 
   componentDidMount() {
     const r = this.props.defaultRole;
@@ -1759,6 +1979,22 @@ class Component extends DCLogic {
       }
     };
     window.addEventListener('message', this._onYt);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const enteredVideo = this.state.screen === 'chapter' && this.state.chapterPhase === 'video' &&
+      (prevState.screen !== 'chapter' || prevState.chapterPhase !== 'video' || prevState.videoLang !== this.state.videoLang);
+    if (enteredVideo) {
+      clearInterval(this._ytPing);
+      let tries = 0;
+      this._ytPing = setInterval(() => {
+        const f = document.getElementById('mpYtFrame');
+        if (f && f.contentWindow) {
+          try { f.contentWindow.postMessage('{"event":"listening"}', '*'); } catch (_) {}
+        }
+        if (++tries > 8) clearInterval(this._ytPing);
+      }, 400);
+    }
   }
 
   videoId() {
@@ -1882,11 +2118,11 @@ class Component extends DCLogic {
 
   quotesData() {
     return [
-      { text: '\u201CNo es el m\u00e1s fuerte el que sobrevive, ni el m\u00e1s inteligente. Es el que mejor se adapta al cambio.\u201D', author: 'Charles Darwin', img: 'assets/works-globe.jpeg', pos: 'center' },
-      { text: '\u201CEl \u00e9xito es la suma de peque\u00f1os esfuerzos repetidos d\u00eda tras d\u00eda.\u201D', author: 'Robert Collier', img: 'assets/quote-10.jpeg', pos: 'center 40%' },
-      { text: '\u201CNo es que tengamos un problema dif\u00edcil; es que tenemos un problema f\u00e1cil que estamos resolviendo de forma dif\u00edcil.\u201D', author: 'Albert Einstein', img: 'assets/pexels-filip-aurel-vlcek-350223250-35730384.jpg', pos: 'center 30%' },
-      { text: '\u201CEl que tiene un porqu\u00e9 para vivir, puede soportar casi cualquier c\u00f3mo.\u201D', author: 'Friedrich Nietzsche', img: 'assets/quote-6.jpeg', pos: 'center 40%' },
-      { text: '\u201CNo te rindas. Sufre ahora y vivir\u00e1s el resto de tu vida como un campe\u00f3n.\u201D', author: 'Muhammad Ali', img: 'assets/quote-berlin.jpeg', pos: 'center 45%' }
+      { text: '\u201CNo es el m\u00e1s fuerte el que sobrevive, ni el m\u00e1s inteligente. Es el que mejor se adapta al cambio.\u201D', author: 'Charles Darwin', img: 'uploads/Works globe.jpeg', pos: 'center' },
+      { text: '\u201CEl \u00e9xito es la suma de peque\u00f1os esfuerzos repetidos d\u00eda tras d\u00eda.\u201D', author: 'Robert Collier', img: 'uploads/_ (10).jpeg', pos: 'center 40%' },
+      { text: '\u201CNo es que tengamos un problema dif\u00edcil; es que tenemos un problema f\u00e1cil que estamos resolviendo de forma dif\u00edcil.\u201D', author: 'Albert Einstein', img: 'uploads/pexels-filip-aurel-vlcek-350223250-35730384.jpg', pos: 'center 30%' },
+      { text: '\u201CEl que tiene un porqu\u00e9 para vivir, puede soportar casi cualquier c\u00f3mo.\u201D', author: 'Friedrich Nietzsche', img: 'uploads/_ (6).jpeg', pos: 'center 40%' },
+      { text: '\u201CNo te rindas. Sufre ahora y vivir\u00e1s el resto de tu vida como un campe\u00f3n.\u201D', author: 'Muhammad Ali', img: 'uploads/48 Hours in Berlin _ Sarah Michiko.jpeg', pos: 'center 45%' }
     ];
   }
 
@@ -1929,7 +2165,7 @@ class Component extends DCLogic {
                 : 'AI-powered vocational guidance. Let\u2019s discover your professional future.',
         active: true, action: 'link', url: 'https://mentoia.app/',
         col: '1 / span 3', row: '1', delay: '0.05s',
-        img: 'assets/mento-hero.jpg', imgPos: 'center 25%',
+        img: 'uploads/image-1776420963165.png', imgPos: 'center 25%',
         icon: 'M12 2 a10 10 0 1 0 0 20 a10 10 0 0 0 0 -20 Z', icon2: 'M15.5 8.5 L13.5 13.5 L8.5 15.5 L10.5 10.5 Z'
       },
       {
@@ -1938,7 +2174,7 @@ class Component extends DCLogic {
                 : 'The world\u2019s most powerful academic search engine, in your hands. Universities, programs and much more.',
         active: true, action: 'link', url: 'https://www.mycampusia.app/',
         col: '4 / span 3', row: '1', delay: '0.12s',
-        img: 'assets/Imagen_My.Unni.jpg', imgPos: 'center 60%',
+        img: 'uploads/Imagen_My.Unni.jpg', imgPos: 'center 60%',
         icon: 'M3 21 h18 M5 21 V8 l7 -5 l7 5 v13', icon2: 'M9 21 v-6 h6 v6'
       },
       {
@@ -1950,7 +2186,7 @@ class Component extends DCLogic {
           ? 'My.Mind es un programa de detección y acompañamiento psicológico y neurológico diseñado para la etapa escolar. A través de protocolos validados científicamente, identifica de forma temprana neurodivergencias, estados emocionales y situaciones de riesgo, construyendo un perfil longitudinal del alumno que alimenta su proceso de orientación vital en la adolescencia.'
           : 'My.Mind is a psychological and neurological screening and support program designed for the school years. Through scientifically validated protocols, it identifies neurodivergences, emotional states and risk situations early, building a longitudinal profile of the student that feeds their life-orientation process in adolescence.',
         col: '1 / span 2', row: '2', delay: '0.19s',
-        img: 'assets/Imagen_My.Mind.jpg', imgPos: 'center 20%',
+        img: 'uploads/Imagen_My.Mind.jpg', imgPos: 'center 20%',
         icon: 'M12 21 C6 16 3 12.5 3 9 a5 5 0 0 1 9 -3 a5 5 0 0 1 9 3 c0 3.5 -3 7 -9 12 Z', icon2: ''
       },
       {
@@ -1962,7 +2198,7 @@ class Component extends DCLogic {
           ? 'My.Cognition es el primer protocolo digital de rehabilitación neurocognitiva para niños y adolescentes cuyo cerebro ha sido afectado por tratamientos médicos agresivos — quimioterapia, epilepsia, traumatismos craneales — usando inteligencia artificial adaptativa para devolver, sesión a sesión, las capacidades cognitivas que el tratamiento les quitó.'
           : 'My.Cognition is the first digital neurocognitive rehabilitation protocol for children and adolescents whose brains have been affected by aggressive medical treatments — chemotherapy, epilepsy, head trauma — using adaptive artificial intelligence to restore, session by session, the cognitive abilities the treatment took from them.',
         col: '3 / span 2', row: '2', delay: '0.26s',
-        img: 'assets/pexels-ruben-boekeloo-521336009-29626802.jpg', imgPos: 'center',
+        img: 'uploads/pexels-ruben-boekeloo-521336009-29626802.jpg', imgPos: 'center',
         icon: 'M9.5 3 a3.5 3.5 0 0 0 -3.5 3.5 c-2 0.5 -3 2 -3 4 c0 1.5 0.8 2.8 2 3.5 c-0.3 2.5 1.5 4.5 4 4.5 c0.5 1 1.5 2 3 2 V3.5 A3.5 3.5 0 0 0 9.5 3 Z', icon2: 'M14.5 3 a3.5 3.5 0 0 1 3.5 3.5 c2 0.5 3 2 3 4 c0 1.5 -0.8 2.8 -2 3.5 c0.3 2.5 -1.5 4.5 -4 4.5 c-0.5 1 -1.5 2 -3 2'
       },
       {
@@ -1974,12 +2210,202 @@ class Component extends DCLogic {
           ? 'Primera plataforma para encontrar el profesional que necesites. Psicólogos, pedagogos, orientadores, ¡y más!'
           : 'The first platform to find the professional you need. Psychologists, pedagogues, counselors, and more!',
         col: '5 / span 2', row: '2', delay: '0.33s',
-        img: 'assets/imagen-mypath-healthcare.avif', imgPos: 'center 30%',
+        img: 'uploads/Imagen_My Path - Healtcare.avif', imgPos: 'center 30%',
         icon: 'M12 3 l1.9 5.1 L19 10 l-5.1 1.9 L12 17 l-1.9 -5.1 L5 10 l5.1 -1.9 Z', icon2: 'M18 15 l0.9 2.1 L21 18 l-2.1 0.9 L18 21 l-0.9 -2.1 L15 18 l2.1 -0.9 Z'
       }
     ];
-    // El usuario (alumno) solo ve Mento, Campus y Linno
+    // La organización ve las 5; el alumno solo ve Mento, Campus y Linno
+    if (role === 'profesional') return all;
     return all.filter(p => p.id !== 'mind' && p.id !== 'cognition');
+  }
+
+  openInfo() {
+    this.setState(s => ({ infoFrom: s.screen === 'info' ? s.infoFrom : s.screen, screen: 'info' }));
+  }
+
+  sliderFromClientX(clientX) {
+    const el = this._trackRef && this._trackRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    let pct = (clientX - r.left) / r.width;
+    pct = Math.max(0, Math.min(1, pct));
+    const min = 10, max = 700;
+    const v = Math.round((min + pct * (max - min)) / 10) * 10;
+    this.setState({ students: v });
+  }
+
+  sliderDown(e) {
+    this._dragging = true;
+    this.sliderFromClientX(e.clientX);
+    this._mv = (ev) => { if (this._dragging) this.sliderFromClientX(ev.clientX); };
+    this._up = () => {
+      this._dragging = false;
+      window.removeEventListener('pointermove', this._mv);
+      window.removeEventListener('pointerup', this._up);
+    };
+    window.addEventListener('pointermove', this._mv);
+    window.addEventListener('pointerup', this._up);
+  }
+
+  precVals() {
+    const s = this.state;
+    const es = s.lang === 'es';
+    const dark = s.dark;
+    const T = (a, b) => this.T(a, b);
+    const usd = s.currency === 'usd';
+    const fmt = (v) => usd ? ('U$D ' + v.toFixed(2)) : ('\u20AC ' + v.toFixed(2));
+
+    const tierData = [
+      { band: T('Hasta 200 alumnos', 'Up to 200 students'), usd: 12, eur: 11, disc: T('Base especial', 'Special base') },
+      { band: T('De 201 a 500 alumnos', 'From 201 to 500 students'), usd: 10, eur: 9, disc: T('16,6% adicional', '16.6% additional') },
+      { band: T('Más de 500 alumnos', 'More than 500 students'), usd: 8, eur: 7, disc: T('33,3% adicional', '33.3% additional') }
+    ];
+    const n = s.students;
+    const ti = n <= 200 ? 0 : (n <= 500 ? 1 : 2);
+    const val = (t) => usd ? t.usd : t.eur;
+
+    return {
+      precPlan: T('Plan combinado', 'Combined plan'),
+      precPerUser: T('Precio por alumno', 'Price per student'),
+      precWas: fmt(usd ? 15 : 13),
+      precNow: fmt(val(tierData[0])),
+      precBadge: T('Tarifa 2026', '2026 rate'),
+      precOne: T('Un solo pago (no mensual)', 'One-time payment (not monthly)'),
+      precYear: T('Acceso todo el año', 'Full-year access'),
+      precFeatures: [
+        T('Acceso anual al programa Mento.IA (año correspondiente).', 'Annual access to the Mento.IA program (corresponding year).'),
+        T('Acceso full a My Campus.IA.', 'Full access to My Campus.IA.'),
+        T('Acceso docente: 1 por curso.', 'Teacher access: 1 per class.'),
+        T('Acceso coordinador: 1 por colegio.', 'Coordinator access: 1 per school.')
+      ],
+      precSimTitle: T('Simulador por volumen', 'Volume simulator'),
+      precSimSub: T(
+        'Arrastrá la bola para ver el precio por alumno según la cantidad de alumnos del colegio.',
+        'Drag the ball to see the price per student based on the school\u2019s number of students.'
+      ),
+      precStudentsCaption: T('Alumnos', 'Students'),
+      simStudentsLabel: n >= 700 ? '700+' : String(n),
+      simPrice: fmt(val(tierData[ti])),
+      simDisc: tierData[ti].disc,
+      trackRef: this._trackRef,
+      sliderDown: (e) => this.sliderDown(e),
+      sliderPct: (((n - 10) / (700 - 10)) * 100).toFixed(2) + '%',
+      sliderTrackBg: dark ? 'rgba(255,255,255,0.12)' : '#dfe6ef',
+      precColBand: T('Franja de alumnos', 'Student band'),
+      precColPrice: T('Precio por usuario', 'Price per user'),
+      precColDisc: T('Descuento', 'Discount'),
+      precTiers: tierData.map((t, i) => ({
+        band: t.band,
+        price: fmt(val(t)),
+        disc: t.disc,
+        rowBg: i === ti ? 'rgba(13,224,230,0.14)' : (dark ? 'transparent' : '#ffffff'),
+        weight: i === ti ? 700 : 500,
+        priceColor: i === ti ? '#074292' : (dark ? '#e8edf5' : '#151111')
+      })),
+      precCta: T('Solicitar propuesta', 'Request a proposal'),
+      setUsd: () => this.setState({ currency: 'usd' }),
+      setEur: () => this.setState({ currency: 'eur' }),
+      curX: usd ? '0%' : '100%',
+      usdColor: usd ? '#ffffff' : (dark ? 'rgba(255,255,255,0.6)' : '#3a4a52'),
+      eurColor: !usd ? '#ffffff' : (dark ? 'rgba(255,255,255,0.6)' : '#3a4a52')
+    };
+  }
+
+  infoBack() {
+    this.setState(s => ({ screen: s.infoFrom || 'home' }));
+  }
+
+  infoFaqData() {
+    const es = this.state.lang === 'es';
+    return es ? [
+      {
+        tag: '01', title: 'Duración del programa',
+        highlights: ['5 horas máx.', '4-5 semanas', '100% asincrónico'],
+        paras: [
+          'El programa completo requiere un máximo de 5 horas de dedicación por alumno. Distribuido en sesiones de una hora semanal, se completa en un plazo estimado de 4 a 5 semanas.',
+          'Al ser totalmente asincrónico, cada alumno avanza a su propio ritmo y desde donde le resulte más cómodo, sin afectar la dinámica de la clase.'
+        ]
+      },
+      {
+        tag: '02', title: 'Implementación',
+        highlights: ['Llave en mano', 'Alta con un Excel'],
+        paras: [
+          'La implementación es integral: desde Mento.IA gestionamos todo el proceso. El colegio solo debe aportar un archivo Excel con los datos de los alumnos para realizar el alta en la plataforma.'
+        ],
+        bullets: [
+          'Reunión inicial con las familias, opcional, para presentar el alcance y los objetivos de Mento.IA.',
+          'Sesión de repaso con el equipo docente los días previos al inicio, para resolver dudas y asegurar un despliegue sin fricciones.'
+        ]
+      },
+      {
+        tag: '03', title: 'Acompañamiento',
+        highlights: ['Soporte 24/7', 'WhatsApp + email'],
+        paras: [
+          'Ofrecemos acompañamiento permanente, disponible 24/7 a lo largo de todo el programa. Ponemos a disposición del colegio canales directos por WhatsApp y correo electrónico para resolver cualquier consulta con agilidad.'
+        ]
+      },
+      {
+        tag: '04', title: 'Privacidad y seguridad',
+        highlights: ['RGPD (UE)', 'Datos encriptados'],
+        paras: [
+          'Operamos en pleno cumplimiento del RGPD de la Unión Europea. La totalidad de la información almacenada en nuestra base de datos está encriptada, bajo los máximos estándares de ciberseguridad del sector.'
+        ]
+      },
+      {
+        tag: '05', title: '¿Competimos con el docente?',
+        lead: 'Mento.IA no reemplaza al docente. Lo potencia.',
+        paras: [
+          'Ningún algoritmo puede sustituir la mirada de un docente que conoce a sus estudiantes, ni la confianza que se construye en una conversación cara a cara. Mento.IA no viene a ocupar ese lugar: viene a devolverle el tiempo para ejercerlo plenamente.',
+          'Hoy, buena parte del trabajo de orientación se consume en tareas que no requieren a un profesional formado: administrar evaluaciones, tabular resultados y buscar patrones en planillas. Mento.IA asume esa carga. La inteligencia artificial procesa la información, cruza los resultados y los organiza en un reporte claro y accionable, para que el orientador o el docente llegue a la conversación con el estudiante con los datos ya elaborados.',
+          'El resultado es más tiempo real de acompañamiento y menos tiempo administrativo. La decisión final, la lectura del contexto y el vínculo con el estudiante y su familia siguen siendo, y seguirán siendo siempre, trabajo humano.',
+          'Mento.IA no decide por nadie. Le entrega al equipo docente mejores datos, más tiempo y más criterio para decidir mejor.'
+        ]
+      }
+    ] : [
+      {
+        tag: '01', title: 'Program duration',
+        highlights: ['5 hours max.', '4-5 weeks', '100% asynchronous'],
+        paras: [
+          'The full program requires a maximum of 5 hours of dedication per student. Delivered in weekly one-hour sessions, it is completed within an estimated 4 to 5 weeks.',
+          'Being fully asynchronous, each student progresses at their own pace and from wherever is most convenient, without disrupting class dynamics.'
+        ]
+      },
+      {
+        tag: '02', title: 'Implementation',
+        highlights: ['Turnkey', 'Onboarding via one Excel'],
+        paras: [
+          'Implementation is end-to-end: Mento.IA manages the entire process. The school only needs to provide an Excel file with the students\u2019 details to enroll them on the platform.'
+        ],
+        bullets: [
+          'Optional kickoff meeting with families to present the scope and objectives of Mento.IA.',
+          'Refresher session with the teaching team in the days before launch, to resolve questions and ensure a frictionless rollout.'
+        ]
+      },
+      {
+        tag: '03', title: 'Support',
+        highlights: ['24/7 support', 'WhatsApp + email'],
+        paras: [
+          'We provide ongoing support, available 24/7 throughout the program. We give the school direct channels via WhatsApp and email to resolve any query quickly.'
+        ]
+      },
+      {
+        tag: '04', title: 'Privacy & security',
+        highlights: ['GDPR (EU)', 'Encrypted data'],
+        paras: [
+          'We operate in full compliance with the European Union\u2019s GDPR. All information stored in our database is encrypted, under the industry\u2019s highest cybersecurity standards.'
+        ]
+      },
+      {
+        tag: '05', title: 'Do we compete with the teacher?',
+        lead: 'Mento.IA does not replace the teacher. It empowers them.',
+        paras: [
+          'No algorithm can replace the insight of a teacher who knows their students, nor the trust built in a face-to-face conversation. Mento.IA does not come to take that place: it comes to give back the time to exercise it fully.',
+          'Today, much of guidance work is consumed by tasks that don\u2019t require a trained professional: administering assessments, tabulating results and looking for patterns in spreadsheets. Mento.IA takes on that load. AI processes the information, cross-references the results and organizes them into a clear, actionable report, so the counselor or teacher arrives at the conversation with the student with the data already worked through.',
+          'The result is more real time for accompaniment and less administrative time. The final decision, the reading of context and the bond with the student and their family remain, and will always remain, human work.',
+          'Mento.IA decides for no one. It gives the teaching team better data, more time and more judgment to decide better.'
+        ]
+      }
+    ];
   }
 
   orgCreateReport() {
@@ -2148,7 +2574,7 @@ class Component extends DCLogic {
     }, 700);
   }
 
-  componentWillUnmount() { clearTimeout(this._bt); clearTimeout(this._orgProc); clearInterval(this._qi); if (this._onResize) window.removeEventListener('resize', this._onResize); if (this._onCampusMsg) window.removeEventListener('message', this._onCampusMsg); if (this._onYt) window.removeEventListener('message', this._onYt); }
+  componentWillUnmount() { clearTimeout(this._bt); clearTimeout(this._orgProc); clearInterval(this._qi); clearInterval(this._ytPing); if (this._onResize) window.removeEventListener('resize', this._onResize); if (this._onCampusMsg) window.removeEventListener('message', this._onCampusMsg); if (this._onYt) window.removeEventListener('message', this._onYt); }
 
   renderVals() {
     const s = this.state;
@@ -2176,10 +2602,17 @@ class Component extends DCLogic {
     const mobile = vw < 640;
     const tablet = vw >= 640 && vw < 980;
     const gridCols = mobile ? '1fr' : (tablet ? 'repeat(2, 1fr)' : 'repeat(6, 1fr)');
-    // colspan + min-height por tile [Mento, Campus, Linno]
-    const gcDesktop = ['1 / span 3', '4 / span 3', '1 / span 6'];
-    const gcTablet = ['1 / span 2', '1 / span 2', '1 / span 2'];
-    const gcMobile = ['1 / span 1', '1 / span 1', '1 / span 1'];
+    const isOrg = s.role === 'profesional';
+    // colspan por tile — alumno: [Mento, Campus, Linno] · org: [Mento, Campus, Mind, Cognition, Linno]
+    const gcDesktop = isOrg
+      ? ['1 / span 3', '4 / span 3', '1 / span 2', '3 / span 2', '5 / span 2']
+      : ['1 / span 3', '4 / span 3', '1 / span 6'];
+    const gcTablet = isOrg
+      ? ['1 / span 1', '2 / span 1', '1 / span 1', '2 / span 1', '1 / span 2']
+      : ['1 / span 2', '1 / span 2', '1 / span 2'];
+    const gcMobile = isOrg
+      ? ['1 / span 1', '1 / span 1', '1 / span 1', '1 / span 1', '1 / span 1']
+      : ['1 / span 1', '1 / span 1', '1 / span 1'];
     const gcArr = mobile ? gcMobile : (tablet ? gcTablet : gcDesktop);
     const mhFor = i => {
       const big = i < 2;
@@ -2677,12 +3110,49 @@ class Component extends DCLogic {
       // ===== Capítulo 9 =====
       isChapter: s.screen === 'chapter',
       chVideoPhase: s.chapterPhase !== 'questions',
+
+      // ===== Información (FAQ / Precios) =====
+      isInfo: s.screen === 'info',
+      showRocket: s.screen !== 'login',
+      showWhats: s.role === 'profesional' && s.screen !== 'login',
+      t_whats: T('Escribinos por WhatsApp', 'Message us on WhatsApp'),
+      openInfo: () => this.openInfo(),
+      infoBack: () => this.infoBack(),
+      infoGoFaq: () => this.setState({ infoTab: 'faq' }),
+      infoGoPrecios: () => this.setState({ infoTab: 'precios' }),
+      infoFaqOn: s.infoTab === 'faq',
+      infoPreciosOn: s.infoTab === 'precios',
+      infoKicker: T('Información', 'Information'),
+      rocketTitle: T('Información: preguntas y precios', 'Information: FAQ and pricing'),
+      infoFaqLabel: T('Preguntas frecuentes', 'FAQ'),
+      infoPreciosLabel: T('Precios', 'Pricing'),
+      infoFaqBg: s.infoTab === 'faq' ? '#074292' : 'transparent',
+      infoFaqColor: s.infoTab === 'faq' ? '#ffffff' : (dark ? '#e8edf5' : '#1b2a3a'),
+      infoFaqBorder: s.infoTab === 'faq' ? '#074292' : (dark ? 'rgba(255,255,255,0.2)' : '#c9d3df'),
+      infoPrecBg: s.infoTab === 'precios' ? '#074292' : 'transparent',
+      infoPrecColor: s.infoTab === 'precios' ? '#ffffff' : (dark ? '#e8edf5' : '#1b2a3a'),
+      infoPrecBorder: s.infoTab === 'precios' ? '#074292' : (dark ? 'rgba(255,255,255,0.2)' : '#c9d3df'),
+      faqCols: (s.vw || 1200) < 720 ? '1fr' : 'repeat(2, 1fr)',
+      faqTop: this.infoFaqData().slice(0, 4).map(f => ({
+        ...f,
+        paras: f.paras || [],
+        bullets: f.bullets || [],
+        highlights: f.highlights || [],
+        hasHighlight: !!(f.highlights && f.highlights.length),
+        hasBullets: !!(f.bullets && f.bullets.length)
+      })),
+      faqBottom: this.infoFaqData().slice(4).map(f => ({
+        ...f,
+        hasLead: !!f.lead,
+        paras: f.paras || []
+      })),
+      ...this.precVals(),
+
       chQuestions: s.chapterPhase === 'questions',
       chPlayerFlex: s.chapterPhase === 'questions' ? '1 1 380px' : '1 1 100%',
       chStep1: s.qStep !== 2,
       chStep2: s.qStep === 2,
       videoSrc: 'https://www.youtube-nocookie.com/embed/' + this.videoId() + '?enablejsapi=1&rel=0&playsinline=1',
-      ytListen: (e) => { try { e.target.contentWindow.postMessage('{"event":"listening"}', '*'); } catch (_) {} },
       setVidEs: () => this.setState({ videoLang: 'es' }),
       setVidEn: () => this.setState({ videoLang: 'en' }),
       setVidPt: () => this.setState({ videoLang: 'pt' }),
@@ -2738,7 +3208,7 @@ class Component extends DCLogic {
       alumnoSegColor: alumno ? '#F6F0EC' : '#151111',
       profSegColor: !alumno ? '#F6F0EC' : '#151111',
       panelBg: alumno ? '#F6F0EC' : '#EFE9E4',
-      roleImg: alumno ? 'assets/mento-hero.jpg' : 'assets/Imagen_My.Unni.jpg',
+      roleImg: alumno ? 'uploads/image-1776420963165.png' : 'uploads/Imagen_My.Unni.jpg',
       roleImgPos: alumno ? 'center 25%' : 'center 55%',
       roleKicker: alumno ? 'Acceso · Usuarios' : 'Acceso · Organizaciones',
       loginTitle: s.isSignup
