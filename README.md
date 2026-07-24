@@ -1,54 +1,36 @@
-# MY PATH.IA — Ecosistema (prototipo interactivo)
+# MY PATH.IA — Landing & Home
 
-Prototipo navegable del ecosistema **MY PATH.IA**: acceso, home del ecosistema, **Mento.IA** y **My Campus.IA**, con dos perfiles de entrada — **Usuario** (alumno) y **Organización** (docente).
+Landing interactiva del ecosistema psicopedagógico **MY PATH.IA**, construida en HTML como Design Component. Incluye dos pantallas:
 
-Sitio 100 % estático (HTML + CSS + JS del lado del cliente). No necesita build ni servidor de aplicaciones.
-
-## Cómo verlo
-
-Abre `index.html` en un servidor estático (necesario porque la app carga archivos y un `<iframe>` con rutas relativas — abrirlo como `file://` puede fallar):
-
-```bash
-# Opción 1 — Python
-python3 -m http.server 8000
-# luego abre http://localhost:8000
-
-# Opción 2 — Node
-npx serve .
-```
-
-### Publicar en GitHub Pages
-1. Sube el contenido de esta carpeta a la raíz del repositorio.
-2. En **Settings → Pages**, elige la rama y la carpeta raíz (`/`).
-3. La app queda disponible en la URL de Pages. `index.html` es el punto de entrada.
+1. **Login** — carrusel de citas a pantalla completa (rota cada 10 s) + acceso con selector Alumno / Docente, login con Google, usuario MY PATH.IA o correo, y registro.
+2. **Home** — cabecera con nombre, idioma (ES/EN), modo claro/oscuro y salida; saludo personalizado y mosaico de productos del ecosistema (Mento.IA, My Campus.IA, My Mind.IA, My Cognition.IA, Linno) con estados activo/inactivo, pop-ups informativos y chatbot "Path".
 
 ## Estructura
 
 ```
-index.html          Aplicación principal (acceso, home, Mento.IA, panels de organización)
-support.js          Runtime del componente de la página (requerido por index.html)
-_ds/                Design System MY PATH.IA — tokens (color, tipografía, etc.) y bundle
-campus/             My Campus.IA (buscador de universidades y programas) — se embebe vía iframe
-  ├─ index.html
-  └─ assets/        Imágenes propias de My Campus.IA
-assets/             Imágenes y logos usados por la aplicación principal
+My Path Landing.dc.html   → página principal (abre directo en el navegador)
+support.js                → runtime del Design Component (no editar)
+_ds/                      → design system MY PATH.IA (tokens, estilos, bundle)
+uploads/                  → imágenes y logos usados por la landing
 README.md
 ```
 
-## Recorridos principales
+## Uso
 
-**Usuario (alumno):** accede como *Usuario* → home con Mento.IA, My Campus.IA y Linno → capítulos, test y "Tu reporte" (Evaluaciones · Resultados · Tips).
+Abre `My Path Landing.dc.html` en un navegador moderno, o sírvelo desde cualquier hosting estático:
 
-**Organización (docente):** accede como *Organización* → Mento.IA con Seguimiento de alumnos, Gestión de capítulos, Estadísticas, Resumen IA, Guía didáctica y Actividades → My Campus.IA docente con Seguimiento de clase, buscadores de universidad/programas y "Estudios posibles".
+```bash
+npx serve .
+```
 
-La barra superior (logo, cambio Mento.IA / My Campus.IA, idioma ES/EN, modo claro/oscuro, usuario y salir) se mantiene en todas las vistas.
+No requiere build ni dependencias: todo es HTML, CSS inline y JavaScript vanilla.
 
-## Notas
+## Diseño
 
-- Idiomas: Español / Inglés (conmutador en la barra superior).
-- Tema claro / oscuro incluido.
-- Los enlaces "abrir buscador" del docente entran a la vista embebida de My Campus.IA; el botón **Inicio** de esas vistas devuelve al panel del docente.
-- Contenido de demostración (alumnos, universidades, métricas) es ilustrativo.
+- **Paleta:** Celeste `#399AB8` (acento único), Opulent `#133039`, Oat Milk `#F6F0EC`, Fresh Linen `#F8F8F8`, Deep Chocolate `#151111`.
+- **Tipografías:** Syncopate (marca), Space Grotesk (títulos/UI), Quicksand (texto), DM Mono (metadatos).
+- Sin gradientes de marca; superficies sólidas y bordes suaves, según el design system v3.
 
 ---
-MY PATH.IA · *Build your tomorrow.*
+
+*MY PATH.IA · Build your tomorrow.*
