@@ -270,7 +270,7 @@ const UNIS=[
    {id:'u5p2',nom:'Derecho',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:4,mod:'Presencial',idi:'Inglés',coste:22000,beca:true,acc:'543 puntos',accT:'CAO points',emp:90,sal:48000},
    {id:'u5p3',nom:'Literatura Inglesa',tipo:'Grado',area:'Artes y Humanidades',rp:'A',rs:'S',dur:4,mod:'Presencial',idi:'Inglés',coste:18500,beca:false,acc:'498 puntos',accT:'CAO points',emp:74,sal:32000},
    {id:'u5p4',nom:'Bioquímica',tipo:'Grado',area:'Salud y Ciencias',rp:'I',rs:'R',dur:4,mod:'Presencial',idi:'Inglés',coste:23000,beca:true,acc:'555 puntos',accT:'CAO points',emp:88,sal:44000}]},
- {id:'u6',nombre:'Universidad de Buenos Aires',corto:'UBA',pais:'Argentina',region:'CABA',ciudad:'Buenos Aires',tipo:'Pública',idiomas:['Español'],qs:71,the:351,arwu:201,nac:1,acred:['CONEAU'],alumnos:310000,fund:1821,web:'uba.ar',foto:'assets/campus/uni-06.jpg',
+ {id:'u6',nombre:'Universidad de Buenos Aires',corto:'UBA',pais:'Argentina',region:'CABA',ciudad:'Buenos Aires',tipo:'Pública',idiomas:['Español'],qs:71,the:351,arwu:201,nac:1,acred:['CONEAU'],alumnos:310000,fund:1821,web:'uba.ar',web:'uba.edu.ar',foto:'assets/campus/uba-ar.avif',
   desc:'Gigante pública y gratuita de Latinoamérica, cuna de cinco premios Nobel y de una intensa vida cultural porteña.',
   costeMedio:0,vida:{alquiler:380,airbnb:42,hotel:70,comida:210,transporte:18,indice:'Bajo'},
   progs:[
@@ -278,6 +278,46 @@ const UNIS=[
    {id:'u6p2',nom:'Abogacía',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:5,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'CBC aprobado',accT:'Ciclo Básico',emp:85,sal:26000},
    {id:'u6p3',nom:'Ciencias de la Comunicación',tipo:'Grado',area:'Artes y Humanidades',rp:'A',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'CBC aprobado',accT:'Ciclo Básico',emp:70,sal:19000},
    {id:'u6p4',nom:'Economía',tipo:'Grado',area:'Negocios y Economía',rp:'I',rs:'E',dur:5,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'CBC aprobado',accT:'Ciclo Básico',emp:83,sal:28000}]},
+ {id:'u11',nombre:'Universidad de San Andrés',corto:'UdeSA',pais:'Argentina',region:'Buenos Aires',ciudad:'Victoria',tipo:'Privada',idiomas:['Español','Inglés'],qs:1050,the:1200,arwu:1000,nac:7,acred:['CONEAU'],alumnos:4100,fund:1988,web:'udesa.edu.ar',foto:'assets/campus/san-andres.avif',
+  desc:'Universidad privada de artes liberales en Victoria, sobre el Río de la Plata: pequeña, exigente y con la mayor proporción de alumnos becados del país. Referente en economía, negocios y ciencias sociales.',
+  costeMedio:14000,vida:{alquiler:420,airbnb:55,hotel:85,comida:230,transporte:22,indice:'Bajo'},
+  progs:[
+   {id:'u11p1',nom:'Licenciatura en Economía',tipo:'Grado',area:'Negocios y Economía',rp:'I',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:14000,beca:true,acc:'Promedio + entrevista',accT:'Admisión selectiva',emp:94,sal:34000},
+   {id:'u11p2',nom:'Administración de Empresas',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:14000,beca:true,acc:'Promedio + entrevista',accT:'Admisión selectiva',emp:93,sal:33000},
+   {id:'u11p3',nom:'Abogacía',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:5,mod:'Presencial',idi:'Español',coste:13500,beca:true,acc:'Promedio + entrevista',accT:'Admisión selectiva',emp:88,sal:30000},
+   {id:'u11p4',nom:'Ciencia Política',tipo:'Grado',area:'Ciencias Sociales',rp:'S',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:13000,beca:true,acc:'Promedio + entrevista',accT:'Admisión selectiva',emp:82,sal:27000}]},
+ {id:'u12',nombre:'Universidad Argentina de la Empresa',corto:'UADE',destacada:true,pais:'Argentina',region:'CABA',ciudad:'Buenos Aires',tipo:'Privada',idiomas:['Español','Inglés'],qs:1100,the:1250,arwu:1100,nac:9,acred:['CONEAU'],alumnos:28000,fund:1957,web:'uade.edu.ar',foto:'assets/campus/uade.jpg',
+  desc:'Gran universidad privada del microcentro porteño, referente en negocios, economía, derecho y comunicación, con fuerte vínculo con el mundo empresarial y horarios pensados para quienes trabajan.',
+  costeMedio:4500,vida:{alquiler:400,airbnb:50,hotel:80,comida:220,transporte:20,indice:'Bajo'},
+  progs:[
+   {id:'u12p1',nom:'Administración de Empresas',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:4500,beca:true,acc:'Admisión directa',accT:'Curso de ingreso',emp:90,sal:29000},
+   {id:'u12p2',nom:'Contador Público',tipo:'Grado',area:'Negocios y Economía',rp:'C',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:4300,beca:true,acc:'Admisión directa',accT:'Curso de ingreso',emp:92,sal:28000},
+   {id:'u12p3',nom:'Licenciatura en Marketing',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'A',dur:4,mod:'Híbrida',idi:'Español',coste:4400,beca:false,acc:'Admisión directa',accT:'Curso de ingreso',emp:88,sal:26000},
+   {id:'u12p4',nom:'Abogacía',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:5,mod:'Presencial',idi:'Español',coste:4200,beca:true,acc:'Admisión directa',accT:'Curso de ingreso',emp:84,sal:25000}]},
+ {id:'u13',nombre:'Universidad Torcuato Di Tella',corto:'UTDT',pais:'Argentina',region:'CABA',ciudad:'Buenos Aires',tipo:'Privada',idiomas:['Español','Inglés'],qs:975,the:1000,arwu:900,nac:8,acred:['CONEAU'],alumnos:5200,fund:1991,web:'utdt.edu',foto:'assets/campus/di-tella.jpg',
+  desc:'Universidad privada pequeña y de élite, con reconocimiento internacional en economía, ciencia política, derecho y negocios; casa de think tanks y de una intensa vida de investigación.',
+  costeMedio:12000,vida:{alquiler:410,airbnb:52,hotel:82,comida:225,transporte:21,indice:'Bajo'},
+  progs:[
+   {id:'u13p1',nom:'Licenciatura en Economía',tipo:'Grado',area:'Negocios y Economía',rp:'I',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:12000,beca:true,acc:'Examen + promedio',accT:'Admisión selectiva',emp:95,sal:36000},
+   {id:'u13p2',nom:'Administración de Empresas',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:12000,beca:true,acc:'Examen + promedio',accT:'Admisión selectiva',emp:93,sal:34000},
+   {id:'u13p3',nom:'Ciencia Política',tipo:'Grado',area:'Ciencias Sociales',rp:'S',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:11500,beca:true,acc:'Examen + promedio',accT:'Admisión selectiva',emp:83,sal:28000},
+   {id:'u13p4',nom:'Abogacía',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:5,mod:'Presencial',idi:'Español',coste:11500,beca:false,acc:'Examen + promedio',accT:'Admisión selectiva',emp:87,sal:31000}]},
+ {id:'u14',nombre:'Pontificia Universidad Católica Argentina',corto:'UCA',pais:'Argentina',region:'CABA',ciudad:'Buenos Aires',tipo:'Privada',idiomas:['Español'],qs:517,the:600,arwu:700,nac:3,acred:['CONEAU'],alumnos:20000,fund:1958,web:'uca.edu.ar',foto:'assets/campus/uca.jpeg',
+  desc:'Universidad católica junto a Puerto Madero y la mejor universidad privada del país en el ranking QS, con oferta amplia en derecho, economía, ingeniería y humanidades.',
+  costeMedio:5000,vida:{alquiler:400,airbnb:50,hotel:80,comida:220,transporte:20,indice:'Bajo'},
+  progs:[
+   {id:'u14p1',nom:'Abogacía',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:5,mod:'Presencial',idi:'Español',coste:5000,beca:true,acc:'Admisión + entrevista',accT:'Curso de ingreso',emp:88,sal:29000},
+   {id:'u14p2',nom:'Contador Público',tipo:'Grado',area:'Negocios y Economía',rp:'C',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:4800,beca:true,acc:'Admisión + entrevista',accT:'Curso de ingreso',emp:91,sal:28000},
+   {id:'u14p3',nom:'Licenciatura en Economía',tipo:'Grado',area:'Negocios y Economía',rp:'I',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:4900,beca:true,acc:'Admisión + entrevista',accT:'Curso de ingreso',emp:89,sal:30000},
+   {id:'u14p4',nom:'Administración de Empresas',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:4800,beca:false,acc:'Admisión + entrevista',accT:'Curso de ingreso',emp:90,sal:28000}]},
+ {id:'u15',nombre:'Universidad de Palermo',corto:'UP',pais:'Argentina',region:'CABA',ciudad:'Buenos Aires',tipo:'Privada',idiomas:['Español','Inglés'],qs:785,the:800,arwu:850,nac:5,acred:['CONEAU'],alumnos:20000,fund:1986,web:'palermo.edu',foto:'assets/campus/palermo.avif',
+  desc:'Universidad privada muy internacional, reconocida por diseño, comunicación y negocios, con uno de los mejores ratios de profesores por alumno del mundo y una gran comunidad de estudiantes extranjeros.',
+  costeMedio:4500,vida:{alquiler:410,airbnb:52,hotel:82,comida:225,transporte:21,indice:'Bajo'},
+  progs:[
+   {id:'u15p1',nom:'Administración de Empresas',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Híbrida',idi:'Español',coste:4500,beca:true,acc:'Admisión directa',accT:'Entrevista',emp:88,sal:27000},
+   {id:'u15p2',nom:'Licenciatura en Marketing',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'A',dur:4,mod:'Híbrida',idi:'Español',coste:4500,beca:true,acc:'Admisión directa',accT:'Entrevista',emp:87,sal:26000},
+   {id:'u15p3',nom:'Relaciones Públicas e Institucionales',tipo:'Grado',area:'Artes y Humanidades',rp:'E',rs:'A',dur:4,mod:'Presencial',idi:'Español',coste:4300,beca:false,acc:'Admisión directa',accT:'Entrevista',emp:82,sal:23000},
+   {id:'u15p4',nom:'Licenciatura en Economía Empresarial',tipo:'Grado',area:'Negocios y Economía',rp:'I',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:4400,beca:true,acc:'Admisión directa',accT:'Entrevista',emp:86,sal:28000}]},
  {id:'u7',nombre:'Politecnico di Milano',corto:'PoliMi',pais:'Italia',region:'Lombardía',ciudad:'Milán',tipo:'Pública',idiomas:['Italiano','Inglés'],qs:123,the:152,arwu:151,nac:1,acred:['EUR-ACE','NAAB'],alumnos:47000,fund:1863,web:'polimi.it',foto:'assets/campus/uni-07-min.jpg',
   desc:'La mejor escuela de ingeniería, arquitectura y diseño de Italia, en la capital mundial del diseño industrial.',
   costeMedio:3900,vida:{alquiler:1050,airbnb:95,hotel:150,comida:330,transporte:39,indice:'Medio-alto'},
@@ -312,18 +352,18 @@ const UNIS=[
    {id:'u10p4',nom:'Diseño Sostenible',tipo:'Máster',area:'Arquitectura y Diseño',rp:'A',rs:'E',dur:2,mod:'Presencial',idi:'Inglés',coste:0,beca:false,acc:'Portfolio',accT:'Portfolio',emp:86,sal:44000}]}
 ];
 const AREAS=['Ingeniería','Tecnología y Datos','Arquitectura y Diseño','Salud y Ciencias','Ciencias Sociales','Negocios y Economía','Artes y Humanidades','Derecho'];
-const RIASEC=[{k:'R',nombre:'Realista',score:62},{k:'I',nombre:'Investigador',score:91},{k:'A',nombre:'Artístico',score:84},{k:'S',nombre:'Social',score:70},{k:'E',nombre:'Emprendedor',score:55},{k:'C',nombre:'Convencional',score:48}];
+const RIASEC=[{k:'R',nombre:'Realista',score:41},{k:'I',nombre:'Investigador',score:66},{k:'A',nombre:'Artístico',score:44},{k:'S',nombre:'Social',score:74},{k:'E',nombre:'Emprendedor',score:93},{k:'C',nombre:'Convencional',score:85}];
 const CAREERS=[
- {nombre:'Ingeniería Biomédica',af:97,cod:'IRA',area:'Salud y Ciencias'},
- {nombre:'Ciencia de Datos',af:94,cod:'IRC',area:'Tecnología y Datos'},
- {nombre:'Arquitectura',af:89,cod:'AIR',area:'Arquitectura y Diseño'},
- {nombre:'Diseño de Producto',af:85,cod:'AIE',area:'Arquitectura y Diseño'},
- {nombre:'Psicología',af:81,cod:'SIA',area:'Ciencias Sociales'},
- {nombre:'Relaciones Internacionales',af:78,cod:'SEI',area:'Ciencias Sociales'},
- {nombre:'Biotecnología',af:74,cod:'IRA',area:'Salud y Ciencias'},
- {nombre:'Economía',af:69,cod:'IEC',area:'Negocios y Economía'},
- {nombre:'Comunicación Audiovisual',af:63,cod:'AES',area:'Artes y Humanidades'},
- {nombre:'Derecho',af:57,cod:'ESC',area:'Derecho'}
+ {nombre:'Licenciatura en Administración de Empresas',af:96,cod:'ECS',area:'Negocios y Economía'},
+ {nombre:'Contador Público',af:93,cod:'CES',area:'Negocios y Economía'},
+ {nombre:'Licenciatura en Economía',af:90,cod:'IEC',area:'Negocios y Economía'},
+ {nombre:'Abogacía',af:86,cod:'ESC',area:'Derecho'},
+ {nombre:'Licenciatura en Marketing / Comercialización',af:83,cod:'EAS',area:'Negocios y Economía'},
+ {nombre:'Licenciatura en Finanzas',af:79,cod:'ECI',area:'Negocios y Economía'},
+ {nombre:'Licenciatura en Comercio Internacional',af:75,cod:'ECS',area:'Negocios y Economía'},
+ {nombre:'Licenciatura en Recursos Humanos',af:71,cod:'SEC',area:'Ciencias Sociales'},
+ {nombre:'Licenciatura en Relaciones Públicas e Institucionales',af:67,cod:'ESA',area:'Artes y Humanidades'},
+ {nombre:'Licenciatura en Ciencia Política',af:62,cod:'ESI',area:'Ciencias Sociales'}
 ];
 const TOPPROGS=[
  {nombre:'Ciencia de Datos',area:'Tecnología y Datos',riasec:'IRC',dur:'2 años',sal:99000,demanda:'Muy alta',desc:'Disciplina que combina estadística, programación y negocio para extraer conocimiento útil de grandes volúmenes de datos.',actividad:'Programas en Python o R, limpias y modelas datos, construyes algoritmos de machine learning y traduces los resultados en decisiones para la empresa.',salidas:['Data Scientist','Ingeniero/a de Machine Learning','Analista de datos','Especialista en IA','Consultor/a analítico'],skills:['Python · SQL','Estadística','Machine Learning','Visualización']},
@@ -396,7 +436,7 @@ let S={
  selUni:null,uniMode:'mosaico',
  favU:[],favP:[],tuttorReq:[],eventRSVP:[],jobApplied:[],
  tuttorTab:'mentores',clView:'lista',cvOpen:false,cvUploaded:false,statsLoc:'global',
- filters:{pais:'Todos',tipo:'Todos',idioma:'Todos',area:'Todos',rankingMax:300,costeMax:50000,beca:false},
+ filters:{pais:'Todos',tipo:'Todos',idioma:'Todos',area:'Todos',rankingMax:1200,costeMax:50000,beca:false},
  programFilter:null,programQuery:'',programOpen:null,
  statsOpen:false,settingsOpen:false,testOpen:false,testPaid:false,
  contactOpen:false,contactSent:false,
@@ -434,7 +474,6 @@ function header(){const l=L();return `
  </div>
  <div class="ctas">
    <button class="btn btn-sm btn-sand" onclick="App.nav('riasec')">${l.mento}</button>
-   <button class="btn btn-sm btn-out-d btn-test" onclick="App.openTest()">${l.test}</button>
    <button class="btn btn-sm btn-out-d" onclick="App.nav('tuttor')">${l.tuttor}</button>
    <button class="btn btn-sm btn-out-d" onclick="App.nav('campuslive')">${l.live}</button>
    <button class="btn btn-sm btn-out-d" onclick="App.nav('firstjob')">${l.job}</button>
@@ -481,15 +520,10 @@ function vLanding(){const l=L();
    ${dt("App.nav('riasec')",'01','span4','rows2',icShield,l.cRiT,l.cRiD,32,'hero-m')}
    ${pt("App.nav('tuttor')",'02','span2','rows2','assets/campus/students-min.jpg','linear-gradient(180deg,rgba(11,61,46,.15) 0%,rgba(11,61,46,.5) 50%,rgba(8,42,32,.92) 100%)',icUsers,l.cTuT,l.cTuD,23)}
    ${pt("App.nav('universities')",'03','span3','','assets/campus/uni-02-min.jpg','linear-gradient(160deg,rgba(20,23,26,.1) 25%,rgba(11,61,46,.85) 100%)',icBank,l.cUnT,l.cUnD,22)}
-   ${pt("App.openStats()",'04','span3','','assets/campus/globe-min.jpg','linear-gradient(150deg,rgba(11,61,46,.6),rgba(27,31,35,.92))',icGlobe,l.cStT,l.cStD,22)}
-   ${lt("App.nav('programs')",'05','span2',icBook,l.cPrT,l.cPrD,20)}
+   ${pt("App.nav('programs')",'05','span3','','assets/campus/study-group.jpg','linear-gradient(160deg,rgba(20,23,26,.1) 25%,rgba(11,61,46,.85) 100%)',icBook,l.cPrT,l.cPrD,22)}
    ${lt("App.nav('comparator')",'06','span2',icBars,l.cCpT,l.cCpD,20)}
    ${lt("App.nav('campuslive')",'07','span2',icCal,l.cLiT,l.cLiD,20)}
-   <div class="mtile mtile-light span6 hero-m jobbanner" onclick="App.nav('firstjob')"><div class="in" style="flex-direction:row;align-items:center;gap:22px">
-     <div class="m-ico" style="background:rgba(11,61,46,.08);color:var(--forest);width:54px;height:54px;flex:none">${icBrief}</div>
-     <div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:10px;margin-bottom:5px"><span class="m-tt" style="color:var(--forest);font-size:22px">${l.cJoT}</span><span class="m-no" style="color:var(--muted)">08</span></div><div style="color:var(--text2);font-size:15px;line-height:1.45">${l.cJoD}</div></div>
-     <span class="m-go" style="color:var(--forest);padding-top:0;white-space:nowrap">${l.explore} <span style="color:var(--sand-500)">→</span></span>
-   </div></div>
+   ${lt("App.nav('firstjob')",'08','span2',icBrief,l.cJoT,l.cJoD,20)}
  </div>
  <div class="card premium" style="margin-top:20px;padding:38px 44px;position:relative;overflow:hidden;border-radius:20px">
    <div class="topbar" style="position:absolute;top:0;left:0;right:0;z-index:2"></div>
@@ -544,7 +578,18 @@ function vRiasec(){
  </div>
 </section>`;}
 
-function uniCard(u){const fav=S.favU.includes(u.id);return `<div class="card card-int uni" onclick="App.openUni('${u.id}')">
+function trophy(c){return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v4a6 6 0 0 1-12 0V4Z"/><path d="M6 6H3v1a3 3 0 0 0 3 3M18 6h3v1a3 3 0 0 1-3 3M9 18h6M8 21h8M12 14v4"/></svg>`;}
+function uniCard(u){const fav=S.favU.includes(u.id);
+  if(u.destacada)return `<div class="card card-int" onclick="App.openUni('${u.id}')" style="grid-column:span 2;grid-row:span 2;height:100%;cursor:pointer;overflow:hidden;border-radius:20px;border:2px solid #b8963e;box-shadow:0 0 0 4px rgba(184,150,62,.12),var(--sh-lg);display:flex;position:relative;background:var(--forest);color:var(--cream-100)">
+    <div style="position:relative;width:44%;flex:none;min-height:238px;overflow:hidden"><img src="${u.foto}" alt="${esc(u.nombre)}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,23,26,0) 40%,rgba(20,23,26,.55) 100%)"></div><button class="heart" onclick="App.favUni(event,'${u.id}')">${heart(fav,true)}</button><span class="rankb">#${u.qs} QS</span></div>
+    <div style="flex:1;min-width:0;padding:22px 24px;display:flex;flex-direction:column;justify-content:center;gap:10px">
+      <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;background:#b8963e;color:#fff;font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:.01em;box-shadow:0 4px 12px rgba(184,150,62,.35)">${trophy('#fff')} Opción My Campus.IA</span>
+      <div style="font-family:var(--fd);font-weight:700;font-size:23px;color:#fff;line-height:1.15">${esc(u.nombre)}</div>
+      <div class="loc" style="color:var(--on-dark-muted)">${pin('var(--sand-300)')}${esc(u.ciudad)}, ${esc(u.pais)}</div>
+      <p style="margin:0;font-size:14px;line-height:1.55;color:rgba(255,248,231,.82);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${u.desc}</p>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:2px"><span style="font-size:11px;font-weight:600;color:var(--cream-100);background:rgba(255,248,231,.16);padding:4px 9px;border-radius:999px;white-space:nowrap">${u.tipo}</span><span style="font-size:12px;color:var(--on-dark-muted)">${u.progs.length} programas</span></div>
+    </div></div>`;
+  return `<div class="card card-int uni" onclick="App.openUni('${u.id}')">
   <div class="ph"><img src="${u.foto}" alt="${esc(u.nombre)}"><div class="ov"></div>
     <button class="heart" onclick="App.favUni(event,'${u.id}')">${heart(fav,true)}</button>
     <span class="rankb">#${u.qs} QS</span></div>
@@ -567,8 +612,12 @@ function vUnis(){
  const opt=(arr,sel)=>arr.map(o=>`<option value="${esc(o)}"${o===sel?' selected':''}>${esc(o)}</option>`).join('');
  const seg=(m,ic,lb)=>`<div class="it${S.uniMode===m?' on':''}" onclick="App.setMode('${m}')">${ic}${lb}</div>`;
  let content='';
- if(S.uniMode==='mosaico')content=`<div class="grid3">${list.map(uniCard).join('')||emptyMsg()}</div>`;
- else if(S.uniMode==='listado')content=`<div style="display:flex;flex-direction:column;gap:12px">${list.map(uniRow).join('')||emptyMsg()}</div>`;
+ const cercaU=list.filter(u=>u.pais==='Argentina').sort((a,b)=>(b.destacada?1:0)-(a.destacada?1:0));
+ const extU=list.filter(u=>u.pais!=='Argentina');
+ const secHead=(lb)=>`<div style="grid-column:1/-1;display:flex;align-items:center;gap:16px;margin:2px 0 8px"><span style="font-family:var(--fd);font-weight:700;font-size:15px;color:var(--forest);white-space:nowrap">${lb}</span><span style="flex:1;height:1px;background:var(--line-strong)"></span></div>`;
+ const grouped=(fn)=>((cercaU.length?secHead('Cerca de mí')+cercaU.map(fn).join(''):'')+(extU.length?secHead('Extranjero')+extU.map(fn).join(''):''))||emptyMsg();
+ if(S.uniMode==='mosaico')content=`<div class="grid3">${grouped(uniCard)}</div>`;
+ else if(S.uniMode==='listado')content=`<div style="display:flex;flex-direction:column;gap:12px">${grouped(uniRow)}</div>`;
  else content=`<div style="position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh-card)"><img src="assets/campus/globe-min.jpg" style="width:100%;height:340px;object-fit:cover;filter:saturate(.85)"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,61,46,.25),rgba(11,61,46,.78))"></div><div style="position:absolute;top:24px;left:26px;color:var(--cream-100)"><div style="font-family:var(--fm);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--sand-300);margin-bottom:8px">VISTA MAPA · 22 PAÍSES</div><div style="font-family:var(--fd);font-weight:700;font-size:33px;line-height:1.1">El campus ideal no tiene fronteras</div></div></div>
    <div class="grid2" style="margin-top:14px">${list.map(u=>`<div class="row-card" onclick="App.openUni('${u.id}')"><span style="width:30px;height:30px;border-radius:999px;background:rgba(11,61,46,.1);display:flex;align-items:center;justify-content:center;flex:none">${pin('var(--forest)')}</span><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:14px">${esc(u.nombre)}</div><div style="font-size:12px;color:var(--muted)">${esc(u.ciudad)}, ${esc(u.pais)}</div></div><span style="font-family:var(--fd);font-weight:700;font-size:13px;color:var(--forest)">#${u.qs}</span></div>`).join('')}</div>`;
  const costeLbl=S.filters.costeMax>=50000?'Sin límite':'≤ €'+S.filters.costeMax.toLocaleString('es-ES');
@@ -591,7 +640,7 @@ function vUnis(){
        <label><span class="fl-l">Tipo de institución</span><select onchange="App.setFilter('tipo',this.value)"><option${S.filters.tipo==='Todos'?' selected':''}>Todos</option><option${S.filters.tipo==='Pública'?' selected':''}>Pública</option><option${S.filters.tipo==='Privada'?' selected':''}>Privada</option></select></label>
        <label><span class="fl-l">Idioma de instrucción</span><select onchange="App.setFilter('idioma',this.value)">${opt(idiomas,S.filters.idioma)}</select></label>
        <label><span class="fl-l">Área de conocimiento</span><select onchange="App.setFilter('area',this.value)">${opt(areas,S.filters.area)}</select></label>
-       <div><div style="display:flex;justify-content:space-between"><span class="fl-l">Ranking QS máx.</span><span style="font-family:var(--fd);font-weight:700;font-size:12px;color:var(--forest)" id="rkLbl">#${S.filters.rankingMax}</span></div><input type="range" min="7" max="300" value="${S.filters.rankingMax}" oninput="document.getElementById('rkLbl').textContent='#'+this.value" onchange="App.setFilter('rankingMax',+this.value)"></div>
+       <div><div style="display:flex;justify-content:space-between"><span class="fl-l">Ranking QS máx.</span><span style="font-family:var(--fd);font-weight:700;font-size:12px;color:var(--forest)" id="rkLbl">#${S.filters.rankingMax}</span></div><input type="range" min="7" max="1200" value="${S.filters.rankingMax}" oninput="document.getElementById('rkLbl').textContent='#'+this.value" onchange="App.setFilter('rankingMax',+this.value)"></div>
        <div><div style="display:flex;justify-content:space-between"><span class="fl-l">Matrícula anual</span><span style="font-family:var(--fd);font-weight:700;font-size:12px;color:var(--forest)" id="coLbl">${costeLbl}</span></div><input type="range" min="0" max="50000" step="1000" value="${S.filters.costeMax}" oninput="document.getElementById('coLbl').textContent=(+this.value>=50000?'Sin límite':'≤ €'+(+this.value).toLocaleString('es-ES'))" onchange="App.setFilter('costeMax',+this.value)"></div>
        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding-top:4px"><input type="checkbox" ${S.filters.beca?'checked':''} onchange="App.setFilter('beca',this.checked)" style="width:17px;height:17px;accent-color:var(--forest)"><span style="font-weight:500;font-size:14px">Con becas disponibles</span></label>
      </div>
@@ -1053,7 +1102,6 @@ const HOSTORG=(function(){try{return /[?&]host=org/.test(location.search);}catch
 if(EMBED){document.body.classList.add('embed');}
 function ctasBar(){const l=L();return `<div class="ctas-embed">
    <button class="btn btn-sm btn-primary" onclick="App.nav('riasec')">${l.mento}</button>
-   <button class="btn btn-sm btn-out btn-test" onclick="App.openTest()">${l.test}</button>
    <button class="btn btn-sm btn-out" onclick="App.nav('tuttor')">${l.tuttor}</button>
    <button class="btn btn-sm btn-out" onclick="App.nav('campuslive')">${l.live}</button>
    <button class="btn btn-sm btn-out" onclick="App.nav('firstjob')">${l.job}</button>
@@ -1081,7 +1129,7 @@ const App={
  setMode(m){S.uniMode=m;render();},
  setFilter(k,v){S.filters[k]=v;render();},
  clearPF(){S.programFilter=null;render();},
- applyArea(area){S.view='universities';S.uniMode='mosaico';S.programFilter=area;S.programOpen=null;S.contactOpen=false;S.filters={pais:'Todos',tipo:'Todos',idioma:'Todos',area:'Todos',rankingMax:300,costeMax:50000,beca:false};window.scrollTo(0,0);render();},
+ applyArea(area){S.view='universities';S.uniMode='mosaico';S.programFilter=area;S.programOpen=null;S.contactOpen=false;S.filters={pais:'Todos',tipo:'Todos',idioma:'Todos',area:'Todos',rankingMax:1200,costeMax:50000,beca:false};window.scrollTo(0,0);render();},
  progSearch(v){S.programQuery=v;const q=v.trim().toLowerCase();const list=TOPPROGS.map((p,i)=>({p,i})).filter(o=>!q||o.p.nombre.toLowerCase().includes(q)||o.p.area.toLowerCase().includes(q));const g=document.getElementById('progGrid');if(g)g.innerHTML=progGrid(list);},
  openProgram(i){S.programOpen=i;render();},
  closeProgram(){S.programOpen=null;render();},

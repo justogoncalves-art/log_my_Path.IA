@@ -139,16 +139,48 @@
 
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; background: {{ headerBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ headerBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <img src="uploads/m-31.png" alt="MY PATH.IA — Build your tomorrow." style="height: 40px; width: auto; filter: {{ headerLogoFilter }};">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
+      <img src="uploads/m-31.png" alt="MY PATH.IA — Build your tomorrow." style="height: 40px; width: auto; filter: {{ headerLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ ctrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ nameColor }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ ctrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ avatarBg }}; border: 1px solid {{ ctrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ avatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ nameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
+    </div>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
 
-      <!-- Nombre -->
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ avatarBg }}; border: 1px solid {{ ctrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ avatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ nameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ roleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <!-- Notificaciones -->
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ ctrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #399AB8; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ ctrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ headerBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
 
       <!-- Idioma ES / EN -->
@@ -275,8 +307,15 @@
 
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
       <img onClick="{{ mBackHome }}" src="uploads/m-31.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ mNameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
     </div>
 
     <!-- Accesos rápidos (plataformas activas) -->
@@ -294,12 +333,35 @@
 
     <!-- Controles -->
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ mHeaderBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
 
       <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
@@ -414,8 +476,15 @@
 
   <!-- Header (barra superior de la app) -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
       <img onClick="{{ mBackHome }}" src="uploads/m-31.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ mNameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ mGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: none; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: #ffffff; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.92; transform: translateY(-1px);">
@@ -429,12 +498,35 @@
       </button>
     </div>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ mHeaderBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
       <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
         <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ langX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
@@ -473,9 +565,9 @@
 
       <sc-if value="{{ orgSeguimiento }}" hint-placeholder-val="{{ true }}">
         <div style="font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; padding: 14px 4px 12px;">{{ orgSectionTitle }}</div>
-        <div style="border-top: 1px solid {{ mCardBorder }}; border-bottom: 1px solid {{ mCardBorder }}; background: {{ mCardBg }}; border-radius: 4px; overflow-x: auto;">
+        <div style="border-top: 1px solid {{ mCardBorder }}; border-bottom: 1px solid {{ mCardBorder }}; background: {{ mCardBg }}; border-radius: 4px;">
           <!-- Encabezado -->
-          <div style="display: grid; grid-template-columns: 1.6fr 0.9fr 0.7fr 1fr 1.1fr 1.5fr; align-items: center; gap: 12px; min-width: 900px; padding: 16px 24px; border-bottom: 1px solid {{ mCardBorder }};">
+          <div style="display: grid; grid-template-columns: 1.6fr 0.9fr 0.7fr 1fr 1.1fr 1.5fr; align-items: center; gap: 12px; padding: 16px 24px; border-bottom: 1px solid {{ mCardBorder }};">
             <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mSectionLabel }};">{{ orgCol.alumno }}</span>
             <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mSectionLabel }}; text-align: center;">{{ orgCol.idioma }}</span>
             <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mSectionLabel }}; text-align: center;">{{ orgCol.avance }}</span>
@@ -485,14 +577,26 @@
           </div>
           <!-- Filas -->
           <sc-for list="{{ orgStudents }}" as="st" hint-placeholder-count="5">
-            <div style="display: grid; grid-template-columns: 1.6fr 0.9fr 0.7fr 1fr 1.1fr 1.5fr; align-items: center; gap: 12px; min-width: 900px; padding: 18px 24px; border-bottom: 1px solid {{ mCardBorder }};">
+            <div style="display: grid; grid-template-columns: 1.6fr 0.9fr 0.7fr 1fr 1.1fr 1.5fr; align-items: center; gap: 12px; padding: 18px 24px; border-bottom: 1px solid {{ mCardBorder }};">
               <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }};">{{ st.name }}</span>
 
               <!-- Idioma -->
-              <div style="justify-self: center; display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid {{ mCardBorder }}; border-radius: 8px; background: {{ mTrackBg }};">
-                <span style="width: 20px; height: 14px; border-radius: 2px; background: {{ st.flagBg }}; border: 1px solid rgba(0,0,0,0.08);"></span>
-                <span style="font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; color: {{ mHeroText }};">{{ st.flagCode }}</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{ mSectionLabel }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9 l6 6 l6 -6"></path></svg>
+              <div style="justify-self: center; position: relative;">
+                <button onClick="{{ st.toggleLang }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid {{ mCardBorder }}; border-radius: 8px; background: {{ mTrackBg }};">
+                  <span style="width: 20px; height: 14px; border-radius: 2px; background: {{ st.flagBg }}; border: 1px solid rgba(0,0,0,0.08);"></span>
+                  <span style="font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; color: {{ mHeroText }};">{{ st.flagCode }}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{ mSectionLabel }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9 l6 6 l6 -6"></path></svg>
+                </button>
+                <sc-if value="{{ st.langOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="position: absolute; top: 38px; left: 50%; transform: translateX(-50%); z-index: 40; width: 148px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 32px rgba(4,25,59,0.18); animation: mpFadeUp 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;">
+                    <sc-for list="{{ st.langOpts }}" as="lo" hint-placeholder-count="5">
+                      <button onClick="{{ lo.select }}" style="cursor: pointer; width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: none; border-bottom: 1px solid {{ mCardBorder }}; background: transparent; transition: background 0.14s;" style-hover="background: {{ mTrackBg }};">
+                        <span style="width: 22px; height: 15px; border-radius: 2px; background: {{ lo.flagBg }}; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0;"></span>
+                        <span style="font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; color: {{ mHeroText }};">{{ lo.code }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
               </div>
 
               <span style="text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ st.avanceColor }};">{{ st.avance }}</span>
@@ -520,7 +624,7 @@
 
               <!-- Acciones -->
               <div style="justify-self: center; display: flex; align-items: center; gap: 8px;">
-                <button title="Ver perfil" style="cursor: pointer; width: 32px; height: 32px; border-radius: 9999px; border: 1px solid {{ st.perfil.bd }}; background: {{ st.perfil.b }}; display: flex; align-items: center; justify-content: center; transition: transform 0.15s;" style-hover="transform: translateY(-1px);">
+                <button onClick="{{ st.openProfile }}" title="Ver perfil" style="cursor: pointer; width: 32px; height: 32px; border-radius: 9999px; border: 1px solid {{ st.perfil.bd }}; background: {{ st.perfil.b }}; display: flex; align-items: center; justify-content: center; transition: transform 0.15s;" style-hover="transform: translateY(-1px);">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{ st.perfil.c }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21 c0 -4 3.5 -7 8 -7 s8 3 8 7"></path></svg>
                 </button>
                 <button onClick="{{ st.onDoc }}" title="Crear reporte" style="cursor: pointer; width: 32px; height: 32px; border-radius: 9999px; border: 1px solid {{ st.doc.bd }}; background: {{ st.doc.b }}; display: flex; align-items: center; justify-content: center; transition: transform 0.15s;" style-hover="transform: translateY(-1px);">
@@ -592,8 +696,8 @@
 
             <!-- Contenido -->
             <sc-if value="{{ gestSubContenido }}" hint-placeholder-val="{{ true }}">
-              <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start;">
-                <div style="position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; border: 1px solid {{ mCardBorder }}; background: #000;">
+              <div style="display: flex; flex-direction: column; gap: 22px; align-items: stretch;">
+                <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden; border: 1px solid {{ mCardBorder }}; background: #000;">
                   <iframe src="{{ gestVideoSrc }}" title="Capítulo · Mento.IA" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>
                 </div>
                 <div style="padding: 22px 24px; border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mCardBg }}; display: flex; flex-direction: column; gap: 16px;">
@@ -601,10 +705,10 @@
                     <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ gestQuizLabel }}</span>
                     <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 12px; color: #074292;">{{ gestQuizCounter }}</span>
                   </div>
-                  <p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14.5px; line-height: 1.55; color: #074292;">{{ gestQuestion }}</p>
-                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15.5px; line-height: 1.55; color: #074292;">{{ gestQuestion }}</p>
+                  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     <sc-for list="{{ gestOptions }}" as="opt" hint-placeholder-count="4">
-                      <div style="padding: 13px 16px; border: 1px solid {{ mCardBorder }}; border-radius: 10px; background: {{ mTrackBg }}; font-family: 'Quicksand', sans-serif; font-size: 13px; line-height: 1.5; color: {{ mReportBody }};">{{ opt }}</div>
+                      <div style="padding: 13px 16px; border: 1px solid {{ mCardBorder }}; border-radius: 10px; background: {{ mTrackBg }}; font-family: 'Quicksand', sans-serif; font-size: 13.5px; line-height: 1.5; color: {{ mReportBody }};">{{ opt }}</div>
                     </sc-for>
                   </div>
                 </div>
@@ -713,7 +817,7 @@
           <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 3vw, 32px); color: {{ mHeroText }};">{{ resTitle }}</h2>
           <p style="margin: 0; font-size: 15px; color: {{ mReportBody }}; max-width: 720px;">{{ resSub }}</p>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
           <sc-for list="{{ resKpis }}" as="k" hint-placeholder-count="4">
             <div style="padding: 18px 20px; border: 1px solid {{ mCardBorder }}; border-radius: 14px; background: {{ mCardBg }}; display: flex; flex-direction: column; gap: 6px;">
               <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ k.label }}</span>
@@ -721,7 +825,7 @@
             </div>
           </sc-for>
         </div>
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; margin-top: 18px; align-items: start;">
+        <div style="margin-top: 18px;">
           <div style="padding: 24px 26px; border: 1px solid rgba(13,224,230,0.4); border-radius: 16px; background: {{ mCardBg }}; display: flex; flex-direction: column; gap: 14px;">
             <div style="display: flex; align-items: center; gap: 10px;">
               <div style="width: 34px; height: 34px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
@@ -729,13 +833,15 @@
               </div>
               <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #074292;">{{ resGeneralLabel }}</span>
             </div>
-            <p style="margin: 0; font-size: 14.5px; line-height: 1.8; color: {{ mReportBody }};">{{ resGeneral }}</p>
+            <p style="margin: 0; font-size: 14.5px; line-height: 1.8; color: {{ mReportBody }}; max-width: 900px;">{{ resGeneral }}</p>
           </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; align-items: start;">
           <div style="padding: 22px 24px; border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mCardBg }}; display: flex; flex-direction: column; gap: 14px;">
             <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: {{ mHeroText }};">{{ resProfileLabel }}</span>
             <sc-for list="{{ resProfile }}" as="r" hint-placeholder-count="6">
-              <div style="display: grid; grid-template-columns: 110px 1fr 50px; align-items: center; gap: 10px;">
-                <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; color: {{ mHeroText }};">{{ r.label }}</span>
+              <div style="display: grid; grid-template-columns: 92px 1fr 46px; align-items: center; gap: 10px;">
+                <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 12.5px; color: {{ mHeroText }};">{{ r.label }}</span>
                 <div style="height: 9px; border-radius: 9999px; background: {{ mCardBorder }}; overflow: hidden;">
                   <div style="height: 100%; width: {{ r.w }}; border-radius: 9999px; background: {{ r.color }};"></div>
                 </div>
@@ -743,8 +849,6 @@
               </div>
             </sc-for>
           </div>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; align-items: start;">
           <div style="padding: 22px 24px; border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mCardBg }}; display: flex; flex-direction: column; gap: 12px;">
             <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #1f8a52;">{{ resRecLabel }}</span>
             <sc-for list="{{ resRecs }}" as="item" hint-placeholder-count="4">
@@ -762,6 +866,27 @@
                 <span style="font-size: 13.5px; line-height: 1.65; color: {{ mReportBody }};">{{ item }}</span>
               </div>
             </sc-for>
+          </div>
+        </div>
+        <div style="margin-top: 18px;">
+          <div style="padding: 24px 26px; border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mCardBg }}; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: {{ mHeroText }};">{{ resProgLabel }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ resProgSub }}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 28px;">
+              <sc-for list="{{ resPrograms }}" as="p" hint-placeholder-count="6">
+                <div style="display: grid; grid-template-columns: 1fr 44px; align-items: center; gap: 10px;">
+                  <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; color: {{ mHeroText }}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ p.name }}</span>
+                    <span style="height: 9px; border-radius: 9999px; background: {{ mTrackBg }}; overflow: hidden; display: block;">
+                      <span style="display: block; height: 100%; width: {{ p.w }}; border-radius: 9999px; background: {{ p.color }};"></span>
+                    </span>
+                  </div>
+                  <span style="text-align: right; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: #074292;">{{ p.pct }}</span>
+                </div>
+              </sc-for>
+            </div>
           </div>
         </div>
       </sc-if>
@@ -831,6 +956,66 @@
 
     </div>
   </section>
+
+  <!-- Popup: ficha del alumno -->
+  <sc-if value="{{ orgProfileOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeOrgProfile }}" style="position: fixed; inset: 0; z-index: 130; background: rgba(4,25,59,0.55); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 24px; animation: mpFade 0.2s ease both;">
+      <div onClick="{{ stop }}" style="width: 100%; max-width: 480px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 20px; overflow: hidden; animation: mpModalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
+        <div style="height: 4px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+        <div style="padding: 26px 30px 12px; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 58px; height: 58px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; color: {{ mAvatarText }};">{{ orgProfileCard.initial }}</div>
+          <div style="min-width: 0; flex: 1;">
+            <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 5px;">Ficha del alumno</div>
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2; color: {{ mHeroText }};">{{ orgProfileCard.fullName }}</h3>
+          </div>
+          <button onClick="{{ closeOrgProfile }}" style="cursor: pointer; flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; border: 1px solid {{ mCardBorder }}; background: transparent; display: flex; align-items: center; justify-content: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="{{ mSectionLabel }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6 L18 18 M18 6 L6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="padding: 8px 30px 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px;">
+          <div>
+            <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 4px;">Nombre</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 15px; color: {{ mHeroText }};">{{ orgProfileCard.first }}</div>
+          </div>
+          <div>
+            <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 4px;">Apellido</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 15px; color: {{ mHeroText }};">{{ orgProfileCard.last }}</div>
+          </div>
+          <div>
+            <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 4px;">Edad</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 15px; color: {{ mHeroText }};">{{ orgProfileCard.age }}</div>
+          </div>
+          <div>
+            <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 4px;">Curso</div>
+            <div style="display: inline-flex; align-items: center; gap: 8px; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 15px; color: {{ mHeroText }};">
+              {{ orgProfileCard.curso }}
+              <span style="width: 20px; height: 14px; border-radius: 2px; background: {{ orgProfileCard.flagBg }}; border: 1px solid rgba(0,0,0,0.1);"></span>
+            </div>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 4px;">Email</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 15px; color: {{ mHeroText }}; word-break: break-all;">{{ orgProfileCard.mail }}</div>
+          </div>
+        </div>
+
+        <div style="padding: 20px 30px 30px;">
+          <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 14px;">Avance por capítulo</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <sc-for list="{{ orgProfileCard.chapters }}" as="ch" hint-placeholder-count="6">
+              <div style="display: grid; grid-template-columns: 96px 1fr 42px; align-items: center; gap: 12px;">
+                <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; color: {{ mHeroText }};">{{ ch.label }}</span>
+                <span style="height: 8px; border-radius: 9999px; background: {{ mTrackBg }}; overflow: hidden; display: block;">
+                  <span style="display: block; height: 100%; width: {{ ch.width }}; border-radius: 9999px; background: {{ ch.barColor }};"></span>
+                </span>
+                <span style="text-align: right; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; color: {{ ch.pctColor }};">{{ ch.pct }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
 
   <!-- Popup: procesando -->
   <sc-if value="{{ orgModalProcessing }}" hint-placeholder-val="{{ false }}">
@@ -996,8 +1181,15 @@
 
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
       <img onClick="{{ mBackHome }}" src="uploads/m-31.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ mNameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ chBackMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: none; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: #ffffff; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.92; transform: translateY(-1px);">
@@ -1011,12 +1203,35 @@
       </button>
     </div>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ mHeaderBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
       <button onClick="{{ logout }}" title="{{ t_exit }}" style="cursor: pointer; height: 36px; padding: 0 14px; border-radius: 8px; border: none; background: #7A2230; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: #F6F0EC; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21 H5 a2 2 0 0 1 -2 -2 V5 a2 2 0 0 1 2 -2 h4"></path><path d="M16 17 L21 12 L16 7"></path><path d="M21 12 H9"></path></svg>
@@ -1059,13 +1274,13 @@
 
         <!-- Preguntas -->
         <sc-if value="{{ chQuestions }}" hint-placeholder-val="{{ false }}">
-          <div style="flex: 1.15; min-width: 320px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 16px; padding: 30px 32px; animation: mpFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;">
+          <div style="flex: 1 1 100%; width: 100%; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 16px; padding: 30px 32px; animation: mpFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;">
             <div style="height: 3px; width: 60px; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #0043ad); margin-bottom: 18px;"></div>
             <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 14px;">{{ m_chStepLabel }}</div>
 
             <sc-if value="{{ chStep1 }}" hint-placeholder-val="{{ true }}">
               <h2 style="margin: 0 0 22px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 20px; line-height: 1.4; color: {{ mHeroText }};">{{ m_q1 }}</h2>
-              <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start;">
                 <sc-for list="{{ chQ1 }}" as="o" hint-placeholder-count="6">
                   <div onClick="{{ o.pick }}" style="cursor: pointer; display: flex; align-items: flex-start; gap: 13px; padding: 14px 16px; border-radius: 12px; border: 1.5px solid {{ o.optBorder }}; background: {{ o.optBg }}; transition: border-color 0.18s, background 0.18s;">
                     <span style="flex-shrink: 0; margin-top: 2px; width: 18px; height: 18px; border-radius: 9999px; border: 2px solid {{ o.dotBorder }}; background: {{ o.dotBg }}; display: flex; align-items: center; justify-content: center;">
@@ -1129,8 +1344,15 @@
 
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
       <img onClick="{{ mBackHome }}" src="uploads/m-31.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ mNameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ rGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: none; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: #ffffff; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.92; transform: translateY(-1px);">
@@ -1144,12 +1366,35 @@
       </button>
     </div>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ mHeaderBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
       <button onClick="{{ logout }}" title="{{ t_exit }}" style="cursor: pointer; height: 36px; padding: 0 14px; border-radius: 8px; border: none; background: #7A2230; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: #F6F0EC; transition: opacity 0.15s, transform 0.15s;" style-hover="opacity: 0.9; transform: translateY(-1px);">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F6F0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21 H5 a2 2 0 0 1 -2 -2 V5 a2 2 0 0 1 2 -2 h4"></path><path d="M16 17 L21 12 L16 7"></path><path d="M21 12 H9"></path></svg>
@@ -1271,8 +1516,18 @@
 
           <div style="position: relative; overflow: hidden; border-radius: 18px; background: #04193b; border: 1px solid rgba(13,224,230,0.28); padding: 34px 36px;">
             <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
-            <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #0de0e6; margin-bottom: 12px;">Área dominante · Tu sector ideal</div>
-            <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 17px; line-height: 1.8; color: #ffffff; max-width: 760px;">Tu perfil revela una combinación única de habilidades y valores que te posicionan idealmente para este sector.</p>
+            <div style="position: absolute; right: -40px; top: -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(13,224,230,0.16), transparent 70%); pointer-events: none;"></div>
+            <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #0de0e6; margin-bottom: 14px;">Área dominante · Tu sector ideal</div>
+            <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 16px;">
+              <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 3vw, 32px); line-height: 1.15; color: #ffffff;">Gestión y Estrategia de Negocios</h3>
+              <span style="display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 9999px; background: rgba(13,224,230,0.14); border: 1px solid rgba(13,224,230,0.4); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #0de0e6;">Código ECS · 78/100</span>
+            </div>
+            <p style="margin: 0 0 16px; font-family: 'Quicksand', sans-serif; font-size: 16.5px; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 780px;">Tu perfil combina una fuerte orientación al liderazgo y la acción (Emprendedor) con el método y el rigor para ordenar procesos y números (Convencional), sostenidos por una genuina vocación de trabajar con y para otras personas (Social). Ese equilibrio te posiciona de forma natural en roles donde se dirige, se decide y se construye estrategia.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <span style="padding: 7px 14px; border-radius: 9999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: #ffffff;">Liderazgo e influencia</span>
+              <span style="padding: 7px 14px; border-radius: 9999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: #ffffff;">Orden y análisis de datos</span>
+              <span style="padding: 7px 14px; border-radius: 9999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: #ffffff;">Trabajo con personas</span>
+            </div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
@@ -1291,6 +1546,91 @@
               </div>
             </sc-for>
           </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== IKIGAI ===== -->
+      <sc-if value="{{ reportIkigai }}" hint-placeholder-val="{{ false }}">
+        <div style="animation: mpFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; display: flex; flex-direction: column; gap: 28px;">
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: {{ mSectionLabel }};">Extra de valor · Ikigai</div>
+            <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 3vw, 32px); line-height: 1.2; color: {{ mHeroText }};">Tu ikigai: el punto donde todo se encuentra</h2>
+            <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 16px; line-height: 1.85; color: {{ mReportBody }}; max-width: 780px;">Ikigai es un concepto japonés que significa "razón de ser". Aparece cuando se cruzan cuatro dimensiones de tu vida: lo que amas, aquello en lo que eres bueno, lo que el mundo necesita y aquello por lo que te pueden pagar. Elegir una carrera desde ese centro, y no desde una sola de esas piezas, es lo que sostiene una decisión en el tiempo.</p>
+          </div>
+
+          <!-- Diagrama -->
+          <div style="position: relative; overflow: hidden; border-radius: 20px; background: #04193b; border: 1px solid rgba(13,224,230,0.28); padding: 40px 24px 44px;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+
+            <div style="position: relative; width: 100%; max-width: 500px; aspect-ratio: 1 / 1; margin: 0 auto;">
+              <!-- círculos -->
+              <div style="position: absolute; left: 21.7%; top: 2.2%; width: 56.5%; height: 56.5%; border-radius: 50%; background: rgba(13,224,230,0.42); mix-blend-mode: screen; border: 1px solid rgba(13,224,230,0.5);"></div>
+              <div style="position: absolute; left: 2.2%; top: 21.7%; width: 56.5%; height: 56.5%; border-radius: 50%; background: rgba(48,111,208,0.5); mix-blend-mode: screen; border: 1px solid rgba(48,111,208,0.55);"></div>
+              <div style="position: absolute; left: 41.3%; top: 21.7%; width: 56.5%; height: 56.5%; border-radius: 50%; background: rgba(45,130,112,0.5); mix-blend-mode: screen; border: 1px solid rgba(45,130,112,0.55);"></div>
+              <div style="position: absolute; left: 21.7%; top: 41.3%; width: 56.5%; height: 56.5%; border-radius: 50%; background: rgba(224,178,86,0.42); mix-blend-mode: screen; border: 1px solid rgba(224,178,86,0.5);"></div>
+
+              <!-- etiquetas principales -->
+              <div style="position: absolute; left: 50%; top: 12%; transform: translate(-50%, -50%); width: 40%; text-align: center; pointer-events: none;">
+                <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #0de0e6; margin-bottom: 4px;">Lo que amas</div>
+                <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; line-height: 1.35; color: #ffffff;">Liderar e influir</div>
+              </div>
+              <div style="position: absolute; left: 13.5%; top: 50%; transform: translate(-50%, -50%); width: 26%; text-align: center; pointer-events: none;">
+                <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #8ec5ff; margin-bottom: 4px;">Eres bueno</div>
+                <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; line-height: 1.35; color: #ffffff;">Ordenar y analizar</div>
+              </div>
+              <div style="position: absolute; left: 86.5%; top: 50%; transform: translate(-50%, -50%); width: 26%; text-align: center; pointer-events: none;">
+                <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #7fe0c6; margin-bottom: 4px;">El mundo necesita</div>
+                <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; line-height: 1.35; color: #ffffff;">Buenos líderes</div>
+              </div>
+              <div style="position: absolute; left: 50%; top: 88%; transform: translate(-50%, -50%); width: 40%; text-align: center; pointer-events: none;">
+                <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #f0cf8a; margin-bottom: 4px;">Te pueden pagar</div>
+                <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; line-height: 1.35; color: #ffffff;">Gestión y estrategia</div>
+              </div>
+
+              <!-- etiquetas de intersección -->
+              <div style="position: absolute; left: 31%; top: 33%; transform: translate(-50%, -50%); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.85); pointer-events: none;">Pasión</div>
+              <div style="position: absolute; left: 69%; top: 33%; transform: translate(-50%, -50%); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.85); pointer-events: none;">Misión</div>
+              <div style="position: absolute; left: 31%; top: 67%; transform: translate(-50%, -50%); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.85); pointer-events: none;">Profesión</div>
+              <div style="position: absolute; left: 69%; top: 67%; transform: translate(-50%, -50%); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.85); pointer-events: none;">Vocación</div>
+
+              <!-- centro -->
+              <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 1px; color: #ffffff; text-shadow: 0 0 14px rgba(13,224,230,0.6);">IKIGAI</div>
+                <div style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 11px; color: rgba(255,255,255,0.85); margin-top: 2px;">Dirigir con propósito</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Las cuatro dimensiones -->
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;">
+            <div style="background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-top: 3px solid #0de0e6; border-radius: 14px; padding: 22px 24px;">
+              <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 8px;">Lo que amas</div>
+              <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 14px; line-height: 1.75; color: {{ mReportBody }};">Disfrutas liderar proyectos, influir en las personas y ver cómo una idea se vuelve realidad. La energía aparece cuando estás al frente de algo.</p>
+            </div>
+            <div style="background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-top: 3px solid #306fd0; border-radius: 14px; padding: 22px 24px;">
+              <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 8px;">En lo que eres bueno</div>
+              <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 14px; line-height: 1.75; color: {{ mReportBody }};">Ordenas procesos, analizas datos y estructuras con método. Tu fortaleza es traducir el caos en un plan claro y accionable.</p>
+            </div>
+            <div style="background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-top: 3px solid #2D8270; border-radius: 14px; padding: 22px 24px;">
+              <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 8px;">Lo que el mundo necesita</div>
+              <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 14px; line-height: 1.75; color: {{ mReportBody }};">Organizaciones y equipos necesitan personas que dirijan con criterio humano, tomen decisiones y sostengan a otros en el camino.</p>
+            </div>
+            <div style="background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-top: 3px solid #d0a24a; border-radius: 14px; padding: 22px 24px;">
+              <div style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 8px;">Por lo que te pueden pagar</div>
+              <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 14px; line-height: 1.75; color: {{ mReportBody }};">La gestión, la estrategia de negocios y la coordinación de equipos son competencias con demanda real y bien remuneradas en el mercado.</p>
+            </div>
+          </div>
+
+          <!-- Cierre -->
+          <div style="background: rgba(45,130,112,0.08); border: 1px solid rgba(13,132,102,0.35); border-radius: 16px; padding: 24px 28px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2D8270" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8 v5 l3 2"></path></svg>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: {{ mHeroText }};">Cómo leer tu ikigai</span>
+            </div>
+            <p style="margin: 0; font-family: 'Quicksand', sans-serif; font-size: 14.5px; line-height: 1.8; color: {{ mReportBody }};">Las cuatro dimensiones tuyas convergen en la gestión y la estrategia de negocios: un camino donde lo que amas, lo que haces bien, lo que el mundo pide y lo que sostiene tu vida coinciden. No es una casualidad del test, es la síntesis de tus seis evaluaciones. Úsalo como brújula: cuando dudes entre dos opciones, elige la que más se acerque a este centro.</p>
+          </div>
+
         </div>
       </sc-if>
 
@@ -1362,8 +1702,15 @@
 
   <!-- Header (banner superior de la app — no se reemplaza) -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
       <img onClick="{{ mBackHome }}" src="uploads/m-31.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ mNameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ mGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: 1.5px solid #074292; background: transparent; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: {{ mHeroText }}; transition: border-color 0.15s, transform 0.15s, background 0.15s;" style-hover="transform: translateY(-1px); background: rgba(7,66,146,0.06);">
@@ -1376,12 +1723,35 @@
       </button>
     </div>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ mHeaderBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
       <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
         <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ langX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
@@ -1415,8 +1785,15 @@
 
   <!-- Header (barra superior de la app — consistente con el resto) -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
       <img onClick="{{ mBackHome }}" src="uploads/m-31.png" alt="MY PATH.IA — volver al inicio" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ mNameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
     </div>
     <div style="display: flex; align-items: center; gap: 10px; justify-self: center;">
       <button onClick="{{ mGoMento }}" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: 1.5px solid #074292; background: transparent; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px; color: {{ mHeroText }}; transition: border-color 0.15s, transform 0.15s, background 0.15s;" style-hover="transform: translateY(-1px); background: rgba(7,66,146,0.06);">
@@ -1429,12 +1806,35 @@
       </button>
     </div>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ mHeaderBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
       <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
         <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ langX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
@@ -1470,7 +1870,8 @@
       <!-- Mosaico 3 contenedores -->
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
         <sc-for list="{{ cTiles }}" as="tile" hint-placeholder-count="3">
-          <div onClick="{{ tile.go }}" style="cursor: pointer; padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; min-height: 220px; border-radius: 20px; background: #ffffff; border: 1px solid rgba(27,31,35,0.05); box-shadow: 0 2px 4px rgba(27,31,35,0.04), 0 12px 32px rgba(11,61,46,0.1); transition: transform 0.18s, box-shadow 0.18s;" style-hover="transform: translateY(-3px); box-shadow: 0 18px 48px rgba(11,61,46,0.14);">
+          <div onClick="{{ tile.go }}" style="position: relative; cursor: pointer; padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; min-height: 220px; border-radius: 20px; background: #ffffff; border: 1px solid rgba(27,31,35,0.05); box-shadow: 0 2px 4px rgba(27,31,35,0.04), 0 12px 32px rgba(11,61,46,0.1); transition: transform 0.18s, box-shadow 0.18s;" style-hover="transform: translateY(-3px); box-shadow: 0 18px 48px rgba(11,61,46,0.14);">
+            <span style="position: absolute; top: 18px; right: 24px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 58px; line-height: 1; color: rgba(11,61,46,0.1);">{{ tile.num }}</span>
             <div style="width: 46px; height: 46px; border-radius: 14px; background: rgba(11,61,46,0.08); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0b3d2e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ tile.icon }}"></path><path d="{{ tile.icon2 }}"></path></svg>
             </div>
@@ -1493,19 +1894,23 @@
             <span style="font-size: 14px; color: #4c534f;">{{ cLabels.estudiosSub }}</span>
           </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1.3fr 1.3fr 1fr auto; gap: 12px; align-items: center; padding: 14px 28px; border-bottom: 1px solid #e6dfc9; background: #f6eed8;">
+        <div style="display: grid; grid-template-columns: 1.4fr 1.4fr 0.9fr 1.1fr 210px; gap: 12px; align-items: center; padding: 14px 28px; border-bottom: 1px solid #e6dfc9; background: #f6eed8;">
           <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7a7060;">{{ cLabels.colProgram }}</span>
           <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7a7060;">{{ cLabels.colUni }}</span>
+          <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7a7060;">{{ cLabels.colPais }}</span>
           <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7a7060;">{{ cLabels.colStudent }}</span>
           <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7a7060; text-align: right;">{{ cLabels.colActions }}</span>
         </div>
         <sc-for list="{{ campusEstudios }}" as="e" hint-placeholder-count="4">
-          <div style="display: grid; grid-template-columns: 1.3fr 1.3fr 1fr auto; gap: 12px; align-items: center; padding: 16px 28px; border-bottom: 1px solid #e6dfc9;">
+          <div style="display: grid; grid-template-columns: 1.4fr 1.4fr 0.9fr 1.1fr 210px; gap: 12px; align-items: center; padding: 16px 28px; border-bottom: 1px solid #e6dfc9;">
             <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14.5px; color: #14171a;">{{ e.program }}</span>
-            <span style="font-size: 13.5px; color: #4c534f;">{{ e.uni }}</span>
+            <a href="{{ e.url }}" target="_blank" rel="noopener" style="font-size: 13.5px; font-weight: 600; color: #0b3d2e; text-decoration: underline; text-underline-offset: 2px;">{{ e.uni }}</a>
+            <span style="font-size: 13.5px; color: #4c534f;">{{ e.country }}</span>
             <span style="font-size: 13.5px; color: #4c534f;">{{ e.student }}</span>
             <div style="display: flex; gap: 8px; justify-content: flex-end;">
-              <button onClick="{{ e.saberMas }}" style="cursor: pointer; padding: 8px 16px; border-radius: 9999px; border: 1px solid rgba(27,31,35,0.2); background: transparent; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; color: #0b3d2e; transition: transform 0.15s, border-color 0.15s;" style-hover="transform: translateY(-1px); border-color: #0b3d2e;">{{ cLabels.estudiosBtn }}</button>
+              <sc-if value="{{ e.foreign }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ e.estudios }}" style="cursor: pointer; padding: 8px 16px; border-radius: 9999px; border: 1px solid rgba(27,31,35,0.2); background: transparent; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; color: #0b3d2e; transition: transform 0.15s, border-color 0.15s;" style-hover="transform: translateY(-1px); border-color: #0b3d2e;">{{ cLabels.estudiosBtn }}</button>
+              </sc-if>
               <button onClick="{{ e.contactar }}" style="cursor: pointer; padding: 8px 16px; border-radius: 9999px; border: none; background: #0b3d2e; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; color: #fff8e7; transition: transform 0.15s, opacity 0.15s;" style-hover="transform: translateY(-1px); opacity: 0.92;">{{ cLabels.contactar }}</button>
             </div>
           </div>
@@ -1675,17 +2080,47 @@
 
   <!-- Header -->
   <header style="position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 12px 20px; background: {{ mHeaderBg }}; backdrop-filter: blur(8px); border-bottom: 1px solid {{ mHeaderBorder }}; transition: background 0.4s, border-color 0.4s;">
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
       <img onClick="{{ infoBack }}" src="uploads/m-31.png" alt="MY PATH.IA — volver" title="{{ t_exit }}" style="height: 40px; width: auto; cursor: pointer; filter: {{ mLogoFilter }};">
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: {{ mHeroText }}; white-space: nowrap;">{{ m_school }}</span>
+      <span style="width: 1px; height: 26px; background: {{ mCtrlBorder }}; flex-shrink: 0;"></span>
+      <div style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: {{ mNameColor }}; white-space: nowrap;">{{ name }}</span>
+      </div>
     </div>
     <div style="justify-self: center; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ infoKicker }}</div>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 34px; height: 34px; border-radius: 9999px; background: {{ mAvatarBg }}; border: 1px solid {{ mCtrlBorder }}; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: {{ mAvatarText }};">{{ initial }}</div>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; color: {{ mNameColor }}; line-height: 1;">{{ name }}</span>
-          <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: {{ mRoleColor }}; line-height: 1;">{{ roleLabel }}</span>
-        </div>
+      <div style="position: relative;">
+        <button onClick="{{ toggleNotif }}" title="{{ notifTitle }}" style="cursor: pointer; position: relative; width: 36px; height: 36px; border-radius: 8px; border: 1px solid {{ mCtrlBorder }}; background: transparent; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.15s;" style-hover="border-color: #074292; transform: translateY(-1px);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ mCtrlIcon }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8 a6 6 0 0 0 -12 0 c0 7 -3 9 -3 9 h18 s-3 -2 -3 -9"></path><path d="M13.7 21 a2 2 0 0 1 -3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 9999px; background: #e02424; border: 1.5px solid {{ mHeaderBg }};"></span>
+        </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 46px; right: 0; z-index: 90; width: 342px; background: {{ mCardBg }}; border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 44px rgba(4,25,59,0.20); animation: mpFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;">
+            <div style="height: 3px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+            <div style="padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: {{ mHeroText }};">{{ notifTitle }}</span>
+              <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #074292;">{{ notifBadge }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; max-height: 340px; overflow-y: auto;">
+              <sc-for list="{{ notifs }}" as="nt" hint-placeholder-count="3">
+                <div onClick="{{ nt.open }}" style="cursor: pointer; display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid {{ mCardBorder }}; transition: background 0.15s;" style-hover="background: {{ mTrackBg }};">
+                  <span style="flex-shrink: 0; margin-top: 1px; width: 32px; height: 32px; border-radius: 9999px; background: rgba(7,66,146,0.1); display: flex; align-items: center; justify-content: center;">
+                    <sc-if value="{{ nt.job }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></sc-if>
+                    <sc-if value="{{ nt.uni }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></sc-if>
+                    <sc-if value="{{ nt.chat }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></sc-if>
+                  </span>
+                  <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13.5px; line-height: 1.5; color: {{ mHeroText }};">{{ nt.text }}</span>
+                    <span style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ nt.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
       </div>
       <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
         <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ langX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
@@ -1707,13 +2142,51 @@
     </div>
   </header>
 
-  <!-- Dos botones centrados debajo del zócalo -->
-  <section style="padding: 44px 20px 8px;">
-    <div style="max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
-      <button onClick="{{ infoGoFaq }}" style="cursor: pointer; padding: 13px 30px; border-radius: 9999px; border: 1.5px solid {{ infoFaqBorder }}; background: {{ infoFaqBg }}; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; color: {{ infoFaqColor }}; transition: transform 0.15s, border-color 0.15s, background 0.15s;" style-hover="transform: translateY(-1px);">{{ infoFaqLabel }}</button>
-      <button onClick="{{ infoGoPrecios }}" style="cursor: pointer; padding: 13px 30px; border-radius: 9999px; border: 1.5px solid {{ infoPrecBorder }}; background: {{ infoPrecBg }}; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; color: {{ infoPrecColor }}; transition: transform 0.15s, border-color 0.15s, background 0.15s;" style-hover="transform: translateY(-1px);">{{ infoPreciosLabel }}</button>
-    </div>
-  </section>
+  <!-- Precios -->
+  <sc-if value="{{ infoPreciosOn }}" hint-placeholder-val="{{ false }}">
+    <section style="padding: 24px 20px 90px;">
+      <div style="max-width: 780px; margin: 0 auto; position: relative; border: 1px solid {{ mCardBorder }}; border-radius: 20px; background: {{ mCardBg }}; padding: 38px 40px; animation: mpFadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;">
+        <div style="position: absolute; top: 0; left: 40px; right: 40px; height: 3px; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
+
+        <!-- Encabezado + toggle divisa -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 22px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ precPlan }}</span>
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 3vw, 32px); color: {{ mHeroText }};">Mento.IA + My Campus.IA</h3>
+          </div>
+          <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
+            <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ curX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+            <button onClick="{{ setUsd }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 6px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ usdColor }}; transition: color 0.3s;">USD</button>
+            <button onClick="{{ setEur }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 6px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ eurColor }}; transition: color 0.3s;">EUR</button>
+          </div>
+        </div>
+
+        <!-- Qué incluye -->
+        <ul style="margin: 0 0 26px; padding: 0; list-style: none; display: grid; grid-template-columns: {{ faqCols }}; gap: 12px 24px;">
+          <sc-for list="{{ precFeatures }}" as="f" hint-placeholder-count="4">
+            <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.6; color: {{ mReportBody }};">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M8 12 l2.5 2.5 L16 9"></path></svg>
+              <span>{{ f }}</span>
+            </li>
+          </sc-for>
+        </ul>
+
+        <!-- Precio destacado -->
+        <div style="border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mPageBg }}; padding: 26px 28px; margin-bottom: 26px;">
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 12px;">{{ precPerUser }}</div>
+          <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 14px;">
+            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(38px, 5vw, 48px); line-height: 1; color: {{ mHeroText }};">{{ precNow }}</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(45,130,112,0.14); border: 1px solid rgba(45,130,112,0.45); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.5px; font-weight: 500; color: #1d6149;">{{ precBadge }}</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 18px; margin-top: 16px;">
+            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: {{ mReportBody }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7 v5 l3 2"></path></svg>{{ precOne }}</span>
+            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: {{ mReportBody }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2 v4 M16 2 v4 M3 10 h18"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect></svg>{{ precYear }}</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </sc-if>
 
   <!-- Preguntas frecuentes -->
   <sc-if value="{{ infoFaqOn }}" hint-placeholder-val="{{ true }}">
@@ -1761,7 +2234,7 @@
             <sc-if value="{{ f.hasLead }}" hint-placeholder-val="{{ false }}">
               <p style="margin: 0 0 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 18px; line-height: 1.5; color: #074292;">{{ f.lead }}</p>
             </sc-if>
-            <div style="display: grid; grid-template-columns: {{ faqCols }}; gap: 12px 26px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
               <sc-for list="{{ f.paras }}" as="p" hint-placeholder-count="1">
                 <p style="margin: 0; font-size: 15px; line-height: 1.8; color: {{ mReportBody }};">{{ p }}</p>
               </sc-for>
@@ -1772,96 +2245,6 @@
     </section>
   </sc-if>
 
-  <!-- Precios -->
-  <sc-if value="{{ infoPreciosOn }}" hint-placeholder-val="{{ false }}">
-    <section style="padding: 24px 20px 90px;">
-      <div style="max-width: 780px; margin: 0 auto; position: relative; border: 1px solid {{ mCardBorder }}; border-radius: 20px; background: {{ mCardBg }}; padding: 38px 40px; animation: mpFadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;">
-        <div style="position: absolute; top: 0; left: 40px; right: 40px; height: 3px; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #0043ad);"></div>
-
-        <!-- Encabezado + toggle divisa -->
-        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 22px;">
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ precPlan }}</span>
-            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 3vw, 32px); color: {{ mHeroText }};">Mento.IA + My Campus.IA</h3>
-          </div>
-          <div style="position: relative; display: flex; align-items: center; background: {{ mLangTrackBg }}; border: 1px solid {{ mCtrlBorder }}; border-radius: 9999px; padding: 3px;">
-            <div style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 9999px; background: #074292; transform: translateX({{ curX }}); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
-            <button onClick="{{ setUsd }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 6px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ usdColor }}; transition: color 0.3s;">USD</button>
-            <button onClick="{{ setEur }}" style="position: relative; z-index: 1; cursor: pointer; background: transparent; border: none; padding: 6px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; font-weight: 500; color: {{ eurColor }}; transition: color 0.3s;">EUR</button>
-          </div>
-        </div>
-
-        <!-- Qué incluye -->
-        <ul style="margin: 0 0 26px; padding: 0; list-style: none; display: grid; grid-template-columns: {{ faqCols }}; gap: 12px 24px;">
-          <sc-for list="{{ precFeatures }}" as="f" hint-placeholder-count="4">
-            <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.6; color: {{ mReportBody }};">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M8 12 l2.5 2.5 L16 9"></path></svg>
-              <span>{{ f }}</span>
-            </li>
-          </sc-for>
-        </ul>
-
-        <!-- Precio destacado -->
-        <div style="border: 1px solid {{ mCardBorder }}; border-radius: 16px; background: {{ mPageBg }}; padding: 26px 28px; margin-bottom: 26px;">
-          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 12px;">{{ precPerUser }}</div>
-          <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 14px;">
-            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 22px; color: {{ mSectionLabel }}; text-decoration: line-through; text-decoration-color: #7A2230;">{{ precWas }}</span>
-            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(38px, 5vw, 48px); line-height: 1; color: {{ mHeroText }};">{{ precNow }}</span>
-            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(45,130,112,0.14); border: 1px solid rgba(45,130,112,0.45); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.5px; font-weight: 500; color: #1d6149;">{{ precBadge }}</span>
-          </div>
-          <div style="display: flex; flex-wrap: wrap; gap: 18px; margin-top: 16px;">
-            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: {{ mReportBody }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7 v5 l3 2"></path></svg>{{ precOne }}</span>
-            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: {{ mReportBody }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#074292" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2 v4 M16 2 v4 M3 10 h18"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect></svg>{{ precYear }}</span>
-          </div>
-        </div>
-
-        <!-- Simulador por franja de alumnos -->
-        <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: {{ mSectionLabel }}; margin-bottom: 6px;">{{ precSimTitle }}</div>
-        <p style="margin: 0 0 22px; font-size: 14px; line-height: 1.7; color: {{ mReportBody }};">{{ precSimSub }}</p>
-
-        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px;">
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; line-height: 1; color: {{ mHeroText }};">{{ simStudentsLabel }}</span>
-            <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: {{ mSectionLabel }};">{{ precStudentsCaption }}</span>
-          </div>
-          <div style="text-align: right; display: flex; flex-direction: column; gap: 4px;">
-            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; line-height: 1; color: #074292;">{{ simPrice }}</span>
-            <span style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; color: #1d6149;">{{ simDisc }}</span>
-          </div>
-        </div>
-
-        <!-- Línea con bola arrastrable -->
-        <div ref="{{ trackRef }}" onPointerDown="{{ sliderDown }}" style="position: relative; height: 10px; border-radius: 9999px; background: {{ sliderTrackBg }}; cursor: pointer; margin: 6px 0 10px; touch-action: none;">
-          <div style="position: absolute; left: 0; top: 0; bottom: 0; width: {{ sliderPct }}; border-radius: 9999px; background: linear-gradient(90deg, #0de0e6, #074292);"></div>
-          <div style="position: absolute; left: {{ sliderPct }}; top: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; border-radius: 50%; background: #074292; border: 3px solid #ffffff; box-shadow: 0 3px 10px rgba(7,66,146,0.45); cursor: grab;"></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; color: {{ mSectionLabel }}; margin-bottom: 26px;">
-          <span>10</span><span>200</span><span>500</span><span>700+</span>
-        </div>
-
-        <!-- Tabla de franjas -->
-        <div style="border: 1px solid {{ mCardBorder }}; border-radius: 14px; overflow: hidden;">
-          <div style="display: grid; grid-template-columns: 1.4fr 1fr 1.2fr; background: #074292;">
-            <span style="padding: 11px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #ffffff;">{{ precColBand }}</span>
-            <span style="padding: 11px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #ffffff;">{{ precColPrice }}</span>
-            <span style="padding: 11px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #ffffff;">{{ precColDisc }}</span>
-          </div>
-          <sc-for list="{{ precTiers }}" as="t" hint-placeholder-count="3">
-            <div style="display: grid; grid-template-columns: 1.4fr 1fr 1.2fr; background: {{ t.rowBg }}; border-top: 1px solid {{ mCardBorder }};">
-              <span style="padding: 13px 16px; font-family: 'Quicksand', sans-serif; font-size: 14px; font-weight: {{ t.weight }}; color: {{ mHeroText }};">{{ t.band }}</span>
-              <span style="padding: 13px 16px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: {{ t.priceColor }};">{{ t.price }}</span>
-              <span style="padding: 13px 16px; font-family: 'Quicksand', sans-serif; font-size: 13.5px; color: {{ mReportBody }};">{{ t.disc }}</span>
-            </div>
-          </sc-for>
-        </div>
-
-        <a href="mailto:hola@mypathia.com" style="cursor: pointer; text-decoration: none; margin-top: 26px; display: inline-flex; align-items: center; gap: 9px; padding: 14px 30px; border: none; border-radius: 9999px; background: #074292; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: #ffffff; transition: transform 0.15s, opacity 0.15s;" style-hover="transform: translateY(-1px); opacity: 0.92;">
-          {{ precCta }}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 H19"></path><path d="M13 6 L19 12 L13 18"></path></svg>
-        </a>
-      </div>
-    </section>
-  </sc-if>
 
 </div>
 </sc-if>
@@ -1919,6 +2302,7 @@ class Component extends DCLogic {
     dark: false,
     email: '',
     name: 'Alex',
+    notifOpen: false,
     activeQuote: 0,
     vw: (typeof window !== 'undefined' ? window.innerWidth : 1200),
     isSignup: false,
@@ -2044,12 +2428,12 @@ class Component extends DCLogic {
           'A diferencia de las aptitudes —lo que sabes hacer— los intereses vocacionales predicen la satisfacción laboral a largo plazo con más precisión que las notas académicas.'
         ],
         aiTitle: 'Lo que esto significa para tu decisión',
-        aiBody: 'El código AIE define un perfil que necesita crear con libertad formal (Artístico), entender el problema en profundidad antes de actuar (Investigativo) y luego liderar la ejecución con visión estratégica (Emprendedor). Es el espacio de los directores creativos, los arquitectos de sistemas culturales, los diseñadores de experiencias complejas, los fundadores de proyectos con identidad estética.',
+        aiBody: 'El código ECS define un perfil que disfruta liderar e influir (Emprendedor), trabajar con orden, datos y estructura (Convencional) y hacerlo junto a otras personas (Social). Es el espacio de la administración, las finanzas, la economía y el derecho de los negocios: gestionar, analizar y dirigir organizaciones con criterio y con foco en resultados.',
         question: '¿El trabajo diario de un profesional en esta área se parece a lo que me activa, o a lo que me agota?',
         stars: [
-          { label: 'Artístico', n: 5, dots: star(5) },
           { label: 'Emprendedor', n: 5, dots: star(5) },
-          { label: 'Investigativo', n: 4, dots: star(4) }
+          { label: 'Convencional', n: 5, dots: star(5) },
+          { label: 'Social', n: 4, dots: star(4) }
         ]
       }
     ];
@@ -2058,20 +2442,20 @@ class Component extends DCLogic {
   reportCareers() {
     return [
       {
-        title: 'Diseño de experiencia de usuario (UX) y producto digital',
-        body: 'Investigás cómo las personas interactúan con productos digitales y diseñás interfaces, flujos y sistemas que resuelvan problemas reales de manera intuitiva y estéticamente coherente. Combinás investigación de usuarios, prototipado, testeo iterativo y visión estratégica. Podés trabajar en equipos de producto de tech companies, consultoras de diseño, o como freelance. El rol evoluciona hacia Dirección de Producto o Diseño de Sistemas, donde definís la visión y arquitectura de productos completos.'
+        title: 'Licenciatura en Administración de Empresas',
+        body: 'Aprendés a planificar, organizar y dirigir organizaciones de cualquier tamaño: finanzas, operaciones, recursos humanos, comercial y estrategia. Es una carrera generalista y versátil que te prepara para coordinar equipos, tomar decisiones con información y liderar proyectos. La progresión natural va de analista a mandos medios y luego a dirección general (gerencias, COO, CEO) o al emprendimiento propio.'
       },
       {
-        title: 'Dirección creativa y estrategia de marca',
-        body: 'Liderás la visión creativa de marcas, campañas o productos. Definís territorios estéticos, narrativas de comunicación y sistemas de identidad visual. Trabajás con equipos multidisciplinarios (diseñadores, copywriters, estrategas) pero vos marcás la dirección. Podés estar en agencias, in-house en marcas premium, o montar tu propio estudio. El rol exige tanto sensibilidad artística como capacidad de vender ideas y gestionar clientes.'
+        title: 'Contador Público',
+        body: 'Te formás en contabilidad, impuestos, auditoría y control de gestión: el lenguaje con el que se miden y se explican los negocios. Es una de las salidas con mayor demanda y estabilidad, con matrícula profesional habilitante. Podés ejercer en estudios contables, en la dirección financiera de empresas o de forma independiente, y es una base sólida para escalar hacia CFO o consultoría.'
       },
       {
-        title: 'Arquitectura (con especialización en diseño conceptual o sostenibilidad)',
-        body: 'Diseñás espacios habitables que balancean función, estética y contexto. La arquitectura contemporánea cada vez más integra tecnología, sostenibilidad y pensamiento sistémico. Podés especializarte en diseño residencial de alta gama, espacios culturales, o arquitectura regenerativa. El camino incluye colaboración con ingenieros, clientes y equipos de obra, pero vos definís la visión espacial. También existe la ruta de arquitectura paramétrica o computacional, donde el diseño se cruza con código.'
+        title: 'Licenciatura en Economía',
+        body: 'Estudiás cómo las personas, las empresas y los Estados asignan recursos, y desarrollás un pensamiento analítico y cuantitativo muy valorado. Combinás teoría, estadística y modelización para leer datos y anticipar escenarios. Las salidas van desde bancos, consultoras y organismos públicos hasta investigación y análisis de mercado, con excelente proyección salarial.'
       },
       {
-        title: 'Producción audiovisual y dirección de proyectos creativos',
-        body: 'Gestionás la producción de contenido audiovisual: cine, publicidad, videoclips, documentales, o branded content. El rol combina creatividad (definir el concepto y la estética) con logística (coordinar equipos, presupuestos, tiempos). No necesariamente operás la cámara — tu valor está en la visión del proyecto y en hacer que suceda. Podés trabajar en productoras, como productor independiente, o en departamentos de contenido de marcas. La evolución natural es hacia Dirección Creativa o producción ejecutiva de proyectos de alto impacto.'
+        title: 'Abogacía (Derecho)',
+        body: 'Te preparás para interpretar y aplicar las normas que regulan la sociedad y los negocios, y para asesorar, negociar y resolver conflictos. La carrera abre un abanico amplio: derecho corporativo, tributario, laboral, litigio o compliance, tanto en estudios y empresas como en el sector público. Es una formación con fuerte peso en argumentación, criterio y responsabilidad.'
       }
     ];
   }
@@ -2268,7 +2652,7 @@ class Component extends DCLogic {
       precPlan: T('Plan combinado', 'Combined plan'),
       precPerUser: T('Precio por alumno', 'Price per student'),
       precWas: fmt(usd ? 15 : 13),
-      precNow: fmt(val(tierData[0])),
+      precNow: fmt(usd ? 6 : 5),
       precBadge: T('Tarifa 2026', '2026 rate'),
       precOne: T('Un solo pago (no mensual)', 'One-time payment (not monthly)'),
       precYear: T('Acceso todo el año', 'Full-year access'),
@@ -2417,19 +2801,19 @@ class Component extends DCLogic {
   orgReportData() {
     return {
       alumno: 'Lionel Messi',
-      code: 'AIE',
+      code: 'ECS',
       intent: 'Media-Alta',
-      score: '72/100',
-      area: 'Creación Estratégica y Liderazgo',
-      synthesis: 'Tu perfil no tiene nada de estándar. No encajás en las categorías tradicionales de orientación vocacional porque combinás elementos que rara vez se juntan: apertura radical con estabilidad emocional alta, ambición de gestión con rechazo a lo corporativo, creatividad artística con pensamiento analítico. El patrón más claro es este: necesitás construir tu propio vehículo profesional. Tu punto óptimo está en espacios que te dejen diseñar el formato, no solo el contenido.',
-      riasecIntro: 'El código AIE define un perfil que necesita crear con libertad formal (Artístico), entender el problema en profundidad antes de actuar (Investigativo) y luego liderar la ejecución con visión estratégica (Emprendedor). Es el espacio de los directores creativos, los arquitectos de sistemas culturales y los fundadores de proyectos con identidad estética.',
+      score: '78/100',
+      area: 'Gestión y Estrategia de Negocios',
+      synthesis: 'Su perfil combina una fuerte orientación a la acción y al liderazgo (Emprendedor) con método y rigor para ordenar procesos y números (Convencional), sostenidos por una genuina vocación por trabajar con y para otras personas (Social). No es alguien que se pierda en la abstracción: necesita ver resultados concretos, coordinar equipos y tomar decisiones con información sobre la mesa. Su punto óptimo está en entornos de negocio donde pueda organizar, decidir y hacer crecer proyectos.',
+      riasecIntro: 'El código ECS define un perfil que disfruta liderar e influir (Emprendedor), trabajar con orden, datos y estructura (Convencional) y hacerlo en relación con otras personas (Social). Es el espacio de la administración, las finanzas, la economía y el derecho de los negocios: gestionar, analizar y dirigir organizaciones.',
       riasec: [
-        { label: 'Artístico', pts: 90 },
-        { label: 'Emprendedor', pts: 80 },
-        { label: 'Investigativo', pts: 80 },
-        { label: 'Social', pts: 20 },
-        { label: 'Realista', pts: 20 },
-        { label: 'Convencional', pts: 10 }
+        { label: 'Emprendedor', pts: 92 },
+        { label: 'Convencional', pts: 85 },
+        { label: 'Social', pts: 74 },
+        { label: 'Investigativo', pts: 66 },
+        { label: 'Artístico', pts: 44 },
+        { label: 'Realista', pts: 41 }
       ],
       strengthsIntro: 'Tu cima de fortalezas es Gratitud + Perseverancia + Optimismo. Es una combinación poco común y muy potente: agradeces lo que funciona, sostienes el esfuerzo cuando importa, y encuadras los problemas desde posibilidades en lugar de limitaciones.',
       strengths: [
@@ -2439,10 +2823,10 @@ class Component extends DCLogic {
         { name: 'Vitalidad / Zest', tag: 'Latente', body: 'No sos el tipo que llena la sala con energía contagiosa, y está bien.' }
       ],
       careers: [
-        { title: 'Diseño de experiencia de usuario (UX) y producto digital', match: '92% Match', body: 'Investigás cómo las personas interactúan con productos digitales y diseñás interfaces, flujos y sistemas que resuelvan problemas reales de manera intuitiva y estéticamente coherente. El rol evoluciona hacia Dirección de Producto o Diseño de Sistemas.', metric: 'Fusiona tu pensamiento Investigativo, tu vena Artística y tu capacidad Emprendedora, todo en un marco de alta autonomía.' },
-        { title: 'Dirección creativa y estrategia de marca', match: '89% Match', body: 'Liderás la visión creativa de marcas, campañas o productos. Definís territorios estéticos, narrativas de comunicación y sistemas de identidad visual. Podés estar en agencias, in-house en marcas premium, o montar tu propio estudio.', metric: 'Tu ancla de Gestión General te da la estructura de liderazgo, tu Apertura alimenta la visión estética, y liderás a través de trabajo, no de carisma.' },
-        { title: 'Arquitectura (diseño conceptual o sostenibilidad)', match: '85% Match', body: 'Diseñás espacios habitables que balancean función, estética y contexto. Podés especializarte en diseño residencial de alta gama, espacios culturales, o arquitectura regenerativa, incluso arquitectura paramétrica donde el diseño se cruza con código.', metric: 'Combina tu Artístico, tu Investigativo y tu capacidad de gestionar proyectos complejos de largo plazo que tu Perseverancia sostiene.' },
-        { title: 'Producción audiovisual y dirección de proyectos creativos', match: '83% Match', body: 'Gestionás la producción de contenido audiovisual: cine, publicidad, documentales o branded content. Tu valor está en la visión del proyecto y en hacer que suceda. La evolución natural es hacia Dirección Creativa o producción ejecutiva.', metric: 'Tu Gestión General coordina equipos y recursos; tu Creatividad Emprendedora arma proyectos desde cero; tu Estabilidad Emocional navega los imprevistos.' }
+        { title: 'Licenciatura en Administración de Empresas', match: '96% Match', body: 'Planificar, organizar y dirigir organizaciones: finanzas, operaciones, comercial y estrategia. Una carrera generalista que forma para coordinar equipos y tomar decisiones, con progresión hacia gerencias, dirección general o emprendimiento propio.', metric: 'Encaja de lleno con su combinación Emprendedor + Convencional: liderazgo y ejecución sobre una base de orden y método.' },
+        { title: 'Contador Público', match: '93% Match', body: 'Contabilidad, impuestos, auditoría y control de gestión: el lenguaje con el que se miden los negocios. Alta demanda y estabilidad, con matrícula habilitante y proyección hacia dirección financiera o CFO.', metric: 'Apalanca su fortaleza Convencional —rigor, orden y datos— con la mirada de gestión de su perfil Emprendedor.' },
+        { title: 'Licenciatura en Economía', match: '90% Match', body: 'Cómo personas, empresas y Estados asignan recursos. Combina teoría, estadística y modelización para leer datos y anticipar escenarios; salidas en bancos, consultoras, sector público e investigación.', metric: 'Suma su componente Investigativo al análisis cuantitativo, dentro de un marco de decisión propio del perfil Emprendedor.' },
+        { title: 'Abogacía (Derecho)', match: '86% Match', body: 'Interpretar y aplicar las normas que regulan la sociedad y los negocios: asesorar, negociar y resolver conflictos en derecho corporativo, tributario, laboral o compliance, en estudios, empresas o el sector público.', metric: 'Se apoya en su vena Social y de influencia (Emprendedor) para la negociación, con el orden Convencional que exige el rigor jurídico.' }
       ]
     };
   }
@@ -2459,42 +2843,42 @@ class Component extends DCLogic {
 
   messiData() {
     return {
-      code: 'IAS',
-      codeDesc: 'Investigador · Artístico · Social',
+      code: 'ECS',
+      codeDesc: 'Emprendedor · Convencional · Social',
       riasec: [
-        { k: 'R', label: 'Realista', pts: 62 },
-        { k: 'I', label: 'Investigador', pts: 91 },
-        { k: 'A', label: 'Artístico', pts: 84 },
-        { k: 'S', label: 'Social', pts: 70 },
-        { k: 'E', label: 'Emprendedor', pts: 55 },
-        { k: 'C', label: 'Convencional', pts: 48 }
+        { k: 'R', label: 'Realista', pts: 41 },
+        { k: 'I', label: 'Investigador', pts: 66 },
+        { k: 'A', label: 'Artístico', pts: 44 },
+        { k: 'S', label: 'Social', pts: 74 },
+        { k: 'E', label: 'Emprendedor', pts: 93 },
+        { k: 'C', label: 'Convencional', pts: 85 }
       ],
       careers: [
-        { name: 'Ingeniería Biomédica', code: 'IRA', cat: 'Salud y Ciencias', pct: 97 },
-        { name: 'Ciencia de Datos', code: 'IRC', cat: 'Tecnología y Datos', pct: 94 },
-        { name: 'Arquitectura', code: 'AIR', cat: 'Arquitectura y Diseño', pct: 89 },
-        { name: 'Diseño de Producto', code: 'AIE', cat: 'Arquitectura y Diseño', pct: 85 },
-        { name: 'Psicología', code: 'SIA', cat: 'Ciencias Sociales', pct: 81 },
-        { name: 'Relaciones Internacionales', code: 'SEI', cat: 'Ciencias Sociales', pct: 78 },
-        { name: 'Biotecnología', code: 'IRA', cat: 'Salud y Ciencias', pct: 74 },
-        { name: 'Economía', code: 'IEC', cat: 'Negocios y Economía', pct: 69 },
-        { name: 'Comunicación Audiovisual', code: 'AES', cat: 'Artes y Humanidades', pct: 63 },
-        { name: 'Derecho', code: 'ESC', cat: 'Derecho', pct: 57 }
+        { name: 'Licenciatura en Administración de Empresas', code: 'ECS', cat: 'Negocios y Economía', pct: 96 },
+        { name: 'Contador Público', code: 'CES', cat: 'Negocios y Economía', pct: 93 },
+        { name: 'Licenciatura en Economía', code: 'IEC', cat: 'Negocios y Economía', pct: 90 },
+        { name: 'Abogacía', code: 'ESC', cat: 'Derecho', pct: 86 },
+        { name: 'Licenciatura en Marketing / Comercialización', code: 'EAS', cat: 'Negocios y Economía', pct: 83 },
+        { name: 'Licenciatura en Finanzas', code: 'ECI', cat: 'Negocios y Economía', pct: 79 },
+        { name: 'Licenciatura en Comercio Internacional', code: 'ECS', cat: 'Negocios y Economía', pct: 75 },
+        { name: 'Licenciatura en Recursos Humanos', code: 'SEC', cat: 'Ciencias Sociales', pct: 71 },
+        { name: 'Licenciatura en Relaciones Públicas e Institucionales', code: 'ESA', cat: 'Comunicación', pct: 67 },
+        { name: 'Licenciatura en Ciencia Política', code: 'ESI', cat: 'Ciencias Sociales', pct: 62 }
       ],
       unis: [
-        { name: 'Instituto Tecnológico de Buenos Aires', meta: 'ITBA · Buenos Aires, AR', program: 'Ingeniería Biomédica' },
-        { name: 'Universidad de Buenos Aires', meta: 'UBA · Buenos Aires, AR', program: 'Ciencia de Datos' },
-        { name: 'Universidad Torcuato Di Tella', meta: 'UTDT · Buenos Aires, AR', program: 'Arquitectura' }
+        { name: 'Universidad de San Andrés', meta: 'UdeSA · Buenos Aires, AR', program: 'Licenciatura en Economía' },
+        { name: 'Universidad Torcuato Di Tella', meta: 'UTDT · Buenos Aires, AR', program: 'Administración de Empresas' },
+        { name: 'Universidad de Buenos Aires', meta: 'UBA · Buenos Aires, AR', program: 'Contador Público' }
       ]
     };
   }
 
   campusEstudiosData() {
     return [
-      { program: 'Ingeniería Biomédica', uni: 'ITBA · Buenos Aires', student: 'Lionel Messi' },
-      { program: 'Ciencia de Datos', uni: 'UBA · Buenos Aires', student: 'Lionel Messi' },
-      { program: 'Diseño de Producto', uni: 'UTDT · Buenos Aires', student: 'Emiliano Martinez' },
-      { program: 'Psicología', uni: 'UBA · Buenos Aires', student: 'Emiliano Martinez' }
+      { program: 'Ingeniería Biomédica', uni: 'ITBA', country: 'Argentina', url: 'https://www.itba.edu.ar/', student: 'Lionel Messi', foreign: false },
+      { program: 'Ciencia de Datos', uni: 'UBA', country: 'Argentina', url: 'https://www.uba.ar/', student: 'Lionel Messi', foreign: false },
+      { program: 'Diseño de Producto', uni: 'Politecnico di Milano', country: 'Italia', url: 'https://www.polimi.it/', student: 'Emiliano Martinez', foreign: true },
+      { program: 'Psicología', uni: 'UBA', country: 'Argentina', url: 'https://www.uba.ar/', student: 'Emiliano Martinez', foreign: false }
     ];
   }
 
@@ -2515,12 +2899,28 @@ class Component extends DCLogic {
 
   orgStudentsData() {
     return [
-      { name: 'Emiliano Martinez', flag: 'AR', avance: '30%', next: 'Capítulo 4', report: 'progress', perfil: true, doc: true, eye: false, comms: false, ready: false },
-      { name: 'Lionel Messi', flag: 'AR', avance: '100%', next: 'Finalizado', report: 'ready', perfil: true, doc: true, eye: true, comms: true, ready: true },
-      { name: 'Cristian Romero', flag: 'AR', avance: '0%', next: 'Capítulo 1', report: 'na', perfil: true, doc: false, eye: false, comms: false, ready: false },
-      { name: 'Nahuel Molina', flag: 'AR', avance: '0%', next: 'Capítulo 1', report: 'na', perfil: true, doc: false, eye: false, comms: false, ready: false },
-      { name: 'Lucia Zavala', flag: 'ES', avance: '0%', next: 'Capítulo 1', report: 'na', perfil: true, doc: false, eye: false, comms: false, ready: false }
+      { name: 'Emiliano Martinez', last: 'Martinez', first: 'Emiliano', age: 17, mail: 'emiliano.martinez@colegiosanmartin.edu.ar', curso: '5.º A', flag: 'AR', avance: '30%', next: 'Capítulo 4', report: 'progress', perfil: true, doc: true, eye: false, comms: false, ready: false, chapters: [100, 100, 40, 0, 0, 0] },
+      { name: 'Lionel Messi', last: 'Messi', first: 'Lionel', age: 18, mail: 'lionel.messi@colegiosanmartin.edu.ar', curso: '6.º B', flag: 'AR', avance: '100%', next: 'Finalizado', report: 'ready', perfil: true, doc: true, eye: true, comms: true, ready: true, chapters: [100, 100, 100, 100, 100, 100] },
+      { name: 'Cristian Romero', last: 'Romero', first: 'Cristian', age: 16, mail: 'cristian.romero@colegiosanmartin.edu.ar', curso: '4.º A', flag: 'AR', avance: '0%', next: 'Capítulo 1', report: 'na', perfil: true, doc: false, eye: false, comms: false, ready: false, chapters: [0, 0, 0, 0, 0, 0] },
+      { name: 'Nahuel Molina', last: 'Molina', first: 'Nahuel', age: 17, mail: 'nahuel.molina@colegiosanmartin.edu.ar', curso: '5.º A', flag: 'AR', avance: '0%', next: 'Capítulo 1', report: 'na', perfil: true, doc: false, eye: false, comms: false, ready: false, chapters: [0, 0, 0, 0, 0, 0] },
+      { name: 'Lucia Zavala', last: 'Zavala', first: 'Lucia', age: 16, mail: 'lucia.zavala@colegiosanmartin.edu.ar', curso: '4.º B', flag: 'ES', avance: '0%', next: 'Capítulo 1', report: 'na', perfil: true, doc: false, eye: false, comms: false, ready: false, chapters: [0, 0, 0, 0, 0, 0] }
     ];
+  }
+
+  flagBg(code) {
+    const f = {
+      AR: 'linear-gradient(180deg,#75AADB 0 33%,#ffffff 33% 66%,#75AADB 66% 100%)',
+      ES: 'linear-gradient(180deg,#c60b1e 0 28%,#ffc400 28% 72%,#c60b1e 72% 100%)',
+      PT: 'linear-gradient(90deg,#006600 0 40%,#ff0000 40% 100%)',
+      FR: 'linear-gradient(90deg,#0055A4 0 33%,#ffffff 33% 66%,#EF4135 66% 100%)',
+      CT: 'repeating-linear-gradient(180deg,#FCDD09 0 2.8px,#DA121A 2.8px 4.6px)',
+      EN: 'linear-gradient(#3C3B6E,#3C3B6E) top left / 42% 54% no-repeat, repeating-linear-gradient(180deg,#B22234 0 2px,#ffffff 2px 3.9px)'
+    };
+    return f[code] || f.AR;
+  }
+
+  langLabel(code) {
+    return { AR: 'AR', ES: 'ES', PT: 'PT', FR: 'FR', CT: 'CT', EN: 'EN' }[code] || code;
   }
 
   openProduct(p) {
@@ -2653,6 +3053,38 @@ class Component extends DCLogic {
 
       // ===== Mento.IA app =====
       mBackHome: () => this.setState({ screen: 'home', modalOpen: false }),
+      m_school: T('Colegio San Martín', 'San Martín School'),
+      notifOpen: s.notifOpen,
+      notifTitle: T('Notificaciones', 'Notifications'),
+      notifBadge: (s.screen === 'mentoOrg' || s.screen === 'campusOrg') ? 'Mento.IA' : 'My Campus.IA',
+      toggleNotif: () => this.setState({ notifOpen: !this.state.notifOpen }),
+      notifs: (s.screen === 'mentoOrg' || s.screen === 'campusOrg') ? [
+        { job: false, uni: false, chat: true,
+          text: T('Lionel Messi terminó el programa “Tu Manifiesto”.', 'Lionel Messi finished the “Your Manifesto” program.'),
+          time: T('Hace 1 h', '1 h ago'),
+          open: () => this.setState({ notifOpen: false, screen: 'mentoOrg' }) },
+        { job: true, uni: false, chat: false,
+          text: T('Hay alumnos que no comenzaron el programa.', 'Some students have not started the program.'),
+          time: T('Hoy', 'Today'),
+          open: () => this.setState({ notifOpen: false, screen: 'mentoOrg' }) },
+        { job: false, uni: true, chat: false,
+          text: T('Se agregaron más de 1.000 universidades nuevas.', 'Over 1,000 new universities have been added.'),
+          time: T('Ayer', 'Yesterday'),
+          open: () => this.setState({ notifOpen: false, screen: 'campusOrg' }) }
+      ] : [
+        { job: true, uni: false, chat: false,
+          text: T('Hay una oportunidad laboral que puede interesarte.', 'There is a job opportunity that may interest you.'),
+          time: T('Hace 2 h', '2 h ago'),
+          open: () => this.setState({ notifOpen: false, screen: 'campus' }) },
+        { job: false, uni: true, chat: false,
+          text: T('Se han agregado +100 universidades que coinciden con tu código RIASEC.', '+100 universities matching your RIASEC code have been added.'),
+          time: T('Ayer', 'Yesterday'),
+          open: () => this.setState({ notifOpen: false, screen: 'campus' }) },
+        { job: false, uni: false, chat: true,
+          text: T('Tu Tuttor, Lucía Fernández, te ha respondido.', 'Your Tuttor, Lucía Fernández, has replied.'),
+          time: T('Hace 3 d', '3 d ago'),
+          open: () => this.setState({ notifOpen: false, screen: 'campus' }) }
+      ],
       mGoMento: () => this.setState({ screen: s.role === 'profesional' ? 'mentoOrg' : 'mento' }),
       mGoCampus: () => this.setState({ screen: s.role === 'profesional' ? 'campusOrg' : 'campus', modalOpen: false }),
 
@@ -2867,6 +3299,18 @@ class Component extends DCLogic {
         'Baja participación proyectada en los capítulos 7 y 8.',
         'Lucia Zavala cursa en ES: verificar que los materiales estén traducidos.'
       ],
+      resProgLabel: T('Programas que más salieron al grupo', 'Top programs across the group'),
+      resProgSub: T('Distribución de carreras', 'Career distribution'),
+      resPrograms: [
+        { name: 'Administración de Empresas', pts: 45 },
+        { name: 'Marketing', pts: 15 },
+        { name: 'Diseño y Comunicación', pts: 12 },
+        { name: 'Medicina', pts: 10 },
+        { name: 'Abogacía', pts: 8 },
+        { name: 'Ingeniería', pts: 5 },
+        { name: 'Psicología', pts: 3 },
+        { name: 'Otras', pts: 2 }
+      ].map(p => ({ name: p.name, pct: p.pts + '%', w: p.pts + '%', color: p.pts >= 30 ? '#074292' : (p.pts >= 10 ? '#0d84a6' : (dark ? 'rgba(255,255,255,0.3)' : '#b8c6cf')) })),
 
       orgReportSeek: this.reportSeek(),
       orgReportAvoid: this.reportAvoid(),
@@ -2894,9 +3338,16 @@ class Component extends DCLogic {
         report: T('Reporte', 'Report'),
         acciones: T('Acciones', 'Actions')
       },
-      orgStudents: this.orgStudentsData().map(st => {
+      orgStudents: this.orgStudentsData().map((st, i) => {
         const muted = dark ? 'rgba(255,255,255,0.22)' : '#cbd5dd';
         const mutedBg = dark ? 'rgba(255,255,255,0.04)' : '#f4f6f8';
+        const curLang = (s.orgLangs && s.orgLangs[i]) || st.flag;
+        const langOpts = ['AR', 'EN', 'PT', 'ES', 'FR', 'CT'].map(code => ({
+          code,
+          flagBg: this.flagBg(code),
+          current: code === curLang,
+          select: () => this.setState({ orgLangs: { ...(this.state.orgLangs || {}), [i]: code }, orgLangOpen: null })
+        }));
         const ic = (on, col, tint) => ({ c: on ? col : muted, bd: on ? col : muted, b: on ? tint : mutedBg });
         const rep = st.report === 'ready'
           ? { kind: 'ready', label: T('Listo', 'Ready'), color: '#1f8a52', bg: 'rgba(31,138,82,0.12)', border: 'rgba(31,138,82,0.4)' }
@@ -2907,10 +3358,12 @@ class Component extends DCLogic {
           onDoc: st.doc ? () => this.orgCreateReport() : () => {},
           onEye: st.eye ? () => this.setState({ orgModal: 'report' }) : () => {},
           name: st.name,
-          flagCode: st.flag,
-          flagBg: st.flag === 'AR'
-            ? 'linear-gradient(180deg,#75AADB 0 33%,#ffffff 33% 66%,#75AADB 66% 100%)'
-            : 'linear-gradient(180deg,#c60b1e 0 28%,#ffc400 28% 72%,#c60b1e 72% 100%)',
+          flagCode: this.langLabel(curLang),
+          flagBg: this.flagBg(curLang),
+          langOpen: s.orgLangOpen === i,
+          toggleLang: () => this.setState({ orgLangOpen: s.orgLangOpen === i ? null : i }),
+          langOpts,
+          openProfile: () => this.setState({ orgProfile: i }),
           avance: st.avance,
           avanceColor: st.avance === '0%' ? muted : (dark ? '#ffffff' : '#151111'),
           next: st.next,
@@ -2928,6 +3381,33 @@ class Component extends DCLogic {
           lock: ic(true, st.ready ? '#25a35a' : (dark ? 'rgba(255,255,255,0.45)' : '#8fa5b0'), st.ready ? 'rgba(37,163,90,0.14)' : mutedBg)
         };
       }),
+      orgProfileOpen: s.orgProfile !== null && s.orgProfile !== undefined,
+      closeOrgProfile: () => this.setState({ orgProfile: null }),
+      orgProfileCard: (() => {
+        const st = this.orgStudentsData()[s.orgProfile];
+        if (!st) return { first: '', last: '', age: '', mail: '', curso: '', initial: '', flagBg: '', flagCode: '', chapters: [] };
+        const cur = (s.orgLangs && s.orgLangs[s.orgProfile]) || st.flag;
+        return {
+          first: st.first,
+          last: st.last,
+          fullName: st.name,
+          age: st.age + (es ? ' años' : ' yrs'),
+          mail: st.mail,
+          curso: st.curso,
+          initial: st.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase(),
+          flagBg: this.flagBg(cur),
+          flagCode: this.langLabel(cur),
+          chapters: st.chapters.map((pct, ci) => ({
+            label: T('Capítulo ', 'Chapter ') + (ci + 1),
+            pct: pct + '%',
+            width: pct + '%',
+            done: pct === 100,
+            started: pct > 0,
+            barColor: pct === 100 ? '#1f8a52' : (pct > 0 ? '#074292' : (dark ? 'rgba(255,255,255,0.18)' : '#d7dee6')),
+            pctColor: pct > 0 ? (dark ? '#ffffff' : '#151111') : (dark ? 'rgba(255,255,255,0.35)' : '#9db0ba')
+          }))
+        };
+      })(),
       isCampus: s.screen === 'campus',
       campusSrc: 'campus/index.html?embed=1' + (s.campusInitView ? '&view=' + s.campusInitView : '') + (s.role === 'profesional' ? '&host=org' : ''),
 
@@ -2945,9 +3425,9 @@ class Component extends DCLogic {
       cOpenProgramSearch: () => window.open('https://www.mycampusia.app/', '_blank', 'noopener'),
       cUniLink: 'https://www.mycampusia.app/',
       cTiles: [
-        { id: 'seguimiento', kicker: '01', title: T('Seguimiento de clase', 'Class tracking'), desc: T('Revisa el avance de cada alumno y abre su perfil vocacional completo.', 'Review each student\u2019s progress and open their full vocational profile.'), icon: 'M22 10 L12 5 L2 10 L12 15 Z', icon2: 'M6 12 v5 c0 1.5 2.5 3 6 3 s6 -1.5 6 -3 v-5', cta: T('Ver la clase', 'View class'), go: () => this.setState({ campusView: 'seguimiento', campusStudent: null }) },
-        { id: 'uni', kicker: '02', title: T('Buscador por universidad', 'University search'), desc: T('Explora universidades de todo el mundo en el buscador de My Campus.', 'Explore universities worldwide in the My Campus search engine.'), icon: 'M3 21 h18 M5 21 V8 l7 -5 l7 5 v13', icon2: 'M9 21 v-6 h6 v6', cta: T('Abrir buscador', 'Open search'), go: () => this.setState({ screen: 'campus', campusInitView: 'universities' }) },
-        { id: 'carrera', kicker: '03', title: T('Buscador de programas', 'Program search'), desc: T('Busca programas y carreras por área de interés y afinidad vocacional.', 'Search programs and careers by field of interest and vocational fit.'), icon: 'M4 19.5 A2.5 2.5 0 0 1 6.5 17 H20', icon2: 'M6.5 2 H20 v20 H6.5 A2.5 2.5 0 0 1 4 19.5 v-15 A2.5 2.5 0 0 1 6.5 2 Z', cta: T('Abrir buscador', 'Open search'), go: () => this.setState({ screen: 'campus', campusInitView: 'programs' }) }
+        { id: 'seguimiento', kicker: '01', num: '1', title: T('Seguimiento de clase', 'Class tracking'), desc: T('Revisa el avance de cada alumno y abre su perfil vocacional completo.', 'Review each student\u2019s progress and open their full vocational profile.'), icon: 'M22 10 L12 5 L2 10 L12 15 Z', icon2: 'M6 12 v5 c0 1.5 2.5 3 6 3 s6 -1.5 6 -3 v-5', cta: T('Ver la clase', 'View class'), go: () => this.setState({ campusView: 'seguimiento', campusStudent: null }) },
+        { id: 'uni', kicker: '02', num: '2', title: T('Buscador por universidad', 'University search'), desc: T('Explora universidades de todo el mundo en el buscador de My Campus.', 'Explore universities worldwide in the My Campus search engine.'), icon: 'M3 21 h18 M5 21 V8 l7 -5 l7 5 v13', icon2: 'M9 21 v-6 h6 v6', cta: T('Abrir buscador', 'Open search'), go: () => this.setState({ screen: 'campus', campusInitView: 'universities' }) },
+        { id: 'carrera', kicker: '03', num: '3', title: T('Buscador de programas', 'Program search'), desc: T('Busca programas y carreras por área de interés y afinidad vocacional.', 'Search programs and careers by field of interest and vocational fit.'), icon: 'M4 19.5 A2.5 2.5 0 0 1 6.5 17 H20', icon2: 'M6.5 2 H20 v20 H6.5 A2.5 2.5 0 0 1 4 19.5 v-15 A2.5 2.5 0 0 1 6.5 2 Z', cta: T('Abrir buscador', 'Open search'), go: () => this.setState({ screen: 'campus', campusInitView: 'programs' }) }
       ],
       campusStudents: this.campusStudentsData().map(st => ({
         name: st.name,
@@ -2975,7 +3455,7 @@ class Component extends DCLogic {
       })),
       campusEstudios: this.campusEstudiosData().map(e => ({
         ...e,
-        saberMas: () => window.open('https://www.mycampusia.app/', '_blank', 'noopener'),
+        estudios: () => this.setState({ campusContact: 'form', campusContactTarget: e.program + ' · ' + e.uni }),
         contactar: () => this.setState({ campusContact: 'form', campusContactTarget: e.program + ' · ' + e.uni })
       })),
       campusContactForm: s.campusContact === 'form',
@@ -3006,6 +3486,7 @@ class Component extends DCLogic {
         estudiosSub: T('Debajo podrás ver el listado de favoritos que tu curso ha marcado. Puedes contactar con ellos directamente o hablar con Estudios posibles para gestionar un estudio en el extranjero.', 'Below you can see the list of favorites your class has marked. You can contact them directly or talk to Estudios posibles to arrange studying abroad.'),
         colProgram: T('Programa', 'Program'),
         colUni: T('Institución', 'Institution'),
+        colPais: T('País', 'Country'),
         colStudent: T('Alumno', 'Student'),
         colActions: T('Acciones', 'Actions'),
         contactTitle: T('Contactar institución', 'Contact institution'),
@@ -3030,6 +3511,7 @@ class Component extends DCLogic {
       rTabTips: () => this.setState({ reportTab: 'tips' }),
       reportEval: s.reportTab === 'eval',
       reportResults: s.reportTab === 'results',
+      reportIkigai: s.reportTab === 'ikigai',
       reportTips: s.reportTab === 'tips',
       rTabEvalActive: s.reportTab === 'eval',
       rTabResultsActive: s.reportTab === 'results',
@@ -3037,7 +3519,8 @@ class Component extends DCLogic {
       rTabs: [
         { key: 'eval', num: '01', label: 'Evaluaciones', on: s.reportTab === 'eval', go: () => this.setState({ reportTab: 'eval' }) },
         { key: 'results', num: '02', label: 'Resultados', on: s.reportTab === 'results', go: () => this.setState({ reportTab: 'results' }) },
-        { key: 'tips', num: '03', label: 'Tips', on: s.reportTab === 'tips', go: () => this.setState({ reportTab: 'tips' }) }
+        { key: 'ikigai', num: '03', label: 'Ikigai', on: s.reportTab === 'ikigai', go: () => this.setState({ reportTab: 'ikigai' }) },
+        { key: 'tips', num: '04', label: 'Tips', on: s.reportTab === 'tips', go: () => this.setState({ reportTab: 'tips' }) }
       ].map(t => ({
         ...t,
         bg: t.on ? '#074292' : (dark ? 'rgba(255,255,255,0.05)' : '#ffffff'),
@@ -3120,8 +3603,8 @@ class Component extends DCLogic {
       infoBack: () => this.infoBack(),
       infoGoFaq: () => this.setState({ infoTab: 'faq' }),
       infoGoPrecios: () => this.setState({ infoTab: 'precios' }),
-      infoFaqOn: s.infoTab === 'faq',
-      infoPreciosOn: s.infoTab === 'precios',
+      infoFaqOn: true,
+      infoPreciosOn: true,
       infoKicker: T('Información', 'Information'),
       rocketTitle: T('Información: preguntas y precios', 'Information: FAQ and pricing'),
       infoFaqLabel: T('Preguntas frecuentes', 'FAQ'),
@@ -3133,6 +3616,7 @@ class Component extends DCLogic {
       infoPrecColor: s.infoTab === 'precios' ? '#ffffff' : (dark ? '#e8edf5' : '#1b2a3a'),
       infoPrecBorder: s.infoTab === 'precios' ? '#074292' : (dark ? 'rgba(255,255,255,0.2)' : '#c9d3df'),
       faqCols: (s.vw || 1200) < 720 ? '1fr' : 'repeat(2, 1fr)',
+      faqCols2: (s.vw || 1200) < 720 ? '1' : '2',
       faqTop: this.infoFaqData().slice(0, 4).map(f => ({
         ...f,
         paras: f.paras || [],
@@ -3149,7 +3633,7 @@ class Component extends DCLogic {
       ...this.precVals(),
 
       chQuestions: s.chapterPhase === 'questions',
-      chPlayerFlex: s.chapterPhase === 'questions' ? '1 1 380px' : '1 1 100%',
+      chPlayerFlex: '1 1 100%',
       chStep1: s.qStep !== 2,
       chStep2: s.qStep === 2,
       videoSrc: 'https://www.youtube-nocookie.com/embed/' + this.videoId() + '?enablejsapi=1&rel=0&playsinline=1',
