@@ -230,6 +230,70 @@ input[type=range]{width:100%;accent-color:var(--forest)}
 <script>
 /* ============================ DATA ============================ */
 const UNIS=[
+ {id:'mx5',nombre:'Universidad de Guadalajara',corto:'UdeG',pais:'México',region:'Jalisco',ciudad:'Guadalajara',tipo:'Pública',idiomas:['Español','Inglés'],qs:801,the:1001,arwu:901,nac:4,acred:['CIEES','COPAES'],alumnos:290000,fund:1792,web:'udg.mx',foto:'assets/campus/uni-07-min.jpg',
+  desc:'La segunda universidad pública más grande de México, motor cultural de Guadalajara y organizadora de la Feria Internacional del Libro, con fuerte oferta en artes, salud e ingeniería.',
+  costeMedio:0,vida:{alquiler:360,airbnb:42,hotel:70,comida:210,transporte:18,indice:'Bajo'},
+  progs:[
+   {id:'mx5p1',nom:'Medicina',tipo:'Grado',area:'Salud y Ciencias',rp:'I',rs:'S',dur:6,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UdeG',emp:90,sal:29000},
+   {id:'mx5p2',nom:'Ingeniería en Computación',tipo:'Grado',area:'Tecnología y Datos',rp:'I',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UdeG',emp:92,sal:33000},
+   {id:'mx5p3',nom:'Diseño para la Comunicación Gráfica',tipo:'Grado',area:'Arquitectura y Diseño',rp:'A',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UdeG',emp:78,sal:24000},
+   {id:'mx5p4',nom:'Administración',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UdeG',emp:83,sal:26000}]},
+ {id:'mx6',nombre:'Universidad Anáhuac',corto:'Anáhuac',pais:'México',region:'Estado de México',ciudad:'Huixquilucan',tipo:'Privada',idiomas:['Español','Inglés'],qs:1000,the:1200,arwu:1100,nac:6,acred:['FIMPES'],alumnos:60000,fund:1964,web:'anahuac.mx',foto:'assets/campus/uni-08.jpg',
+  desc:'Red universitaria privada con fuerte proyección internacional, reconocida en negocios, comunicación y salud, con un campus moderno al poniente de la Ciudad de México.',
+  costeMedio:12000,vida:{alquiler:560,airbnb:64,hotel:110,comida:290,transporte:30,indice:'Medio'},
+  progs:[
+   {id:'mx6p1',nom:'Mercadotecnia',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'A',dur:4,mod:'Presencial',idi:'Español',coste:12000,beca:true,acc:'Proceso de admisión',accT:'Examen + entrevista',emp:88,sal:34000},
+   {id:'mx6p2',nom:'Comunicación',tipo:'Grado',area:'Artes y Humanidades',rp:'A',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:11800,beca:false,acc:'Proceso de admisión',accT:'Examen + entrevista',emp:82,sal:30000},
+   {id:'mx6p3',nom:'Medicina',tipo:'Grado',area:'Salud y Ciencias',rp:'I',rs:'S',dur:6,mod:'Presencial',idi:'Español',coste:19000,beca:false,acc:'Proceso de admisión',accT:'Examen + entrevista',emp:94,sal:52000},
+   {id:'mx6p4',nom:'Negocios Internacionales',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:12200,beca:true,acc:'Proceso de admisión',accT:'Examen + entrevista',emp:90,sal:38000}]},
+ {id:'us1',nombre:'Stanford University',corto:'Stanford',pais:'Estados Unidos',region:'California',ciudad:'Stanford',tipo:'Privada',idiomas:['Inglés'],qs:6,the:2,arwu:3,nac:2,acred:['ABET','AACSB'],alumnos:17000,fund:1885,web:'stanford.edu',foto:'assets/campus/uni-05.jpg',
+  desc:'Cuna de Silicon Valley y una de las universidades más influyentes del mundo, referente absoluto en tecnología, emprendimiento e investigación interdisciplinar.',
+  costeMedio:58000,vida:{alquiler:2400,airbnb:180,hotel:280,comida:560,transporte:90,indice:'Muy alto'},
+  progs:[
+   {id:'us1p1',nom:'Computer Science',tipo:'Grado',area:'Tecnología y Datos',rp:'I',rs:'C',dur:4,mod:'Presencial',idi:'Inglés',coste:58000,beca:true,acc:'SAT + ensayos',accT:'Admisión holística',emp:99,sal:135000},
+   {id:'us1p2',nom:'Management Science & Engineering',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'I',dur:4,mod:'Presencial',idi:'Inglés',coste:58000,beca:true,acc:'SAT + ensayos',accT:'Admisión holística',emp:98,sal:120000},
+   {id:'us1p3',nom:'Bioengineering',tipo:'Grado',area:'Salud y Ciencias',rp:'I',rs:'R',dur:4,mod:'Presencial',idi:'Inglés',coste:58000,beca:false,acc:'SAT + ensayos',accT:'Admisión holística',emp:96,sal:98000},
+   {id:'us1p4',nom:'Product Design',tipo:'Grado',area:'Arquitectura y Diseño',rp:'A',rs:'I',dur:4,mod:'Presencial',idi:'Inglés',coste:58000,beca:false,acc:'Portafolio + SAT',accT:'Admisión holística',emp:94,sal:104000}]},
+ {id:'us2',nombre:'New York University',corto:'NYU',pais:'Estados Unidos',region:'Nueva York',ciudad:'Nueva York',tipo:'Privada',idiomas:['Inglés'],qs:38,the:26,arwu:27,nac:12,acred:['AACSB'],alumnos:59000,fund:1831,web:'nyu.edu',foto:'assets/campus/uni-06.jpg',
+  desc:'Universidad urbana sin campus tradicional, integrada en Manhattan, muy internacional y potente en negocios, artes, cine y ciencias sociales.',
+  costeMedio:56000,vida:{alquiler:2600,airbnb:200,hotel:300,comida:600,transporte:130,indice:'Muy alto'},
+  progs:[
+   {id:'us2p1',nom:'Business & Finance (Stern)',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Inglés',coste:56000,beca:true,acc:'SAT + ensayos',accT:'Admisión holística',emp:97,sal:110000},
+   {id:'us2p2',nom:'Film & Television (Tisch)',tipo:'Grado',area:'Artes y Humanidades',rp:'A',rs:'E',dur:4,mod:'Presencial',idi:'Inglés',coste:56000,beca:false,acc:'Portafolio + SAT',accT:'Admisión holística',emp:84,sal:62000},
+   {id:'us2p3',nom:'Computer Science',tipo:'Grado',area:'Tecnología y Datos',rp:'I',rs:'C',dur:4,mod:'Presencial',idi:'Inglés',coste:56000,beca:true,acc:'SAT + ensayos',accT:'Admisión holística',emp:97,sal:118000},
+   {id:'us2p4',nom:'Psychology',tipo:'Grado',area:'Ciencias Sociales',rp:'S',rs:'I',dur:4,mod:'Presencial',idi:'Inglés',coste:56000,beca:false,acc:'SAT + ensayos',accT:'Admisión holística',emp:80,sal:56000}]},
+ {id:'mx1',nombre:'Universidad Nacional Autónoma de México',corto:'UNAM',pais:'México',region:'CDMX',ciudad:'Ciudad de México',tipo:'Pública',idiomas:['Español','Inglés'],qs:94,the:251,arwu:301,nac:1,acred:['CACEI','CIEES'],alumnos:360000,fund:1910,web:'unam.mx',foto:'assets/campus/uni-01-min.jpg',
+  desc:'La universidad más grande e influyente de América Latina, con un campus declarado Patrimonio de la Humanidad y una enorme vida cultural, científica y deportiva.',
+  costeMedio:0,vida:{alquiler:420,airbnb:48,hotel:75,comida:230,transporte:20,indice:'Bajo'},
+  progs:[
+   {id:'mx1p1',nom:'Medicina',tipo:'Grado',area:'Salud y Ciencias',rp:'I',rs:'S',dur:6,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UNAM',emp:93,sal:32000},
+   {id:'mx1p2',nom:'Ingeniería en Computación',tipo:'Grado',area:'Tecnología y Datos',rp:'I',rs:'C',dur:5,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UNAM',emp:95,sal:36000},
+   {id:'mx1p3',nom:'Derecho',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:5,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UNAM',emp:84,sal:27000},
+   {id:'mx1p4',nom:'Arquitectura',tipo:'Grado',area:'Arquitectura y Diseño',rp:'A',rs:'I',dur:5,mod:'Presencial',idi:'Español',coste:0,beca:true,acc:'Examen de admisión',accT:'Examen UNAM',emp:82,sal:26000}]},
+ {id:'mx2',nombre:'Tecnológico de Monterrey',corto:'ITESM',destacada:true,pais:'México',region:'Nuevo León',ciudad:'Monterrey',tipo:'Privada',idiomas:['Español','Inglés'],qs:170,the:601,arwu:801,nac:2,acred:['AACSB','ABET'],alumnos:90000,fund:1943,web:'tec.mx',foto:'assets/campus/uni-02-min.jpg',
+  desc:'La universidad privada más internacional de México, referente en ingeniería, negocios y emprendimiento, con un modelo educativo basado en retos y una potente red de egresados.',
+  costeMedio:16000,vida:{alquiler:620,airbnb:70,hotel:120,comida:300,transporte:35,indice:'Medio'},
+  progs:[
+   {id:'mx2p1',nom:'Ingeniería en Tecnologías Computacionales',tipo:'Grado',area:'Tecnología y Datos',rp:'I',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:16500,beca:true,acc:'Prueba PAA',accT:'PAA + promedio',emp:98,sal:52000},
+   {id:'mx2p2',nom:'Licenciatura en Negocios Internacionales',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:16000,beca:true,acc:'Prueba PAA',accT:'PAA + promedio',emp:94,sal:44000},
+   {id:'mx2p3',nom:'Medicina',tipo:'Grado',area:'Salud y Ciencias',rp:'I',rs:'S',dur:6,mod:'Presencial',idi:'Español',coste:22000,beca:false,acc:'Prueba PAA',accT:'PAA + entrevista',emp:96,sal:60000},
+   {id:'mx2p4',nom:'Diseño',tipo:'Grado',area:'Arquitectura y Diseño',rp:'A',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:15500,beca:false,acc:'Portafolio + PAA',accT:'Portafolio',emp:88,sal:38000}]},
+ {id:'mx3',nombre:'Instituto Tecnológico Autónomo de México',corto:'ITAM',pais:'México',region:'CDMX',ciudad:'Ciudad de México',tipo:'Privada',idiomas:['Español','Inglés'],qs:601,the:800,arwu:900,nac:3,acred:['AACSB'],alumnos:5000,fund:1946,web:'itam.mx',foto:'assets/campus/uni-03-min.jpg',
+  desc:'Universidad privada pequeña y de élite en Ciudad de México, referente absoluto en economía, finanzas, derecho y ciencia política, con una exigencia académica muy alta.',
+  costeMedio:13000,vida:{alquiler:560,airbnb:65,hotel:110,comida:290,transporte:30,indice:'Medio'},
+  progs:[
+   {id:'mx3p1',nom:'Economía',tipo:'Grado',area:'Negocios y Economía',rp:'I',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:13000,beca:true,acc:'Examen de admisión',accT:'Examen ITAM',emp:95,sal:50000},
+   {id:'mx3p2',nom:'Ciencia de Datos',tipo:'Grado',area:'Tecnología y Datos',rp:'I',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:13500,beca:true,acc:'Examen de admisión',accT:'Examen ITAM',emp:97,sal:56000},
+   {id:'mx3p3',nom:'Derecho',tipo:'Grado',area:'Derecho',rp:'E',rs:'S',dur:5,mod:'Presencial',idi:'Español',coste:12500,beca:false,acc:'Examen de admisión',accT:'Examen ITAM',emp:90,sal:46000},
+   {id:'mx3p4',nom:'Ciencia Política',tipo:'Grado',area:'Ciencias Sociales',rp:'S',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:12000,beca:true,acc:'Examen de admisión',accT:'Examen ITAM',emp:85,sal:38000}]},
+ {id:'mx4',nombre:'Universidad Iberoamericana',corto:'IBERO',pais:'México',region:'CDMX',ciudad:'Ciudad de México',tipo:'Privada',idiomas:['Español','Inglés'],qs:800,the:1000,arwu:1000,nac:5,acred:['FIMPES'],alumnos:14000,fund:1943,web:'ibero.mx',foto:'assets/campus/uni-04.jpg',
+  desc:'Universidad jesuita en Santa Fe, reconocida por comunicación, diseño, humanidades y su fuerte compromiso social, con una vida de campus activa y creativa.',
+  costeMedio:11000,vida:{alquiler:540,airbnb:62,hotel:105,comida:280,transporte:28,indice:'Medio'},
+  progs:[
+   {id:'mx4p1',nom:'Comunicación',tipo:'Grado',area:'Artes y Humanidades',rp:'A',rs:'E',dur:4,mod:'Presencial',idi:'Español',coste:11000,beca:true,acc:'Proceso de admisión',accT:'Examen + entrevista',emp:82,sal:30000},
+   {id:'mx4p2',nom:'Diseño Interactivo',tipo:'Grado',area:'Arquitectura y Diseño',rp:'A',rs:'I',dur:4,mod:'Presencial',idi:'Español',coste:11200,beca:false,acc:'Portafolio',accT:'Portafolio',emp:84,sal:32000},
+   {id:'mx4p3',nom:'Psicología',tipo:'Grado',area:'Ciencias Sociales',rp:'S',rs:'I',dur:4,mod:'Presencial',idi:'Español',coste:10500,beca:true,acc:'Proceso de admisión',accT:'Examen + entrevista',emp:80,sal:27000},
+   {id:'mx4p4',nom:'Administración de Empresas',tipo:'Grado',area:'Negocios y Economía',rp:'E',rs:'C',dur:4,mod:'Presencial',idi:'Español',coste:11000,beca:false,acc:'Proceso de admisión',accT:'Examen + entrevista',emp:86,sal:34000}]},
  {id:'u1',nombre:'Universidad de Barcelona',corto:'UB',pais:'España',region:'Cataluña',ciudad:'Barcelona',tipo:'Pública',idiomas:['Español','Catalán','Inglés'],qs:165,the:152,arwu:151,nac:1,acred:['AQU','EQUIS'],alumnos:63000,fund:1450,web:'ub.edu',foto:'assets/campus/uni-01-min.jpg',
   desc:'Universidad pública líder del sur de Europa, con una vida estudiantil mediterránea y una de las facultades de medicina más antiguas del continente.',
   costeMedio:2800,vida:{alquiler:920,airbnb:78,hotel:135,comida:280,transporte:40,indice:'Medio'},
@@ -436,7 +500,7 @@ let S={
  selUni:null,uniMode:'mosaico',
  favU:[],favP:[],tuttorReq:[],eventRSVP:[],jobApplied:[],
  tuttorTab:'mentores',clView:'lista',cvOpen:false,cvUploaded:false,statsLoc:'global',
- filters:{pais:'Todos',tipo:'Todos',idioma:'Todos',area:'Todos',rankingMax:1200,costeMax:50000,beca:false},
+ filters:{pais:'Argentina',tipo:'Todos',idioma:'Todos',area:'Todos',rankingMax:1200,costeMax:50000,beca:false},
  programFilter:null,programQuery:'',programOpen:null,
  statsOpen:false,settingsOpen:false,testOpen:false,testPaid:false,
  contactOpen:false,contactSent:false,
@@ -454,12 +518,12 @@ const eur=n=>n===0?'Gratuita':'€'+n.toLocaleString('es-ES');
 const num=n=>n.toLocaleString('es-ES');
 function heart(filled,light){const f=filled?'var(--danger)':'none';const st=filled?'var(--danger)':(light?'#fff':'var(--forest)');return `<svg width="18" height="18" viewBox="0 0 24 24" fill="${f}" stroke="${st}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>`;}
 function pin(c){return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;}
-function filteredUnis(){const f=S.filters,pf=S.programFilter;return UNIS.filter(u=>{
- if(f.pais!=='Todos'&&u.pais!==f.pais)return false;
+function filteredUnis(ignorePais){const f=S.filters,pf=S.programFilter;return UNIS.filter(u=>{
+ if(!ignorePais&&f.pais!=='Todos'&&u.pais!==f.pais)return false;
  if(f.tipo!=='Todos'&&u.tipo!==f.tipo)return false;
  if(f.idioma!=='Todos'&&!u.idiomas.includes(f.idioma))return false;
  if(u.qs>f.rankingMax)return false;
- if(u.costeMedio>f.costeMax)return false;
+ if(f.costeMax<50000&&u.costeMedio>f.costeMax)return false;
  if(f.area!=='Todos'&&!u.progs.some(p=>p.area===f.area))return false;
  if(f.beca&&!u.progs.some(p=>p.beca))return false;
  if(pf&&!u.progs.some(p=>p.area===pf))return false;
@@ -605,15 +669,21 @@ function uniRow(u){const fav=S.favU.includes(u.id);return `<div class="row-card"
   <span style="color:var(--sand-500);font-size:18px">→</span></div>`;}
 
 function vUnis(){
- const list=filteredUnis();
- const paises=['Todos',...new Set(UNIS.map(u=>u.pais))];
+ const list=filteredUnis(true);
+ const paises=['Todos','Reino Unido','Estados Unidos','Canadá','Argentina','España','Chile','Francia','México','Australia','Alemania','Italia','Portugal','Países Bajos','Suiza','Colombia','El Salvador','Honduras','Irlanda','Bélgica','Suecia','Austria'];
  const idiomas=['Todos',...new Set(UNIS.flatMap(u=>u.idiomas))];
  const areas=['Todos',...AREAS];
  const opt=(arr,sel)=>arr.map(o=>`<option value="${esc(o)}"${o===sel?' selected':''}>${esc(o)}</option>`).join('');
  const seg=(m,ic,lb)=>`<div class="it${S.uniMode===m?' on':''}" onclick="App.setMode('${m}')">${ic}${lb}</div>`;
  let content='';
- const cercaU=list.filter(u=>u.pais==='Argentina').sort((a,b)=>(b.destacada?1:0)-(a.destacada?1:0));
- const extU=list.filter(u=>u.pais!=='Argentina');
+ const EXT={'Argentina':['Estados Unidos','España','Italia'],'México':['Estados Unidos','Argentina','España']};
+ const sel=S.filters.pais;
+ let home,extPaises;
+ if(sel==='Todos'){home='Argentina';extPaises=null;}
+ else if(EXT[sel]){home=sel;extPaises=EXT[sel];}
+ else{home=sel;extPaises=[];}
+ const cercaU=list.filter(u=>u.pais===home).sort((a,b)=>(b.destacada?1:0)-(a.destacada?1:0));
+ const extU=list.filter(u=>u.pais!==home&&(extPaises===null||extPaises.includes(u.pais)));
  const secHead=(lb)=>`<div style="grid-column:1/-1;display:flex;align-items:center;gap:16px;margin:2px 0 8px"><span style="font-family:var(--fd);font-weight:700;font-size:15px;color:var(--forest);white-space:nowrap">${lb}</span><span style="flex:1;height:1px;background:var(--line-strong)"></span></div>`;
  const grouped=(fn)=>((cercaU.length?secHead('Cerca de mí')+cercaU.map(fn).join(''):'')+(extU.length?secHead('Extranjero')+extU.map(fn).join(''):''))||emptyMsg();
  if(S.uniMode==='mosaico')content=`<div class="grid3">${grouped(uniCard)}</div>`;
