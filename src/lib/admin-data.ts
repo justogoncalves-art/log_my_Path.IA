@@ -156,3 +156,62 @@ export async function listCampaigns(orgId: string): Promise<Campaign[]> {
     .order("send_at", { ascending: false });
   return (data ?? []) as Campaign[];
 }
+
+export type ProgramRow = {
+  id: string;
+  module_id: string;
+  code: string;
+  title: string;
+  level: string;
+  grade: number;
+  language: string;
+  version: number;
+  active: boolean;
+  chapters: number;
+  questions: number;
+  missingVideos: number;
+};
+
+export async function listProgramsDetailed(): Promise<ProgramRow[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("programs")
+    .select("id, module_id, code, title, level, grade, language, version, active, chapters(id, mux_playback_id, questions(count))")
+    .order("module_id")
+    .order("grade")
+    .order("code")
+    .order("language")
+    .order("version", { ascending: false });
+  return (data ?? []).map((p) => {
+    const chapters = p.chapters as unknown as Array<{ mux_playback_id: string | null; questions: Array<{ count: number }> }>;
+    return {
+      id: p.id,
+      module_id: p.module_id,
+      code: p.code,
+      title: p.title,
+      level: p.level,
+      grade: p.grade,
+      language: p.language,
+      version: p.version,
+      active: p.active,
+      chapters: chapters.length,
+      questions: chapters.reduce((a, c) => a + (c.questions[0]?.count ?? 0), 0),
+      missingVideos: chapters.filter((c) => !c.mux_playback_id).length,
+    };
+  });
+}
+
+export async function dimensionLabels(): Promise<Record<string, string>> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("dimensions").select("id, excel_label");
+  return Object.fromEntries((data ?? []).map((d) => [d.excel_label, d.id]));
+}
+
+export async function listModulesAndLanguages() {
+  const supabase = await createClient();
+  const [{ data: modules }, { data: languages }] = await Promise.all([
+    supabase.from("modules").select("id, name").order("sort"),
+    supabase.from("languages").select("code, name_es").eq("active", true).order("sort"),
+  ]);
+  return { modules: modules ?? [], languages: languages ?? [] };
+}

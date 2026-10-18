@@ -51,6 +51,7 @@ const moduleIds = z.array(z.string().regex(/^[a-z]{2,20}$/)).max(20);
 
 // Mensajes de la base que se pueden mostrar tal cual (no traen datos personales)
 const SAFE_ERRORS = [
+  "módulo inexistente", "idioma inexistente", "capítulos inválidos", "tipo de pregunta inválido", "dimensión inexistente",
   "datos inválidos", "clase inexistente", "programa inexistente", "la persona no pertenece a la organización",
   "clase de otra organización", "el alumno tiene que tener una sola clase", "un coordinador ve todas las clases",
   "mail inválido", "el mail ya lo usa otra persona", "la plantilla tiene que incluir {{contrasena}}",
@@ -298,4 +299,53 @@ export async function sendWelcomeNow(campaignId: string): Promise<ActionResult> 
   const run = await runWelcomeCampaigns({ campaignId, maxPeople: 600 });
   if (!run.ok) return { ok: false, error: run.error };
   return done(null, `Enviados: ${run.sent}${run.failed ? ` · con error: ${run.failed}` : ""}`);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Programas (carga desde Excel)
+// ─────────────────────────────────────────────────────────────
+const optionSchema = z.object({
+  position: z.number().int().min(1).max(50),
+  text: z.string().min(1).max(1000),
+  weights: z.record(z.string().regex(/^[a-z_]+\.[a-z_]+$/), z.number().min(0).max(100)),
+});
+const questionSchema = z.object({
+  position: z.number().int().min(1).max(100),
+  kind: z.enum(["simple", "abierta"]),
+  prompt: z.string().min(1).max(2000),
+  options: z.array(optionSchema).max(20),
+});
+const chapterSchema = z.object({
+  position: z.number().int().min(1).max(60),
+  title: z.string().min(1).max(200),
+  assessment: z.string().max(200),
+  video: z.string().max(100),
+  questions: z.array(questionSchema).max(100),
+});
+const programSchema = z.object({
+  module: z.string().regex(/^[a-z]{2,20}$/),
+  code: z.string().regex(/^[a-z0-9-]{3,60}$/),
+  title: z.string().trim().min(2).max(120),
+  level: z.enum(["primaria", "secundaria"]),
+  grade: z.number().int().min(1).max(7),
+  language: z.string().min(2).max(10),
+  track: z.string().max(20).optional(),
+  chapters: z.array(chapterSchema).min(1).max(60),
+});
+
+export async function importProgram(input: unknown): Promise<ActionResult> {
+  const parsed = programSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "El programa tiene datos con un formato que no reconocemos" };
+  const d = parsed.data;
+  const { data, error } = await rpc("admin_import_program", {
+    p_module: d.module, p_code: d.code, p_title: d.title, p_level: d.level, p_grade: d.grade,
+    p_language: d.language, p_track: d.track ?? null, p_chapters: d.chapters,
+  });
+  if (error) return { ok: false, error };
+  const r = (data as Array<{ version: number; chapters: number; questions: number; moved_assignments: boolean }> | null)?.[0];
+  return done(
+    null,
+    `Cargado como versión ${r?.version ?? 1}: ${r?.chapters ?? 0} capítulos y ${r?.questions ?? 0} preguntas` +
+      (r && r.version > 1 ? (r.moved_assignments ? ". Las clases asignadas pasaron a esta versión." : ". La versión anterior ya tiene respuestas: las clases siguen con esa hasta que las reasignes.") : ""),
+  );
 }
