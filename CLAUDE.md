@@ -6,6 +6,9 @@ Los módulos (Mento.IA, My Campus.IA, My Mind.IA, My Cognition.IA, Linno) se act
 ## Stack previsto
 Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) · app móvil con Expo / React Native.
 
+## Dominio
+- Plataforma: `app.mypathia.app` · Mails (Resend): `send.mypathia.app` · DNS en Namecheap.
+
 ## Skills
 - Las skills del proyecto están en `.claude/skills/` (ver `.claude/skills/LEEME.md`).
 - Antes de cada tarea, buscar si hay una skill que aplique (del proyecto o de las disponibles en la sesión) y usarla.
