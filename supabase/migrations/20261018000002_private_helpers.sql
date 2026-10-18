@@ -29,8 +29,7 @@ revoke execute on all functions in schema private from public, anon;
 grant execute on all functions in schema private to authenticated;
 
 -- Políticas apuntando al esquema privado
-drop policy people_select on public.people;
-create policy people_select on public.people for select to authenticated using (
+alter policy people_select on public.people using (
   auth_user_id = (select auth.uid())
   or private.is_platform_admin()
   or exists (
@@ -41,59 +40,50 @@ create policy people_select on public.people for select to authenticated using (
   )
 );
 
-drop policy organizations_select on public.organizations;
-create policy organizations_select on public.organizations for select to authenticated using (
+alter policy organizations_select on public.organizations using (
   private.is_platform_admin()
   or id in (select organization_id from public.memberships where person_id = private.my_person_id())
 );
 
-drop policy classes_select on public.classes;
-create policy classes_select on public.classes for select to authenticated using (
+alter policy classes_select on public.classes using (
   private.is_platform_admin()
   or organization_id in (select private.my_managed_orgs())
   or id in (select private.my_taught_classes())
   or id in (select class_id from public.memberships where person_id = private.my_person_id())
 );
 
-drop policy memberships_select on public.memberships;
-create policy memberships_select on public.memberships for select to authenticated using (
+alter policy memberships_select on public.memberships using (
   private.is_platform_admin()
   or person_id = private.my_person_id()
   or organization_id in (select private.my_managed_orgs())
   or class_id in (select private.my_taught_classes())
 );
 
-drop policy class_teachers_select on public.class_teachers;
-create policy class_teachers_select on public.class_teachers for select to authenticated using (
+alter policy class_teachers_select on public.class_teachers using (
   private.is_platform_admin()
   or person_id = private.my_person_id()
   or class_id in (select id from public.classes where organization_id in (select private.my_managed_orgs()))
 );
 
-drop policy organization_modules_select on public.organization_modules;
-create policy organization_modules_select on public.organization_modules for select to authenticated using (
+alter policy organization_modules_select on public.organization_modules using (
   private.is_platform_admin()
   or organization_id in (select organization_id from public.memberships where person_id = private.my_person_id())
 );
 
-drop policy class_modules_select on public.class_modules;
-create policy class_modules_select on public.class_modules for select to authenticated using (
+alter policy class_modules_select on public.class_modules using (
   private.is_platform_admin()
   or class_id in (select id from public.classes where organization_id in (select private.my_managed_orgs()))
   or class_id in (select private.my_taught_classes())
   or class_id in (select class_id from public.memberships where person_id = private.my_person_id())
 );
 
-drop policy person_modules_select on public.person_modules;
-create policy person_modules_select on public.person_modules for select to authenticated using (
+alter policy person_modules_select on public.person_modules using (
   private.is_platform_admin()
   or person_id = private.my_person_id()
   or organization_id in (select private.my_managed_orgs())
 );
 
-drop policy audit_log_select on public.audit_log;
-create policy audit_log_select on public.audit_log for select to authenticated
-  using (private.is_platform_admin());
+alter policy audit_log_select on public.audit_log using (private.is_platform_admin());
 
 -- Las funciones de la API usan las privadas
 create or replace function public.me()
@@ -151,7 +141,8 @@ returns void language sql security definer set search_path = '' as $$
   select (select auth.uid()), 'password_changed', 'people', private.my_person_id()::text;
 $$;
 
-drop function public.is_platform_admin();
-drop function public.my_managed_orgs();
-drop function public.my_taught_classes();
-drop function public.my_person_id();
+-- Las versiones públicas quedan sin permiso de ejecución (se borran en una limpieza posterior)
+revoke execute on function public.is_platform_admin() from public, anon, authenticated;
+revoke execute on function public.my_person_id() from public, anon, authenticated;
+revoke execute on function public.my_managed_orgs() from public, anon, authenticated;
+revoke execute on function public.my_taught_classes() from public, anon, authenticated;
