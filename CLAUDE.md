@@ -9,6 +9,13 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 ## Dominio
 - Plataforma: `app.mypathia.app` · Mails (Resend): `send.mypathia.app` · DNS en Namecheap.
 
+## Decisiones tomadas
+- Identidad: una persona = un ID por documento (país + tipo + número). El mail queda atado a la persona; solo el admin lo cambia.
+- Contraseña inicial: al azar, ~10 caracteres sin ambiguos, se genera al enviar el mail de bienvenida (programado por colegio desde el admin, plantilla HTML provista por My Path). Cambio obligatorio en el primer ingreso. El DNI no forma parte de la contraseña.
+- Compras siempre en la web (Stripe); la app móvil solo para usar lo comprado.
+- Datos separados en capas educativa / clínica / sanitaria con permisos propios.
+- Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
+
 ## Skills
 - Las skills del proyecto están en `.claude/skills/` (ver `.claude/skills/LEEME.md`).
 - Antes de cada tarea, buscar si hay una skill que aplique (del proyecto o de las disponibles en la sesión) y usarla.
