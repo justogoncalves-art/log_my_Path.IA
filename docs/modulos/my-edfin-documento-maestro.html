@@ -1,0 +1,654 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My.EdFin · Documento Maestro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1a1a4b;--magenta:#e5177b;--purple:#7b2ff7;--cyan:#12b5d9;
+    --grad:linear-gradient(125deg,#1a1a4b 0%,#5b23c9 42%,#b0197a 78%,#e5177b 100%);
+    --bg:#f6f5fb;--surface:#ffffff;--surface-2:#f0eefa;
+    --ink:#1a1a4b;--ink-soft:#4f4f70;--ink-faint:#8686a6;--line:#e5e3f2;
+    --ok:#12a56a;--ok-bg:#e3f6ee;--warn:#dd8a1e;--warn-bg:#fbf0dd;--bad:#e5455f;--bad-bg:#fce6ea;
+    --display:"Space Grotesk",system-ui,sans-serif;--body:"Quicksand",system-ui,sans-serif;
+    --maxw:860px;--r:16px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0d0d22;--surface:#15153a;--surface-2:#1c1c47;
+    --ink:#edecf8;--ink-soft:#bcbcda;--ink-faint:#7d7da6;--line:#2a2a55;
+    --magenta:#ff4b9c;--purple:#9d5cff;--cyan:#3ecff0;
+    --ok:#2fce8a;--ok-bg:#123a2c;--warn:#e8a942;--warn-bg:#3a2e12;--bad:#ff6b82;--bad-bg:#3a1720;
+  }}
+  :root[data-theme="dark"]{--bg:#0d0d22;--surface:#15153a;--surface-2:#1c1c47;--ink:#edecf8;--ink-soft:#bcbcda;
+    --ink-faint:#7d7da6;--line:#2a2a55;--magenta:#ff4b9c;--purple:#9d5cff;--cyan:#3ecff0;
+    --ok:#2fce8a;--ok-bg:#123a2c;--warn:#e8a942;--warn-bg:#3a2e12;--bad:#ff6b82;--bad-bg:#3a1720}
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);
+    font-weight:500;line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  /* sticky minibar */
+  .minibar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--surface) 88%,transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .minibar .in{max-width:var(--maxw);margin:0 auto;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .minibar .name{font-family:var(--display);font-weight:700;font-size:.92rem}
+  .minibar .name b{color:var(--magenta)}
+  .minibar .tt{font-family:var(--display);font-weight:600;font-size:.76rem;color:var(--ink-faint)}
+  .minibar a.top{font-family:var(--display);font-weight:600;font-size:.76rem;color:var(--purple);text-decoration:none}
+
+  /* hero */
+  .hero{background:var(--grad);color:#fff;padding:74px 0 60px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-140px;top:-120px;width:380px;height:380px;border-radius:50%;
+    background:radial-gradient(circle,rgba(18,181,217,.5),transparent 68%)}
+  .hero .wrap{position:relative;z-index:1}
+  .doc-kind{font-family:var(--display);font-weight:600;font-size:.8rem;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--cyan);margin:0 0 14px}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(2.6rem,9vw,4.3rem);line-height:.98;
+    letter-spacing:-.03em;margin:0 0 10px}
+  .hero h1 .dot{color:var(--cyan)}
+  .hero .tagline{font-family:var(--display);font-weight:500;font-size:clamp(1.1rem,3.4vw,1.5rem);
+    color:rgba(255,255,255,.92);margin:0 0 26px}
+  .hero .desc{color:rgba(255,255,255,.86);max-width:60ch;margin:0 0 30px;font-size:1.05rem}
+  .hero-meta{display:flex;gap:28px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.22);padding-top:20px;
+    font-family:var(--display);font-size:.85rem}
+  .hero-meta div b{display:block;font-weight:700;font-size:1.05rem;color:#fff}
+  .hero-meta div span{color:rgba(255,255,255,.7)}
+
+  /* TOC */
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+    padding:26px 28px;margin-top:-34px;position:relative;z-index:2;box-shadow:0 22px 46px -30px rgba(26,26,75,.5)}
+  .toc h4{font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-faint);margin:0 0 16px}
+  .toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:28px}
+  @media(max-width:620px){.toc ol{columns:1}}
+  .toc li{break-inside:avoid;margin:0 0 9px}
+  .toc a{text-decoration:none;color:var(--ink);font-size:.93rem;display:flex;gap:10px;align-items:baseline}
+  .toc a:hover{color:var(--purple)}
+  .toc a .i{font-family:var(--display);font-weight:700;color:var(--magenta);font-size:.8rem;min-width:20px}
+
+  /* sections */
+  section{padding:50px 0;border-top:1px solid var(--line)}
+  .sec-n{font-family:var(--display);font-weight:700;font-size:.78rem;letter-spacing:.08em;color:var(--magenta);
+    text-transform:uppercase;margin:0 0 8px}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,4.5vw,2.1rem);letter-spacing:-.02em;
+    line-height:1.1;margin:0 0 18px;scroll-margin-top:70px}
+  h3{font-family:var(--display);font-weight:600;font-size:1.22rem;letter-spacing:-.01em;margin:30px 0 12px}
+  h4{font-family:var(--display);font-weight:600;font-size:1rem;margin:22px 0 8px}
+  p{margin:0 0 14px;color:var(--ink-soft)}
+  strong,b{color:var(--ink);font-weight:600}
+  ul,ol.list{margin:0 0 16px;padding-left:0;list-style:none}
+  ul li,ol.list li{position:relative;padding-left:22px;margin:0 0 9px;color:var(--ink-soft)}
+  ul li::before{content:"";position:absolute;left:3px;top:10px;width:6px;height:6px;border-radius:50%;background:var(--purple)}
+  ol.list{counter-reset:ol}
+  ol.list li{counter-increment:ol}
+  ol.list li::before{content:counter(ol);position:absolute;left:0;top:0;font-family:var(--display);font-weight:700;
+    color:var(--magenta);font-size:.85rem}
+  .lead{font-size:1.08rem;color:var(--ink)}
+
+  /* callouts */
+  .box{border-radius:var(--r);padding:20px 22px;margin:18px 0}
+  .box .bt{font-family:var(--display);font-weight:700;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+  .box p:last-child{margin-bottom:0}
+  .box.principle{background:var(--surface-2);border-left:3px solid var(--purple)}
+  .box.principle .bt{color:var(--purple)}
+  .box.ethic{background:var(--ok-bg);border-left:3px solid var(--ok)}
+  .box.ethic .bt{color:var(--ok)}
+  .box.tech{background:var(--surface);border:1px solid var(--line)}
+  .box.tech .bt{color:var(--cyan)}
+  .box.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
+  .box.warn .bt{color:var(--warn)}
+
+  /* tables */
+  .tbl-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:520px}
+  th{background:var(--navy);color:#fff;font-family:var(--display);font-weight:600;text-align:left;
+    padding:11px 14px;font-size:.82rem;position:sticky;top:0}
+  td{padding:11px 14px;border-top:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
+  tbody tr:nth-child(even){background:var(--surface-2)}
+  td b{color:var(--ink)}
+  .pill{display:inline-block;font-family:var(--display);font-weight:600;font-size:.72rem;padding:2px 9px;border-radius:99px;white-space:nowrap}
+  .pill.av{background:var(--ok-bg);color:var(--ok)}
+  .pill.so{background:color-mix(in srgb,var(--purple) 15%,transparent);color:var(--purple)}
+  .pill.dev{background:var(--warn-bg);color:var(--warn)}
+  .pill.y1{background:color-mix(in srgb,var(--cyan) 16%,transparent);color:var(--cyan)}
+  .pill.y2{background:color-mix(in srgb,var(--magenta) 14%,transparent);color:var(--magenta)}
+
+  /* grids */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  @media(max-width:620px){.grid2{grid-template-columns:1fr}}
+  .mini{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:17px 19px}
+  .mini b{font-family:var(--display);display:block;margin-bottom:4px}
+  .mini span{font-size:.92rem;color:var(--ink-soft)}
+
+  /* report blocks */
+  .rb{display:flex;gap:16px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .rb:last-child{border-bottom:none}
+  .rb .rn{font-family:var(--display);font-weight:700;color:#fff;background:var(--grad);width:34px;height:34px;
+    border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+  .rb .rc b{font-family:var(--display);display:block;margin-bottom:2px}
+  .rb .rc span{font-size:.93rem;color:var(--ink-soft)}
+  .rb .rc .feeds{font-size:.8rem;color:var(--ink-faint);margin-top:4px;font-family:var(--display);font-weight:500}
+
+  .tag-src{font-size:.82rem;color:var(--ink-faint);font-style:italic}
+  hr{border:none;border-top:1px solid var(--line);margin:24px 0}
+
+  footer{padding:34px 0 54px;color:var(--ink-faint);font-family:var(--display);font-size:.82rem;
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line)}
+  .brand{font-weight:600;color:var(--ink-soft)}.brand .s{color:var(--magenta);margin:0 6px}
+
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .hero .wrap>*{animation:rise .6s cubic-bezier(.2,.7,.3,1) both}
+  .hero h1{animation-delay:.08s}.hero .tagline{animation-delay:.16s}.hero .desc{animation-delay:.24s}.hero-meta{animation-delay:.32s}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="minibar">
+  <div class="in">
+    <span class="name">My<b>.EdFin</b></span>
+    <span class="tt">Documento Maestro</span>
+    <a class="top" href="#top">↑ Índice</a>
+  </div>
+</div>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="doc-kind">Documento Maestro · Producto</p>
+    <h1>My.EdFin<span class="dot">.</span></h1>
+    <p class="tagline">Educación financiera para la vida real — de los 16 a los 18 años.</p>
+    <p class="desc">Programa auto-guiado de educación financiera dentro del ecosistema My Path.IA / Mento.IA. Dos años de formación progresiva, con contenido en video, ejercicios dinámicos, proyecto final y un reporte de IA personalizado que mide la evolución real de cada alumno.</p>
+    <div class="hero-meta">
+      <div><b>2 años</b><span>16–17 y 17–18</span></div>
+      <div><b>14 sesiones</b><span>7 por año</span></div>
+      <div><b>100% auto-guiado</b><span>Sin intervención docente</span></div>
+      <div><b>Reporte IA</b><span>10 bloques de análisis</span></div>
+      <div><b>v1.0</b><span>Oct 2026</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Índice">
+    <h4>Contenido</h4>
+    <ol>
+      <li><a href="#s1"><span class="i">01</span> Resumen ejecutivo</a></li>
+      <li><a href="#s2"><span class="i">02</span> Visión y propósito</a></li>
+      <li><a href="#s3"><span class="i">03</span> Fundamento pedagógico</a></li>
+      <li><a href="#s4"><span class="i">04</span> Las fuentes: 15 libros</a></li>
+      <li><a href="#s5"><span class="i">05</span> Arquitectura del programa</a></li>
+      <li><a href="#s6"><span class="i">06</span> Objetivos y competencias</a></li>
+      <li><a href="#s7"><span class="i">07</span> Anatomía de una sesión</a></li>
+      <li><a href="#s8"><span class="i">08</span> Sesión de referencia (detalle)</a></li>
+      <li><a href="#s9"><span class="i">09</span> Sistema de evaluación y datos</a></li>
+      <li><a href="#s10"><span class="i">10</span> El reporte de IA</a></li>
+      <li><a href="#s11"><span class="i">11</span> Los proyectos finales</a></li>
+      <li><a href="#s12"><span class="i">12</span> Especificación técnica</a></li>
+      <li><a href="#s13"><span class="i">13</span> Integración con el ecosistema</a></li>
+      <li><a href="#s14"><span class="i">14</span> Métricas de impacto</a></li>
+      <li><a href="#s15"><span class="i">15</span> Roadmap y glosario</a></li>
+    </ol>
+  </nav>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 -->
+  <section id="s1">
+    <p class="sec-n">01</p>
+    <h2>Resumen ejecutivo</h2>
+    <p class="lead">My.EdFin es un programa de educación financiera para adolescentes de los dos últimos años de secundaria, diseñado para funcionar de forma 100% auto-guiada dentro de la plataforma, sin intervención docente.</p>
+    <p>El alumno avanza solo frente a la pantalla: mira videos cortos, resuelve ejercicios dinámicos, responde preguntas y completa un proyecto final. Toda esa actividad la procesa la IA del ecosistema para generar un reporte personalizado que mide su evolución, detecta fortalezas y gaps, y le entrega recomendaciones accionables.</p>
+    <p>El programa se divide en dos años con una lógica de progresión clara: primero <b>entender y controlar</b> el dinero (defensa), y luego <b>hacerlo crecer y proyectar el futuro</b> (crecimiento). No enseña productos financieros concretos ni promete riqueza: enseña hábitos, criterio y herramientas para que el alumno se defienda y decida mejor cuando empiece a manejar su propio dinero.</p>
+    <div class="grid2">
+      <div class="mini"><b>Qué resuelve</b><span>La ausencia total de educación financiera en la escuela, justo antes de que el alumno entre a la vida financiera adulta.</span></div>
+      <div class="mini"><b>Para quién</b><span>Alumnos de 16 a 18 años. Secundariamente: colegios (impacto medible) y familias.</span></div>
+      <div class="mini"><b>Qué lo diferencia</b><span>Auto-guiado + reporte de IA personalizado basado en datos reales del alumno, con el mismo ADN que la psicometría de My Path.IA.</span></div>
+      <div class="mini"><b>Encaje estratégico</b><span>Se integra con la orientación vocacional: "convertir tu talento en ingresos" conecta con el diagnóstico RIASEC.</span></div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="s2">
+    <p class="sec-n">02</p>
+    <h2>Visión y propósito</h2>
+    <h3>El problema</h3>
+    <p>La escuela enseña a resolver ecuaciones, pero no enseña a hacer un presupuesto, entender la inflación, usar una tarjeta de crédito o reconocer una estafa. El resultado es una generación que llega a la adultez financiera sin herramientas, aprendiendo a los golpes: deudas evitables, gasto impulsivo, vulnerabilidad ante fraudes y estrés económico crónico.</p>
+    <h3>La misión</h3>
+    <p>Dar a cada adolescente las herramientas para tomar mejores decisiones con su dinero <em>antes</em> de necesitarlas, de modo que lleguen a la vida adulta con más libertad y menos estrés. No formar inversores: formar personas financieramente responsables y difíciles de engañar.</p>
+    <h3>Por qué ahora</h3>
+    <p>El alumno de los dos últimos años de secundaria está a 2–3 años de su primer trabajo, su primera tarjeta y sus primeros gastos autónomos. Es la ventana de máxima palanca: aprender el "juego" antes de estar dentro cambia toda la trayectoria. Y el interés compuesto —el concepto central del programa— premia exponencialmente a quien empieza joven.</p>
+    <div class="box principle">
+      <p class="bt">◆ Filosofía central</p>
+      <p>El éxito con el dinero depende más de cómo te comportás que de lo inteligente que seas. Por eso My.EdFin prioriza <b>hábitos, mentalidad y criterio</b> por encima de la técnica financiera avanzada.</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="s3">
+    <p class="sec-n">03</p>
+    <h2>Fundamento pedagógico</h2>
+    <p>My.EdFin se apoya en seis principios rectores que gobiernan cada decisión de contenido y de producto.</p>
+
+    <h3>Principios rectores</h3>
+    <ol class="list">
+      <li><b>Enseñar más que evaluar.</b> El objetivo es que el alumno aprenda y se lleve herramientas, no obtener una nota. La evaluación existe para <em>alimentar el reporte formativo</em>, no para aprobar o reprobar.</li>
+      <li><b>Principios, no productos.</b> No se recomiendan instrumentos ni se dice "poné tu plata acá". Se enseñan formas de pensar (riesgo, diversificación, largo plazo, desconfianza ante lo fácil) que protegen al alumno a cualquier edad y en cualquier país.</li>
+      <li><b>Basado en el comportamiento.</b> El eje no es la fórmula sino la conducta: cómo se relaciona el alumno con el gasto, el ahorro, la deuda y el riesgo.</li>
+      <li><b>Tono siempre constructivo.</b> Ninguna dimensión "reprueba". Se habla de "en desarrollo", nunca de "malo". El reporte motiva, no castiga.</li>
+      <li><b>Autonomía total.</b> Todo funciona sin docente: el ritmo, los ejemplos y el feedback los da la plataforma. Cada elemento en pantalla tiene que ser útil o entretenido para sostener la atención.</li>
+      <li><b>Progresión por niveles.</b> Dentro de cada año y entre los dos años, la dificultad sube de lo concreto y cotidiano a lo abstracto y proyectivo: primero entender, después controlar, después crecer, después planificar.</li>
+    </ol>
+
+    <h3>Enfoque por edad</h3>
+    <p>El programa se divide deliberadamente en dos años porque la madurez y el horizonte vital del alumno cambian mucho entre el anteúltimo y el último año:</p>
+    <div class="grid2">
+      <div class="mini"><b>Año 1 · 16–17 años</b><span>Defensa. Fundamentos que todos necesitan sí o sí, inviertan o no: entender el dinero, controlarlo, ahorrar, no caer en trampas.</span></div>
+      <div class="mini"><b>Año 2 · 17–18 años</b><span>Crecimiento. Cae justo cuando el alumno está por egresar y decidir su futuro: hacer crecer el dinero, generar ingresos, proyectar la vida.</span></div>
+    </div>
+
+    <h3>Los 7 pilares (competencias transversales)</h3>
+    <p>Del cruce de las fuentes emergen siete pilares que estructuran todo el programa y que luego se vuelven los parámetros del reporte:</p>
+    <ul>
+      <li><b>Mentalidad financiera</b> — comportamiento, creencias, visión de largo plazo.</li>
+      <li><b>Comprensión / alfabetización</b> — dinero, inflación, interés compuesto, activo vs. pasivo.</li>
+      <li><b>Consumo consciente</b> — necesidad vs. deseo, presupuesto, gasto reflexivo.</li>
+      <li><b>Capacidad de ahorro</b> — pagarse primero, constancia, fondo de emergencia.</li>
+      <li><b>Manejo de deuda y crédito</b> — deuda buena/mala, tarjetas, evitar trampas.</li>
+      <li><b>Defensa financiera</b> — detección de estafas, pensamiento crítico ante lo "fácil".</li>
+      <li><b>Planificación y metas</b> — proyecto, visión a 1/5/10 años, libertad financiera.</li>
+    </ul>
+  </section>
+
+  <!-- 4 -->
+  <section id="s4">
+    <p class="sec-n">04</p>
+    <h2>Las fuentes: 15 libros</h2>
+    <p>El contenido se destila de 15 obras de referencia en finanzas personales. De cada una se extrae la <em>unidad de enseñanza</em> aplicable a adolescentes, no el resumen del libro. Se agrupan por el pilar que mejor alimentan.</p>
+
+    <h3>Núcleo riguroso (base empírica y práctica)</h3>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Libro / Autor</th><th>Qué aporta al programa</th></tr></thead>
+      <tbody>
+        <tr><td><b>La psicología del dinero</b> — Housel</td><td>El comportamiento pesa más que la inteligencia; interés compuesto y paciencia; el concepto de "suficiente"; la libertad como mayor dividendo. Historias cortas ideales para enganchar.</td></tr>
+        <tr><td><b>El hombre más rico de Babilonia</b> — Clason</td><td>"Pagarse primero" (ahorrar ≥10%), controlar el gasto, hacer que los ahorros se multipliquen. Formato parábola, muy memorable.</td></tr>
+        <tr><td><b>Te enseñaré a ser rico</b> — Sethi</td><td>Automatización del ahorro, uso del crédito a favor sin endeudarse, gasto consciente. El más accionable.</td></tr>
+        <tr><td><b>Tu dinero o tu vida</b> — Robin / Dominguez</td><td>El dinero como "tiempo de vida"; coste real por hora; el "punto de cruce" hacia la independencia.</td></tr>
+        <tr><td><b>El millonario de al lado</b> — Stanley &amp; Danko</td><td>La riqueza real viene de la acumulación y la sobriedad, no del consumo visible. Antídoto empírico contra la ostentación.</td></tr>
+        <tr><td><b>Pequeño cerdo capitalista</b> — Macías</td><td>Presupuesto, fondo de emergencia, manejo de tarjetas, primeros pasos de inversión. Tono fresco y adaptado a Latinoamérica.</td></tr>
+        <tr><td><b>El inversor inteligente</b> — Graham <span class="pill dev">avanzado</span></td><td>Solo capítulos de actitud: invertir vs. especular, el "Sr. Mercado", margen de seguridad, disciplina emocional.</td></tr>
+        <tr><td><b>Libertad financiera</b> — Sabatier</td><td>La tasa de ahorro como palanca principal; el tiempo vale más que las cosas; side hustles; invertir temprano.</td></tr>
+        <tr><td><b>El código del dinero</b> — Samsó</td><td>Convertir el talento en ingresos; deuda productiva vs. de consumo; ingresos pasivos. Lenguaje cercano al lector hispano.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Alfabetización y referencia</h3>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Libro / Autor</th><th>Qué aporta al programa</th></tr></thead>
+      <tbody>
+        <tr><td><b>Finanzas para niños y no tan niños</b> — Ingenieri</td><td>Base conceptual limpia: qué es el dinero, inflación, interés compuesto, planificación. Material nivelador introductorio.</td></tr>
+        <tr><td><b>Finanzas personales para Dummies</b> — Hernández</td><td>Manual de consulta: cuentas, presupuesto, deuda, impuestos, seguros. Glosario y "cómo funciona el sistema".</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Mentalidad y generación de ingresos</h3>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Libro / Autor</th><th>Qué aporta al programa</th></tr></thead>
+      <tbody>
+        <tr><td><b>Padre Rico, Padre Pobre</b> — Kiyosaki <span class="pill dev">lectura crítica</span></td><td>Activo vs. pasivo, "la carrera de la rata", hacer que el dinero trabaje. Concepto ancla para el giro de perspectiva.</td></tr>
+        <tr><td><b>El cuadrante del flujo del dinero</b> — Kiyosaki</td><td>Los 4 cuadrantes E-A-D-I (Empleado, Autoempleado, Dueño, Inversor). Marco visual que conecta con lo vocacional.</td></tr>
+        <tr><td><b>Los secretos de la mente millonaria</b> — Eker <span class="pill dev">lectura crítica</span></td><td>Patrones subconscientes y creencias heredadas sobre el dinero. Útil para reflexión, no como método.</td></tr>
+        <tr><td><b>Piense y hágase rico</b> — Hill <span class="pill dev">lectura crítica</span></td><td>Metas claras, deseo, persistencia. Valor histórico y de fijación de objetivos.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="box warn">
+      <p class="bt">⚠ Criterio de uso crítico</p>
+      <p>Kiyosaki, Eker y Hill son motivacionales y contienen afirmaciones discutibles. Se usan como <b>material de debate</b>, nunca como método, y siempre balanceados con las fuentes de base empírica. Enseñar al alumno a distinguir un principio sólido de una promesa exagerada es, en sí mismo, una competencia financiera.</p>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section id="s5">
+    <p class="sec-n">05</p>
+    <h2>Arquitectura del programa</h2>
+    <p>Dos años, catorce sesiones, una progresión de defensa a crecimiento. Cada sesión arranca con una pregunta guía que ordena su contenido.</p>
+
+    <h3>Año 1 · "Entender y controlar el dinero" <span class="pill y1">16–17 años</span></h3>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>#</th><th>Pregunta guía</th><th>Temas</th><th>Fuentes</th></tr></thead>
+      <tbody>
+        <tr><td><b>1</b></td><td>¿Por qué nadie me enseñó esto en el colegio?</td><td>Qué es la educación financiera · mentalidad de partida · defensa ante estafas · diagnóstico inicial</td><td>Housel, Kiyosaki</td></tr>
+        <tr><td><b>2</b></td><td>¿Qué es realmente el dinero y por qué pierde valor?</td><td>Qué es y para qué sirve el dinero · inflación · noción de interés compuesto</td><td>Ingenieri, Dummies</td></tr>
+        <tr><td><b>3</b></td><td>¿Cómo piensan distinto los que se llevan bien con el dinero?</td><td>Comportamiento &gt; inteligencia · activo vs. pasivo · "suficiente" · creencias</td><td>Housel, Kiyosaki, Eker</td></tr>
+        <tr><td><b>4</b></td><td>¿A dónde se va mi dinero?</td><td>Dinero = tiempo de vida · necesidad vs. deseo · registrar gastos · presupuesto</td><td>Robin, Clason, Stanley/Danko</td></tr>
+        <tr><td><b>5</b></td><td>¿Cómo ahorro sin que me duela?</td><td>Pagarse primero (≥10%) · automatizar · gasto consciente · fondo de emergencia</td><td>Clason, Sethi, Macías</td></tr>
+        <tr><td><b>6</b></td><td>¿La deuda es mi enemiga o mi herramienta?</td><td>Deuda buena vs. mala · cómo funcionan las tarjetas · interés compuesto en contra</td><td>Samsó, Sethi, Macías</td></tr>
+        <tr><td><b>7</b></td><td>¿Qué hago con todo esto?</td><td>Integración · Plan Financiero Personal · re-test del diagnóstico · reporte IA</td><td>Todos</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Año 2 · "Hacer crecer el dinero y proyectar tu futuro" <span class="pill y2">17–18 años</span></h3>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>#</th><th>Pregunta guía</th><th>Temas</th><th>Fuentes</th></tr></thead>
+      <tbody>
+        <tr><td><b>1</b></td><td>¿Y ahora qué? De cuidar tu dinero a hacerlo crecer</td><td>Repaso Año 1 · salto defensa→crecimiento · diagnóstico inicial del año</td><td>Housel, Kiyosaki</td></tr>
+        <tr><td><b>2</b></td><td>¿Por qué el tiempo es tu mayor ventaja?</td><td>Interés compuesto aplicado · empezar temprano vs. tarde · la paciencia como estrategia</td><td>Housel, Sabatier, Ingenieri</td></tr>
+        <tr><td><b>3</b></td><td>¿Qué significa invertir (y qué NO es)?</td><td>Invertir vs. especular · riesgo y rendimiento · diversificación · desconfiar de lo fácil</td><td>Graham, Macías, Housel</td></tr>
+        <tr><td><b>4</b></td><td>¿De cuántas formas se puede ganar dinero?</td><td>Cuadrante E-A-D-I · ingreso por tiempo vs. por capital · activos vs. pasivos</td><td>Kiyosaki, Samsó</td></tr>
+        <tr><td><b>5</b></td><td>¿Cómo convierto lo que sé hacer en dinero?</td><td>Talento → ingreso · side hustles · validar una idea · emprender sin capital</td><td>Sabatier, Samsó, Hill</td></tr>
+        <tr><td><b>6</b></td><td>¿Qué es la libertad financiera y cómo se construye?</td><td>Tasa de ahorro · punto de cruce / número de libertad · ingresos pasivos</td><td>Sabatier, Robin, Stanley/Danko</td></tr>
+        <tr><td><b>7</b></td><td>¿Cuál es tu plan para los próximos 10 años?</td><td>Integración · Plan de Crecimiento y Futuro · re-test · reporte final del ciclo</td><td>Todos</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 6 -->
+  <section id="s6">
+    <p class="sec-n">06</p>
+    <h2>Objetivos y competencias</h2>
+    <h3>Objetivo general del programa</h3>
+    <p>Que el alumno termine el ciclo de dos años siendo financieramente responsable y difícil de engañar: capaz de entender cómo funciona el dinero, controlarlo mediante hábitos sanos, hacerlo crecer con criterio y proyectar su futuro con metas claras.</p>
+
+    <h3>Objetivos por año</h3>
+    <div class="grid2">
+      <div class="mini"><b>Al terminar el Año 1, el alumno puede…</b><span>Entender cómo funciona el dinero y por qué pierde valor · armar y sostener un presupuesto · ahorrar con constancia · usar crédito y tarjetas sin caer en trampas · detectar estafas · decidir su consumo pensando en el futuro · tener su primer Plan Financiero Personal.</span></div>
+      <div class="mini"><b>Al terminar el Año 2, el alumno puede…</b><span>Explicar el interés compuesto y el valor del tiempo · distinguir invertir de especular · entender riesgo y diversificación · ubicar las formas de generar ingresos (cuadrante) · idear un proyecto propio desde su talento · comprender la libertad financiera · tener su Plan de Crecimiento y Futuro.</span></div>
+    </div>
+
+    <h3>Competencias medibles (parámetros vitales del reporte)</h3>
+    <p>Cada competencia se evalúa de forma continua y se traduce en un nivel: <span class="pill dev">En desarrollo</span> <span class="pill so">Sólido</span> <span class="pill av">Avanzado</span>. En el Año 2 el set cambia hacia crecimiento.</p>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Año 1</th><th>Año 2</th></tr></thead>
+      <tbody>
+        <tr><td>Mentalidad financiera</td><td>Visión de largo plazo y paciencia</td></tr>
+        <tr><td>Comprensión / alfabetización</td><td>Comprensión de inversión</td></tr>
+        <tr><td>Consumo consciente</td><td>Mentalidad de generación de ingresos (cuadrante)</td></tr>
+        <tr><td>Capacidad de ahorro</td><td>Iniciativa emprendedora</td></tr>
+        <tr><td>Manejo de deuda y crédito</td><td>Planificación de libertad financiera</td></tr>
+        <tr><td>Defensa financiera</td><td>Defensa ante fraudes de inversión</td></tr>
+        <tr><td>Planificación y metas</td><td>Proyección de futuro</td></tr>
+      </tbody>
+    </table></div>
+    <p>Además, tres <b>ejes transversales</b> presentes en ambos años: <b>Evolución</b> (diagnóstico inicial vs. final), <b>Autoconciencia</b> (calidad de las respuestas abiertas) y <b>Constancia</b> (cómo transitó el programa).</p>
+  </section>
+
+  <!-- 7 -->
+  <section id="s7">
+    <p class="sec-n">07</p>
+    <h2>Anatomía de una sesión</h2>
+    <p>Todas las sesiones comparten la misma estructura repetible. El alumno aprende el ritmo una vez y después fluye solo; la consistencia también facilita que la IA evalúe de forma comparable.</p>
+    <ol class="list">
+      <li><b>Intro del capítulo</b> — video corto (~60 s) que presenta qué se verá y por qué importa. Engancha.</li>
+      <li><b>3–4 subsecciones</b> — cada una combina un video/historia corto con un ejercicio dinámico de tipo distinto (para no aburrir).</li>
+      <li><b>Punto de partida / momento personal</b> — un elemento interactivo que la IA guarda (ej. el diagnóstico en la sesión 1).</li>
+      <li><b>Cierre "Ponelo a prueba"</b> — una micro-acción de la vida real para la semana.</li>
+      <li><b>Mini-evaluación</b> — 3 preguntas rápidas con feedback inmediato.</li>
+    </ol>
+
+    <div class="box principle">
+      <p class="bt">◆ Reglas de ritmo</p>
+      <p>Videos de <b>60–90 segundos máximo</b> (mejor tres cortos que uno largo). Tipos de ejercicio <b>variados</b> entre subsecciones. Nada excesivamente extenso: a esta edad, la atención se pierde rápido.</p>
+    </div>
+
+    <h3>Tipos de ejercicio y su criterio de "completado"</h3>
+    <p>Cada tipo tiene su propia lógica de corrección y de desbloqueo del avance. Es una especificación clave para desarrollo.</p>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Tipo</th><th>Cómo se corrige</th><th>Criterio de "completado"</th><th>Señal para la IA</th></tr></thead>
+      <tbody>
+        <tr><td><b>Selección única</b></td><td>Se evalúa al tocar la opción; feedback inmediato verde/rojo</td><td>Al responder</td><td>Acierto/error por concepto</td></tr>
+        <tr><td><b>Selección múltiple</b></td><td>El alumno marca varias y confirma con "Comprobar"; se corrige el set completo</td><td>Al confirmar</td><td>Precisión del conjunto</td></tr>
+        <tr><td><b>Clasificar (mito/realidad, arrastrar)</b></td><td>Se corrige cuando todas las fichas están ubicadas</td><td>Al clasificar todo</td><td>% de aciertos</td></tr>
+        <tr><td><b>Escala 1–5</b></td><td>No calificado; se registra el valor</td><td>Al responder todas las afirmaciones</td><td>Actitud / autopercepción (base y delta)</td></tr>
+        <tr><td><b>Respuesta abierta</b></td><td>No tiene "correcto"; la IA la lee</td><td>Al superar un mínimo de texto</td><td>Autoconciencia, comprensión aplicada, expectativas</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 8 -->
+  <section id="s8">
+    <p class="sec-n">08</p>
+    <h2>Sesión de referencia (detalle)</h2>
+    <p>La Sesión 1 del Año 1 funciona como plantilla de referencia para producir todas las demás. Se documenta completa a modo de ejemplo.</p>
+    <h3>Sesión 1 · "¿Por qué nadie me enseñó esto en el colegio?"</h3>
+    <p><b>Objetivo:</b> abrir la cabeza del alumno y generar compromiso; no se enseña técnica todavía.</p>
+
+    <h4>Intro (video ~60 s)</h4>
+    <p>Dos personas ganan lo mismo toda su vida y terminan en vidas opuestas; la diferencia fue qué hicieron con su dinero. Presenta qué es la educación financiera y engancha.</p>
+
+    <h4>Subsección 1 · "Mismo sueldo, vidas opuestas" (video ~75 s + ejercicio)</h4>
+    <p>Historia de Lucas (gasta todo) y Mía (ahorra una parte). Ejercicio de <b>selección única</b> (¿qué explica la diferencia? → "decisiones pequeñas cada mes") + <b>abierta</b> ("¿a quién te parecés más hoy?").</p>
+
+    <h4>Subsección 2 · "Qué es (y qué no es)" (video ~60 s + ejercicio)</h4>
+    <p>Definición clara y desarme de mitos. Ejercicio de <b>clasificar</b> 5 frases como mito o realidad.</p>
+
+    <h4>Subsección 3 · "El costo de no saber" (video ~70 s + ejercicio)</h4>
+    <p>Tres micro-casos (tarjeta eterna, no llegar a fin de mes, estafa de "plata fácil"). Ejercicio de <b>selección múltiple</b>: señales de alarma de una estafa.</p>
+
+    <h4>Diagnóstico inicial (interactivo, escala 1–5)</h4>
+    <p>7 afirmaciones sobre la relación actual con el dinero. Se repite idéntico en la Sesión 7 para medir el "antes y después". Cada afirmación es el espejo de un tema futuro.</p>
+    <ul>
+      <li>Sé más o menos en qué gasto mi dinero.</li>
+      <li>Suelo ahorrar una parte de lo que me llega, aunque sea poco.</li>
+      <li>Antes de comprar algo, pienso si de verdad lo necesito.</li>
+      <li>Entiendo qué es la inflación y cómo me afecta.</li>
+      <li>Sé cómo funciona una tarjeta de crédito.</li>
+      <li>Me siento capaz de manejar mi propio dinero cuando trabaje.</li>
+      <li>Hablar de dinero me resulta cómodo, no un tema tabú.</li>
+    </ul>
+
+    <h4>Cierre "Ponelo a prueba" + mini-evaluación</h4>
+    <p>Micro-acción (antes de una compra, preguntarse necesidad vs. deseo) + expectativas. Luego 3 preguntas de selección con feedback inmediato que consolidan lo esencial.</p>
+    <p class="tag-src">Existe un prototipo navegable de esta sesión y una hoja de estructura + evaluación en el Excel del programa.</p>
+  </section>
+
+  <!-- 9 -->
+  <section id="s9">
+    <p class="sec-n">09</p>
+    <h2>Sistema de evaluación y datos</h2>
+    <p>My.EdFin no evalúa para poner nota, sino para construir el reporte. La plataforma captura <b>tres capas de señal</b> a lo largo de todo el programa, no solo en el proyecto final.</p>
+    <div class="grid2">
+      <div class="mini"><b>1 · Comprensión</b><span>Aciertos en ejercicios y mini-evaluaciones. Mide si el concepto quedó claro, concepto por concepto.</span></div>
+      <div class="mini"><b>2 · Actitud y reflexión</b><span>Respuestas abiertas y escalas. Mide cómo se relaciona el alumno con el dinero y su nivel de autoconciencia.</span></div>
+      <div class="mini"><b>3 · Diagnóstico (base y delta)</b><span>El diagnóstico de la sesión 1 vs. el de la sesión 7. Mide la evolución real durante el programa.</span></div>
+    </div>
+    <p>El <b>proyecto final</b> añade una cuarta capa: la aplicación práctica. Con estas capas, la IA dispone de señal longitudinal (no una sola foto) para generar un reporte con comprensión, actitudes, hábitos, fortalezas y próximos pasos.</p>
+    <div class="box tech">
+      <p class="bt">▚ Captura recomendada</p>
+      <p>Registrar la actividad <b>de cada sesión</b>, con marca de tiempo, y no solo el entregable final. Esto habilita análisis de constancia y la comparación "antes/después", que es el principal argumento de impacto frente a colegios.</p>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section id="s10">
+    <p class="sec-n">10</p>
+    <h2>El reporte de IA</h2>
+    <p class="lead">El reporte final es el output estrella: lo que la IA le devuelve al alumno tras procesar las 7 sesiones. Es un análisis real de parámetros vitales, evolución y recomendaciones — no un folleto ni una nota.</p>
+
+    <h3>Arquitectura de 10 bloques</h3>
+    <div class="rb"><div class="rn">0</div><div class="rc"><b>Identidad del reporte</b><span>Nombre, programa, nivel, fecha + un titular personal que sintetiza la IA.</span></div></div>
+    <div class="rb"><div class="rn">1</div><div class="rc"><b>Tu foto financiera hoy (resumen ejecutivo)</b><span>Perfil de hábitos (arquetipo no fijo) + fortaleza, oportunidad y mayor cambio.</span></div></div>
+    <div class="rb"><div class="rn">2</div><div class="rc"><b>Tus parámetros vitales</b><span>Las 7 competencias con su nivel y un radar visual.</span><span class="feeds">Alimenta: ejercicios + mini-evaluaciones + elecciones.</span></div></div>
+    <div class="rb"><div class="rn">3</div><div class="rc"><b>Tu evolución (antes y después)</b><span>Comparación del diagnóstico inicial vs. final, con el delta por afirmación.</span><span class="feeds">Alimenta: los dos diagnósticos de escala 1–5.</span></div></div>
+    <div class="rb"><div class="rn">4</div><div class="rc"><b>Dominio de conceptos</b><span>Semáforo (verde/amarillo/rojo) de los conceptos clave.</span><span class="feeds">Alimenta: aciertos por concepto.</span></div></div>
+    <div class="rb"><div class="rn">5</div><div class="rc"><b>Tus hábitos y actitudes</b><span>Lectura cualitativa basada en las respuestas abiertas del propio alumno.</span><span class="feeds">Alimenta: abiertas + "ponelo a prueba".</span></div></div>
+    <div class="rb"><div class="rn">6</div><div class="rc"><b>Análisis de tu proyecto final</b><span>Feedback componente por componente (presupuesto, ahorro, fondo, deuda, metas).</span><span class="feeds">Alimenta: entregable del proyecto.</span></div></div>
+    <div class="rb"><div class="rn">7</div><div class="rc"><b>Tus próximos pasos</b><span>3–5 acciones concretas y priorizadas, atadas a sus puntos débiles.</span></div></div>
+    <div class="rb"><div class="rn">8</div><div class="rc"><b>Seguí aprendiendo</b><span>Sugerencias personalizadas según gaps + adelanto del año siguiente.</span></div></div>
+    <div class="rb"><div class="rn">9</div><div class="rc"><b>Tu meta y tu reto</b><span>La meta que el alumno definió + un compromiso de 30–90 días.</span></div></div>
+    <div class="rb"><div class="rn">10</div><div class="rc"><b>Cierre</b><span>Mensaje final personalizado que refuerza el logro y la mentalidad de crecimiento.</span></div></div>
+
+    <h3>Lógica de niveles</h3>
+    <p>Cada competencia se resuelve en un score 0–100 (ver §12) y se traduce a un nivel:</p>
+    <ul>
+      <li><span class="pill dev">En desarrollo</span> &nbsp;0–49 — base por construir; foco de las recomendaciones.</li>
+      <li><span class="pill so">Sólido</span> &nbsp;50–74 — comprensión funcional; a afianzar.</li>
+      <li><span class="pill av">Avanzado</span> &nbsp;75–100 — dominio para la edad; fortaleza a mantener.</li>
+    </ul>
+
+    <div class="box ethic">
+      <p class="bt">✓ Criterios éticos del reporte (no negociables)</p>
+      <p><b>1.</b> Todo se basa en lo que el alumno hizo o dijo, nunca en suposiciones sobre su personalidad o su vida. <b>2.</b> Los perfiles son fotos del momento, cambiables, no etiquetas fijas — clave a esta edad. <b>3.</b> Tono siempre constructivo: ninguna dimensión "reprueba"; se habla de "en desarrollo", no de "malo". El reporte motiva, no castiga.</p>
+    </div>
+    <p class="tag-src">Existe un reporte visual de referencia (HTML) con datos simulados que materializa estos 10 bloques, incluido el radar y los gráficos de evolución en SVG puro.</p>
+  </section>
+
+  <!-- 11 -->
+  <section id="s11">
+    <p class="sec-n">11</p>
+    <h2>Los proyectos finales</h2>
+    <p>Cada año culmina en un proyecto que convierte la teoría en una herramienta propia del alumno. No es un examen: es algo que se lleva para usar.</p>
+    <div class="grid2">
+      <div class="mini"><b>Año 1 · Plan Financiero Personal</b><span>Presupuesto sobre ingreso real o simulado · plan de ahorro y fondo de emergencia · estrategia frente a la deuda · una meta a 1/5/10 años · una reflexión sobre su relación con el dinero.</span></div>
+      <div class="mini"><b>Año 2 · Plan de Crecimiento y Futuro</b><span>Una idea de proyecto/side hustle desde su talento · cómo empezaría a hacer crecer su dinero (principios, no productos) · dónde se ubica y aspira en el cuadrante · metas de vida-dinero a 5 y 10 años.</span></div>
+    </div>
+    <p>El proyecto se sube a la plataforma y la IA lo analiza junto con todas las respuestas del año, produciendo el reporte. El reporte del Año 2 puede además mostrar el <b>ciclo completo de dos años</b>.</p>
+  </section>
+
+  <!-- 12 -->
+  <section id="s12">
+    <p class="sec-n">12</p>
+    <h2>Especificación técnica</h2>
+
+    <h3>Mapeo dato → competencia (Año 1)</h3>
+    <p>Cada competencia se calcula como una mezcla ponderada de entradas normalizadas provenientes de sesiones concretas.</p>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Competencia</th><th>Sesiones</th><th>Entradas (inputs)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Mentalidad financiera</b></td><td>1, 3</td><td>Ítems de diagnóstico (comodidad, capacidad) · abiertas S1/S3 · ejercicios de activo/pasivo y creencias</td></tr>
+        <tr><td><b>Comprensión</b></td><td>2, 3</td><td>Mini-eval S2 · ejercicios de inflación, interés compuesto, activo/pasivo</td></tr>
+        <tr><td><b>Consumo consciente</b></td><td>4</td><td>Ejercicio necesidad vs. deseo · actividad de presupuesto · "ponelo a prueba" de compra</td></tr>
+        <tr><td><b>Capacidad de ahorro</b></td><td>5</td><td>Ejercicio "pagarse primero" · % de ahorro definido en el proyecto · ítem de diagnóstico de ahorro</td></tr>
+        <tr><td><b>Manejo de deuda</b></td><td>6</td><td>Clasificación deuda buena/mala · simulación pago mínimo · mini-eval · ítem de diagnóstico de tarjeta</td></tr>
+        <tr><td><b>Defensa financiera</b></td><td>1</td><td>Selección múltiple de estafas · mini-eval Q3</td></tr>
+        <tr><td><b>Planificación y metas</b></td><td>7</td><td>Completitud del proyecto final · definición de metas</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Lógica de scoring</h3>
+    <ol class="list">
+      <li>Cada input se normaliza a 0–1: ejercicios por % de acierto; escalas 1–5 por (valor−1)/4; rúbrica de proyecto por nivel/3.</li>
+      <li>El score de competencia = promedio ponderado de sus inputs × 100.</li>
+      <li>El score se mapea a nivel (En desarrollo / Sólido / Avanzado) según los cortes de §10.</li>
+      <li>Los ejercicios objetivos se puntúan de forma determinística; las abiertas y el proyecto los evalúa la IA con rúbrica.</li>
+    </ol>
+
+    <h3>Modelo de datos (entidades)</h3>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Entidad</th><th>Campos clave</th></tr></thead>
+      <tbody>
+        <tr><td><b>Alumno</b></td><td>id, nombre, edad, año/programa, progreso</td></tr>
+        <tr><td><b>Sesión</b></td><td>id, año, número, pregunta guía, bloques</td></tr>
+        <tr><td><b>Bloque de contenido</b></td><td>id, sesión, tipo (video/ejercicio/interactivo), duración, guion</td></tr>
+        <tr><td><b>Ejercicio</b></td><td>id, bloque, tipo, opciones, respuesta(s) correcta(s), feedback</td></tr>
+        <tr><td><b>Respuesta</b></td><td>id, alumno, ejercicio, valor, score, timestamp</td></tr>
+        <tr><td><b>Diagnóstico</b></td><td>id, alumno, ítem, fase (inicial/final), valor</td></tr>
+        <tr><td><b>Proyecto</b></td><td>id, alumno, año, componentes, rúbrica</td></tr>
+        <tr><td><b>Score de competencia</b></td><td>id, alumno, competencia, score, nivel</td></tr>
+        <tr><td><b>Reporte</b></td><td>id, alumno, año, bloques generados, fecha</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Rol de la IA</h3>
+    <ul>
+      <li><b>Corrección objetiva</b> de ejercicios (determinística, sin IA).</li>
+      <li><b>Evaluación de abiertas</b> (NLP): autoconciencia y comprensión aplicada, no ortografía.</li>
+      <li><b>Análisis del proyecto</b> con rúbrica por componente.</li>
+      <li><b>Generación narrativa</b> de los bloques redactados (titular, resumen, lectura de hábitos, recomendaciones, cierre) a partir de los datos estructurados.</li>
+      <li><b>Comparación de diagnósticos</b> inicial vs. final.</li>
+    </ul>
+    <div class="box warn">
+      <p class="bt">⚠ Guardarraíles de la IA</p>
+      <p>Basarse solo en datos del alumno; tono constructivo; nada de etiquetas fijas; no afirmar rasgos de personalidad que el alumno no expresó; lenguaje apropiado para la edad. Estos límites deben vivir en el prompt de generación del reporte.</p>
+    </div>
+
+    <h3>Formatos de contenido (producción)</h3>
+    <ul>
+      <li><b>Video:</b> 60–90 s por pieza; guion de producción separado por bloque para el equipo audiovisual.</li>
+      <li><b>Ejercicios:</b> los cinco tipos de §7, con su feedback redactado por ejercicio.</li>
+      <li><b>Agnóstico de país:</b> España y Argentina; impuestos, instrumentos y ejemplos localizables sin rehacer el contenido base.</li>
+      <li><b>Despliegue:</b> las piezas HTML del programa son autocontenidas (fuentes vía Google Fonts, sin librerías externas) y desplegables como estáticos (p. ej. Vercel, con <code>index.html</code> en la raíz).</li>
+    </ul>
+  </section>
+
+  <!-- 13 -->
+  <section id="s13">
+    <p class="sec-n">13</p>
+    <h2>Integración con el ecosistema</h2>
+    <p>My.EdFin no es un producto aislado: es un módulo del ecosistema My Path.IA / Mento.IA y se potencia con el resto.</p>
+    <div class="grid2">
+      <div class="mini"><b>Con la orientación vocacional (RIASEC)</b><span>La Sesión 5 del Año 2 ("convertir tu talento en ingresos") enlaza de forma directa con el diagnóstico vocacional. Un alumno que ya conoce sus fortalezas RIASEC puede aterrizarlas en una idea de ingreso real.</span></div>
+      <div class="mini"><b>Con la psicometría</b><span>El reporte de My.EdFin comparte ADN con los reportes diagnósticos de My Path.IA: pre/post, parámetros, lectura basada en datos, tono constructivo. Mismo motor conceptual, nuevo dominio.</span></div>
+      <div class="mini"><b>Con el reporte para colegios</b><span>Los datos agregados de una clase pueden alimentar un diagnóstico grupal (en la línea del Diagnóstico Estratégico Grupal de Mento.IA), útil para el colegio.</span></div>
+      <div class="mini"><b>Con el modelo auto-guiado</b><span>La anatomía de sesión y los tipos de ejercicio son reutilizables como patrón para otros módulos del ecosistema.</span></div>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section id="s14">
+    <p class="sec-n">14</p>
+    <h2>Métricas de impacto</h2>
+    <p>El diseño pre/post convierte el aprendizaje en una métrica vendible a colegios y familias.</p>
+    <ul>
+      <li><b>Crecimiento de competencias</b> — promedio del diagnóstico inicial vs. final (ej. 2,1 → 4,0 sobre 5).</li>
+      <li><b>Dominio conceptual</b> — % de conceptos en verde al cierre.</li>
+      <li><b>Constancia</b> — sesiones completadas y regularidad.</li>
+      <li><b>Aplicación</b> — calidad del proyecto final por rúbrica.</li>
+      <li><b>Autoconciencia</b> — evolución en la calidad de las respuestas abiertas.</li>
+    </ul>
+    <div class="box principle">
+      <p class="bt">◆ Argumento comercial</p>
+      <p>A nivel de clase o colegio, el reporte agregado demuestra el impacto del programa con datos ("el curso mejoró X% en competencias financieras"), lo que respalda la venta institucional sin depender de percepciones.</p>
+    </div>
+  </section>
+
+  <!-- 15 -->
+  <section id="s15">
+    <p class="sec-n">15</p>
+    <h2>Roadmap y glosario</h2>
+    <h3>Estado y próximos pasos de producción</h3>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>Entregable</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td>Estructura de ambos años (14 sesiones)</td><td><span class="pill av">Definido</span></td></tr>
+        <tr><td>Sesión 1 Año 1 — contenido, ejercicios y prototipo</td><td><span class="pill av">Diseñado</span></td></tr>
+        <tr><td>Arquitectura del reporte de IA (10 bloques) + mockup</td><td><span class="pill av">Diseñado</span></td></tr>
+        <tr><td>Sesiones 2–7 Año 1 — contenido al detalle</td><td><span class="pill dev">Por desarrollar</span></td></tr>
+        <tr><td>Sesiones Año 2 — contenido al detalle</td><td><span class="pill dev">Por desarrollar</span></td></tr>
+        <tr><td>Especificación técnica de datos (mapeo y scoring)</td><td><span class="pill so">Definido · a formalizar en Excel</span></td></tr>
+        <tr><td>Guiones de video para producción audiovisual</td><td><span class="pill dev">Por desarrollar</span></td></tr>
+        <tr><td>Prompt de generación del reporte (con guardarraíles)</td><td><span class="pill dev">Por desarrollar</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Glosario</h3>
+    <ul>
+      <li><b>Anatomía de sesión</b> — la estructura repetible (intro + subsecciones + diagnóstico + cierre + mini-eval).</li>
+      <li><b>Parámetro vital / competencia</b> — una de las 7 dimensiones que mide el reporte.</li>
+      <li><b>Diagnóstico pre/post</b> — las 7 afirmaciones de escala 1–5 respondidas al inicio y al final para medir evolución.</li>
+      <li><b>Punto de cruce / número de libertad</b> — cuando los ingresos pasivos igualan los gastos (independencia financiera).</li>
+      <li><b>Cuadrante E-A-D-I</b> — Empleado, Autoempleado, Dueño, Inversor: las cuatro formas de generar ingresos.</li>
+      <li><b>Side hustle</b> — proyecto paralelo para generar ingresos adicionales desde un talento propio.</li>
+      <li><b>Pagarse primero</b> — apartar el ahorro apenas se recibe el ingreso, antes de gastar.</li>
+      <li><b>Interés compuesto</b> — el crecimiento del dinero sobre sí mismo a lo largo del tiempo (a favor en el ahorro; en contra en la deuda).</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span class="brand">My Path.IA <span class="s">/</span> Mento.IA</span>
+  <span>My.EdFin · Documento Maestro · v1.0 · Oct 2026</span>
+</footer>
+
+</body>
+</html>
+
+</body></html>
