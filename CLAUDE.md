@@ -30,7 +30,7 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 
 ## Entorno
 - Supabase: `mypath-dev` (zbqtalpksfvqwmtqgboa) y `mypath-prod` (rlvmyhqejdxgexndxbsg), ambos en São Paulo.
-- Vercel: proyecto `mypath-app`, funciones en `gru1` (São Paulo, junto a la base). Claves del servidor (`SUPABASE_SECRET_KEY`, `RESEND_API_KEY`, `CRON_SECRET`) cargadas como tipo Secret en Production y Preview; se leen al publicar.
+- Vercel: proyecto `mypath-app`, funciones en `gru1` (São Paulo, junto a la base). Versión de prueba (rama de trabajo): `mypath-dev.vercel.app`. Claves del servidor (`SUPABASE_SECRET_KEY`, `RESEND_API_KEY`, `CRON_SECRET`) cargadas como tipo Secret en Production y Preview; se leen al publicar.
 - Migraciones en `supabase/migrations/`; datos ficticios solo para dev en `supabase/seed_dev.sql`.
 - La herramienta MCP de Supabase pide confirmación humana para `DROP`/`DELETE`: preferir `ALTER`/`REVOKE` o avisar al usuario.
 - Next.js 16: leer `node_modules/next/dist/docs/` antes de usar APIs nuevas. El middleware se llama `src/proxy.ts`.
