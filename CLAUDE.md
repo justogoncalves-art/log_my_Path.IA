@@ -14,6 +14,10 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Contraseña inicial: al azar, ~10 caracteres sin ambiguos, se genera al enviar el mail de bienvenida (programado por colegio desde el admin, plantilla HTML provista por My Path). Cambio obligatorio en el primer ingreso. El DNI no forma parte de la contraseña.
 - Compras siempre en la web (Stripe); la app móvil solo para usar lo comprado.
 - Datos separados en capas educativa / clínica / sanitaria con permisos propios.
+- Programas: un programa = módulo + nivel/año + idioma (+ track). Cada idioma es un programa propio porque tiene sus videos (Mux). Se asignan masivamente por clase o individualmente.
+- Campus es un catálogo global (22 países) cargado desde admin; Campus y EdFin solo se muestran desde cierto año (`modules.min_level/min_grade`).
+- Reporte de programa y perfil holístico con IA: se generan por detrás, no se configuran en el admin.
+- Reseller: entre admin y colegio/profesional. Solo ve estadísticas agregadas de sus organizaciones (`org_stats`, `reseller_overview`); nunca datos personales ni puede modificar nada. El admin ve las de todos los resellers.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
 ## Entorno
