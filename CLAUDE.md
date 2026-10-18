@@ -18,6 +18,12 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Campus es un catálogo global (22 países) cargado desde admin; Campus y EdFin solo se muestran desde cierto año (`modules.min_level/min_grade`).
 - Reporte de programa y perfil holístico con IA: se generan por detrás, no se configuran en el admin.
 - Reseller: entre admin y colegio/profesional. Solo ve estadísticas agregadas de sus organizaciones (`org_stats`, `reseller_overview`); nunca datos personales ni puede modificar nada. El admin ve las de todos los resellers.
+- Idiomas en la tabla `languages` (es-ES, es-419, es-AR voseo, en, pt): se suman sin cambiar el esquema.
+- Campus y EdFin: 5º y 6º de secundaria.
+- Encuesta: "¿Te ha gustado My Path?" (1-5 estrellas) a mitad y al final del programa (`rate_program`); con 3 o menos se pide "¿Qué mejorarías?". Al completar el 100% se registra en `program_completions` y se envía por mail un formulario extenso.
+- Documento: `doc_hash` (HMAC-SHA256) y `doc_cipher` (AES-256) con claves generadas en Supabase Vault; las funciones `private.doc_*` no las puede llamar nadie desde la API.
+- Alta de personas: `admin_import_people` (validar y después guardar todo o nada). La cuenta de acceso se crea al enviar el mail de bienvenida. Si el documento ya existe con otro mail, se avisa y se mantiene el registrado.
+- El panel de admin es solo para My Path: por ahora en español.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
 ## Entorno
