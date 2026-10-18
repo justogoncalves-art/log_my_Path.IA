@@ -1,4 +1,5 @@
 import "server-only";
+import { headers } from "next/headers";
 
 // Envío por Resend (send.mypathia.app). La clave vive en RESEND_API_KEY, nunca en el código.
 
@@ -38,4 +39,20 @@ export async function sendBatch(mails: Mail[]): Promise<boolean[]> {
   return results;
 }
 
-export const APP_URL = process.env.APP_URL ?? "https://app.mypathia.app";
+const PROD_URL = "https://app.mypathia.app";
+
+// Dirección de la plataforma para los links de los mails: en producción la oficial;
+// en la versión de prueba, la misma desde la que se hizo el envío.
+export async function appUrl(): Promise<string> {
+  if (process.env.APP_URL) return process.env.APP_URL;
+  if (process.env.VERCEL_ENV === "production") return PROD_URL;
+  try {
+    const host = (await headers()).get("host") ?? "";
+    if (/^[a-z0-9-]+\.vercel\.app$/.test(host) || /^localhost(:\d+)?$/.test(host)) {
+      return `${host.startsWith("localhost") ? "http" : "https"}://${host}`;
+    }
+  } catch {
+    // Fuera de una petición (no debería pasar)
+  }
+  return PROD_URL;
+}

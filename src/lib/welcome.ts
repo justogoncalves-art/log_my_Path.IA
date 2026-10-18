@@ -1,5 +1,5 @@
 import "server-only";
-import { APP_URL, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
+import { appUrl, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
 import { generatePassword } from "@/lib/password";
 import { serviceClient } from "@/lib/supabase/admin";
 
@@ -61,6 +61,7 @@ export async function runWelcomeCampaigns(opts: { campaignId?: string; maxPeople
   const { data: campaigns, error } = await q;
   if (error) return { ok: false, error: "No pudimos leer los mails programados" };
 
+  const baseUrl = await appUrl();
   let sent = 0;
   let failed = 0;
   for (const c of (campaigns ?? []) as Campaign[]) {
@@ -98,7 +99,7 @@ export async function runWelcomeCampaigns(opts: { campaignId?: string; maxPeople
               apellido: p.t.last_name,
               mail: p.t.email,
               contrasena: p.password!,
-              link: `${APP_URL}/login`,
+              link: `${baseUrl}/login`,
             }),
           })),
         ).catch(() => ready.map(() => false))

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getMe } from "@/lib/dal";
 import { importRowsSchema, type ImportResult } from "@/lib/people-import";
-import { APP_URL, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
+import { appUrl, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
 import { generatePassword } from "@/lib/password";
 import { serviceClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -236,6 +236,7 @@ export async function resetPassword(personId: string): Promise<ActionResult> {
   }
 
   const en = target.locale.startsWith("en");
+  const baseUrl = await appUrl();
   const [sent] = await sendBatch([
     {
       to: target.email,
@@ -244,7 +245,7 @@ export async function resetPassword(personId: string): Promise<ActionResult> {
         en
           ? "<p>Hi {{nombre}},</p><p>Your new password is <strong>{{contrasena}}</strong>.</p><p>Sign in at <a href=\"{{link}}\">{{link}}</a>. You will be asked to choose your own password.</p>"
           : "<p>Hola {{nombre}}:</p><p>Tu nueva contraseña es <strong>{{contrasena}}</strong>.</p><p>Ingresá en <a href=\"{{link}}\">{{link}}</a>. Te vamos a pedir que elijas una propia.</p>",
-        { nombre: target.first_name, contrasena: password, link: `${APP_URL}/login` },
+        { nombre: target.first_name, contrasena: password, link: `${baseUrl}/login` },
       ),
     },
   ]).catch(() => [false]);
