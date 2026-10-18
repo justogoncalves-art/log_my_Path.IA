@@ -16,6 +16,14 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Datos separados en capas educativa / clínica / sanitaria con permisos propios.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
+## Entorno
+- Supabase: `mypath-dev` (zbqtalpksfvqwmtqgboa) y `mypath-prod` (rlvmyhqejdxgexndxbsg), ambos en São Paulo.
+- Vercel: proyecto `mypath-app`, funciones en `gru1` (São Paulo, junto a la base).
+- Migraciones en `supabase/migrations/`; datos ficticios solo para dev en `supabase/seed_dev.sql`.
+- La herramienta MCP de Supabase pide confirmación humana para `DROP`/`DELETE`: preferir `ALTER`/`REVOKE` o avisar al usuario.
+- Next.js 16: leer `node_modules/next/dist/docs/` antes de usar APIs nuevas. El middleware se llama `src/proxy.ts`.
+- Este contenedor no tiene salida a supabase.co ni vercel.com: probar permisos con SQL simulando el rol y la app en el despliegue de Vercel.
+
 ## Skills
 - Las skills del proyecto están en `.claude/skills/` (ver `.claude/skills/LEEME.md`).
 - Antes de cada tarea, buscar si hay una skill que aplique (del proyecto o de las disponibles en la sesión) y usarla.
