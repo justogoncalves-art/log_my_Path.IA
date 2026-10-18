@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { AltaPersonas } from "./alta-personas";
 
-export default async function AltaPage() {
+export default async function AltaPage({ searchParams }: { searchParams: Promise<{ org?: string }> }) {
+  const { org } = await searchParams;
   const supabase = await createClient();
   const { data: orgs } = await supabase
     .from("organizations")
@@ -17,7 +18,7 @@ export default async function AltaPage() {
         Cargá una persona o el Excel del colegio. Primero ves cómo queda cada fila y después confirmás. El documento se guarda
         cifrado y la contraseña se genera recién cuando sale el mail de bienvenida.
       </p>
-      <AltaPersonas orgs={orgs ?? []} />
+      <AltaPersonas orgs={orgs ?? []} initialOrg={orgs?.some((o) => o.id === org) ? org : undefined} />
     </div>
   );
 }

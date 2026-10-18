@@ -3,7 +3,8 @@ import { createServerClient } from "@supabase/ssr";
 import { env } from "@/lib/env";
 import { sessionCookieOptions } from "@/lib/supabase/cookies";
 
-const PUBLIC_PATHS = ["/login"];
+// /api/cron valida su propio secreto
+const PUBLIC_PATHS = ["/login", "/api/cron/"];
 
 function buildCsp(nonce: string) {
   const isDev = process.env.NODE_ENV === "development";

@@ -28,8 +28,8 @@ function maskDoc(doc: string) {
   return d.length > 3 ? `•••${d.slice(-3)}` : d;
 }
 
-export function AltaPersonas({ orgs }: { orgs: Org[] }) {
-  const [org, setOrg] = useState(orgs.length === 1 ? orgs[0].id : "");
+export function AltaPersonas({ orgs, initialOrg }: { orgs: Org[]; initialOrg?: string }) {
+  const [org, setOrg] = useState(initialOrg ?? (orgs.length === 1 ? orgs[0].id : ""));
   const [tab, setTab] = useState<"excel" | "una">("excel");
   const [rows, setRows] = useState<ImportRow[]>([]);
   const [results, setResults] = useState<ImportResult[] | null>(null);

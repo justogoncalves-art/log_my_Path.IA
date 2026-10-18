@@ -24,6 +24,8 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Documento: `doc_hash` (HMAC-SHA256) y `doc_cipher` (AES-256) con claves generadas en Supabase Vault; las funciones `private.doc_*` no las puede llamar nadie desde la API.
 - Alta de personas: `admin_import_people` (validar y después guardar todo o nada). La cuenta de acceso se crea al enviar el mail de bienvenida. Si el documento ya existe con otro mail, se avisa y se mantiene el registrado.
 - El panel de admin es solo para My Path: por ahora en español.
+- Acciones del admin = funciones `admin_*` en la base (validan admin y dejan `audit_log`). Lo que toca cuentas de acceso (contraseñas, bloquear, cambiar mail) lo hace el servidor con `SUPABASE_SECRET_KEY`.
+- Mails de bienvenida: `welcome_campaigns` + cron diario de Vercel (`/api/cron/welcome`, 10:00 UTC) o "Enviar ahora". La contraseña se genera en el envío y no se guarda.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
 ## Entorno

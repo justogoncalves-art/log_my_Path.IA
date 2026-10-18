@@ -6,6 +6,7 @@ import { getMe } from "@/lib/dal";
 // El panel de administración solo lo usa My Path: por ahora en español.
 const NAV = [
   { href: "/admin", label: "Resumen" },
+  { href: "/admin/organizaciones", label: "Organizaciones" },
   { href: "/admin/alta", label: "Alta de personas" },
 ];
 
