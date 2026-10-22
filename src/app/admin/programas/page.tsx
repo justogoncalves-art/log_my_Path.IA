@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { dimensionLabels, listModulesAndLanguages, listProgramsDetailed } from "@/lib/admin-data";
 import { ProgramImport } from "./program-import";
 
@@ -34,7 +35,9 @@ export default async function ProgramsPage() {
             {active.map((p) => (
               <tr key={p.id}>
                 <td className="border-b border-line/60 px-4 py-3">
-                  <span className="font-semibold">{p.title}</span>
+                  <Link href={`/admin/programas/${p.id}`} className="font-semibold underline-offset-2 hover:underline">
+                    {p.title}
+                  </Link>
                   <span className="block text-xs text-muted">
                     {modName[p.module_id] ?? p.module_id} · {p.code}
                   </span>
@@ -48,7 +51,9 @@ export default async function ProgramsPage() {
                 <td className="border-b border-line/60 px-4 py-3">{p.questions}</td>
                 <td className="border-b border-line/60 px-4 py-3">
                   {p.missingVideos ? (
-                    <span className="text-danger">Faltan {p.missingVideos}</span>
+                    <Link href={`/admin/programas/${p.id}`} className="text-danger underline">
+                      Faltan {p.missingVideos}
+                    </Link>
                   ) : (
                     <span className="text-ok">Completos</span>
                   )}

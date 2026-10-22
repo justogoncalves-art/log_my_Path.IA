@@ -5,6 +5,8 @@ import { z } from "zod";
 import { getMe } from "@/lib/dal";
 import { importRowsSchema, type ImportResult } from "@/lib/people-import";
 import { appUrl, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
+import { listMuxAssets, muxApiConfigured } from "@/lib/mux";
+import type { MuxAssetInfo } from "@/lib/mux-match";
 import { generatePassword } from "@/lib/password";
 import { serviceClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -348,4 +350,34 @@ export async function importProgram(input: unknown): Promise<ActionResult> {
     `Cargado como versión ${r?.version ?? 1}: ${r?.chapters ?? 0} capítulos y ${r?.questions ?? 0} preguntas` +
       (r && r.version > 1 ? (r.moved_assignments ? ". Las clases asignadas pasaron a esta versión." : ". La versión anterior ya tiene respuestas: las clases siguen con esa hasta que las reasignes.") : ""),
   );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Videos de Mux por capítulo
+// ─────────────────────────────────────────────────────────────
+export async function listVideos(): Promise<{ ok: true; assets: MuxAssetInfo[] } | { ok: false; error: string }> {
+  const me = await getMe();
+  if (!me.isAdmin) return { ok: false, error: "Sin acceso" };
+  if (!muxApiConfigured()) return { ok: false, error: "Faltan MUX_TOKEN_ID y MUX_TOKEN_SECRET en Vercel (Production y Preview)" };
+  try {
+    const assets = await listMuxAssets();
+    return { ok: true, assets: assets.filter((a) => a.status === "ready" && a.playbackId) };
+  } catch {
+    return { ok: false, error: "No pudimos leer los videos de Mux. Revisá que la clave tenga permiso de lectura." };
+  }
+}
+
+const videoItems = z
+  .array(z.object({ chapterId: z.uuid(), playbackId: z.string().regex(/^[A-Za-z0-9]{10,100}$/).nullable(), signed: z.boolean() }))
+  .min(1)
+  .max(60);
+
+export async function setChapterVideos(items: unknown): Promise<ActionResult> {
+  const parsed = videoItems.safeParse(items);
+  if (!parsed.success) return { ok: false, error: "Datos inválidos" };
+  for (const it of parsed.data) {
+    const { error } = await rpc("admin_set_chapter_video", { p_chapter: it.chapterId, p_playback_id: it.playbackId, p_signed: it.signed });
+    if (error) return { ok: false, error };
+  }
+  return done(null, `Videos guardados en ${parsed.data.length} capítulos`);
 }

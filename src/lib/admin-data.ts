@@ -215,3 +215,24 @@ export async function listModulesAndLanguages() {
   ]);
   return { modules: modules ?? [], languages: languages ?? [] };
 }
+
+export async function getProgramWithChapters(id: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("programs")
+    .select("id, module_id, code, title, level, grade, language, version, active, chapters(id, position, title, mux_playback_id, mux_signed, questions(count))")
+    .eq("id", id)
+    .maybeSingle();
+  if (!data) return null;
+  const chapters = (data.chapters as unknown as Array<{
+    id: string;
+    position: number;
+    title: string;
+    mux_playback_id: string | null;
+    mux_signed: boolean;
+    questions: Array<{ count: number }>;
+  }>)
+    .map((c) => ({ ...c, questions: c.questions[0]?.count ?? 0 }))
+    .sort((a, b) => a.position - b.position);
+  return { ...data, chapters };
+}

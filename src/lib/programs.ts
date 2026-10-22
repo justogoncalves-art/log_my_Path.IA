@@ -42,6 +42,7 @@ export type ChapterContent = {
   position: number;
   title: string;
   playbackId: string | null;
+  signed: boolean;
   questions: Array<{
     id: string;
     position: number;
@@ -56,7 +57,7 @@ export async function getChapterContent(programId: string, position: number, per
   const supabase = await createClient();
   const { data: ch } = await supabase
     .from("chapters")
-    .select("id, position, title, mux_playback_id, questions(id, position, kind, prompt, question_options(id, position, text))")
+    .select("id, position, title, mux_playback_id, mux_signed, questions(id, position, kind, prompt, question_options(id, position, text))")
     .eq("program_id", programId)
     .eq("position", position)
     .maybeSingle();
@@ -83,6 +84,7 @@ export async function getChapterContent(programId: string, position: number, per
     position: ch.position,
     title: ch.title,
     playbackId: ch.mux_playback_id,
+    signed: ch.mux_signed,
     questions: questions.map((q) => {
       const r = byQ.get(q.id);
       return {

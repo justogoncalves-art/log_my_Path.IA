@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { answerQuestion, completeChapter, heartbeat, rateProgram } from "@/app/actions/program";
 import { programText, type ProgramLang } from "@/lib/i18n-program";
+import type { PlaybackTokens } from "@/lib/mux";
 import type { ChapterContent } from "@/lib/programs";
 
 type Answer = { optionId: string | null; text: string | null };
@@ -12,6 +13,7 @@ type Answer = { optionId: string | null; text: string | null };
 export function ChapterPlayer({
   lang,
   content,
+  tokens,
   programId,
   completed,
   nextHref,
@@ -21,6 +23,7 @@ export function ChapterPlayer({
 }: {
   lang: ProgramLang;
   content: ChapterContent;
+  tokens: PlaybackTokens | null;
   programId: string;
   completed: boolean;
   nextHref: string;
@@ -82,6 +85,7 @@ export function ChapterPlayer({
         <div className="overflow-hidden rounded-2xl bg-black">
           <MuxPlayer
             playbackId={content.playbackId}
+            tokens={tokens ?? undefined}
             streamType="on-demand"
             disableTracking
             accentColor="#399ab8"

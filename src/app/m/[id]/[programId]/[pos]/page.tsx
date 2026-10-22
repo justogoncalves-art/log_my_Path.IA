@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { AppHeader } from "@/components/app-header";
 import { getDict } from "@/lib/i18n";
 import { requireModule } from "@/lib/module-access";
+import { signPlayback } from "@/lib/mux";
 import { getChapterContent, getChapters, getMyPrograms } from "@/lib/programs";
 import { ChapterPlayer } from "./chapter-player";
 
@@ -24,6 +25,9 @@ export default async function ChapterPage({ params }: { params: Promise<{ id: st
   const content = await getChapterContent(programId, position, me.personId);
   if (!content) notFound();
   const next = chapters[idx + 1];
+  // Videos "signed": permiso temporal firmado en el servidor, solo para este video
+  const tokens = content.playbackId && content.signed ? signPlayback(content.playbackId) : null;
+  const playable = content.playbackId && (!content.signed || tokens) ? content.playbackId : null;
 
   return (
     <div className="min-h-screen">
@@ -38,7 +42,8 @@ export default async function ChapterPage({ params }: { params: Promise<{ id: st
         <h1 className="mt-3 font-display text-3xl font-bold md:text-4xl">{content.title}</h1>
         <ChapterPlayer
           lang={lang}
-          content={content}
+          content={{ ...content, playbackId: playable }}
+          tokens={tokens}
           programId={programId}
           completed={chapters[idx].completed}
           nextHref={next ? `/m/${id}/${programId}/${next.position}` : `/m/${id}/${programId}`}

@@ -27,6 +27,7 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Acciones del admin = funciones `admin_*` en la base (validan admin y dejan `audit_log`). Lo que toca cuentas de acceso (contraseñas, bloquear, cambiar mail) lo hace el servidor con `SUPABASE_SECRET_KEY`.
 - Mails de bienvenida: `welcome_campaigns` + cron diario de Vercel (`/api/cron/welcome`, 10:00 UTC) o "Enviar ahora". La contraseña se genera en el envío y no se guarda.
 - Programas con preguntas (Mento.IA y otros): Excel de 55 columnas → admin/Programas (`admin_import_program`). Cada carga crea una versión nueva (no se borra nada). Preguntas `simple` (una opción, con ponderaciones por dimensión en `option_weights`, que el alumno nunca ve) o `abierta` (texto). Respuestas en `responses` (solo la persona y el admin). Puntaje T teórico por dimensión: `admin_program_scores`.
+- Videos: entorno "MY PATH" de Mux, reproducción `signed` (permiso firmado en el servidor por 6 h, `src/lib/mux.ts`). Admin → Programas → programa: "Buscar videos en Mux" une por nombre de archivo `<año>-<programa>_<IDIOMA>_cap<n>`. Claves: `MUX_SIGNING_KEY_ID`, `MUX_SIGNING_KEY_PRIVATE`, `MUX_TOKEN_ID`, `MUX_TOKEN_SECRET` (solo lectura).
 - Códigos de idioma del Excel: AR=es-AR, ES=es-ES, LAT=es-419, EN=en, PT=pt.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
