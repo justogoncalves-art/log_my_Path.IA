@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
 import { getDict } from "@/lib/i18n";
-import { programText } from "@/lib/i18n-program";
+import { languageLabel, programText } from "@/lib/i18n-program";
 import { requireModule } from "@/lib/module-access";
 import { getMyPrograms } from "@/lib/programs";
 
@@ -34,7 +34,9 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
                     className="group flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-surface p-6 transition-colors hover:border-celeste"
                   >
                     <div className="min-w-0">
-                      <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">{pr.grade}º</p>
+                      <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
+                        {pr.grade}º · {languageLabel(pr.language)}
+                      </p>
                       <h2 className="mt-1 font-display text-2xl font-semibold">{pr.title}</h2>
                       <div className="mt-3 flex items-center gap-3">
                         <span className="h-1.5 w-40 overflow-hidden rounded-full bg-line" aria-hidden>

@@ -67,3 +67,16 @@ const text = {
 export function programText(lang: ProgramLang) {
   return text[lang];
 }
+
+// Nombre corto del idioma del contenido, para distinguir versiones del mismo programa
+const LANGUAGE_LABELS: Record<string, string> = {
+  "es-ES": "Español (España)",
+  "es-419": "Español latino",
+  "es-AR": "Español (Argentina)",
+  en: "English",
+  pt: "Português",
+};
+
+export function languageLabel(code: string) {
+  return LANGUAGE_LABELS[code] ?? code;
+}
