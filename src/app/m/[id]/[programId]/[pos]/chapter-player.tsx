@@ -9,6 +9,9 @@ import type { PlaybackTokens } from "@/lib/mux";
 import type { ChapterContent } from "@/lib/programs";
 
 type Answer = { optionId: string | null; text: string | null };
+type Question = ChapterContent["questions"][number];
+
+const isAnswered = (q: Question, a: Answer | null | undefined) => !!a && (q.kind === "simple" ? !!a.optionId : !!a.text?.trim());
 
 export function ChapterPlayer({
   lang,
@@ -33,10 +36,18 @@ export function ChapterPlayer({
 }) {
   const p = programText(lang);
   const router = useRouter();
+  const questions = content.questions;
   const [videoDone, setVideoDone] = useState(completed || !content.playbackId);
-  const [answers, setAnswers] = useState<Record<string, Answer | null>>(
-    Object.fromEntries(content.questions.map((q) => [q.id, q.answer])),
+  const [answers, setAnswers] = useState<Record<string, Answer | null>>(Object.fromEntries(questions.map((q) => [q.id, q.answer])));
+  const [drafts, setDrafts] = useState<Record<string, string>>(
+    Object.fromEntries(questions.filter((q) => q.kind === "abierta").map((q) => [q.id, q.answer?.text ?? ""])),
   );
+  // Arranca en la primera pregunta sin responder
+  const [step, setStep] = useState(() => {
+    const i = questions.findIndex((q) => !isAnswered(q, q.answer));
+    return i < 0 ? 0 : i;
+  });
+  const [saving, setSaving] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [rating, setRating] = useState<"mitad" | "final" | null>(null);
   const [finishing, startFinish] = useTransition();
   const watched = useRef({ seconds: 0, last: 0 });
@@ -60,18 +71,44 @@ export function ChapterPlayer({
     if (!videoDone && v.duration > 0 && watched.current.seconds >= v.duration * 0.9) setVideoDone(true);
   }
 
-  const pending = content.questions.filter((q) => {
-    const a = answers[q.id];
-    return !a || (q.kind === "simple" ? !a.optionId : !a.text);
-  }).length;
-  const canFinish = videoDone && pending === 0;
+  async function save(q: Question, optionId: string | null, text: string | null) {
+    setSaving("saving");
+    const res = await answerQuestion(q.id, optionId, text);
+    if (!res.ok) {
+      setSaving("error");
+      return false;
+    }
+    setAnswers((s) => ({ ...s, [q.id]: { optionId, text } }));
+    setSaving("saved");
+    return true;
+  }
+
+  const current = questions[step];
+  const allAnswered = questions.every((q) => isAnswered(q, answers[q.id]));
+  const draft = current?.kind === "abierta" ? (drafts[current.id] ?? "") : "";
+  const currentReady = current ? (current.kind === "simple" ? isAnswered(current, answers[current.id]) : !!draft.trim()) : true;
+  const onLast = !current || step === questions.length - 1;
+
+  // Las abiertas se guardan al avanzar (si cambió el texto)
+  async function saveDraftIfNeeded() {
+    if (!current || current.kind !== "abierta") return true;
+    if (draft.trim() === (answers[current.id]?.text ?? "").trim()) return true;
+    return save(current, null, draft);
+  }
+
+  async function goNext() {
+    if (!(await saveDraftIfNeeded())) return;
+    setSaving("idle");
+    setStep((s) => Math.min(s + 1, questions.length - 1));
+  }
 
   function finish() {
     startFinish(async () => {
+      if (!(await saveDraftIfNeeded())) return;
       if (!completed) {
         const seconds = Math.max(watched.current.seconds, (Date.now() - started.current) / 1000);
         const res = await completeChapter(content.id, seconds);
-        if (!res.ok) return;
+        if (!res.ok) return setSaving("error");
       }
       if (askMid) setRating("mitad");
       else if (askFinal) setRating("final");
@@ -79,10 +116,17 @@ export function ChapterPlayer({
     });
   }
 
+  const finishEnabled = videoDone && (questions.length === 0 || (onLast && currentReady && questions.every((q) => q.id === current?.id || isAnswered(q, answers[q.id]))));
+
   return (
     <div className="mt-8 flex flex-col gap-8">
+      {/* El video ocupa todo el ancho mientras se mira; al terminar se achica y las preguntas pasan al frente */}
       {content.playbackId ? (
-        <div className="overflow-hidden rounded-2xl bg-black">
+        <div
+          className={`overflow-hidden rounded-2xl bg-black shadow-sm transition-[max-width] duration-700 ease-out motion-reduce:transition-none ${
+            videoDone && questions.length ? "w-full max-w-sm" : "w-full max-w-none"
+          }`}
+        >
           <MuxPlayer
             playbackId={content.playbackId}
             tokens={tokens ?? undefined}
@@ -100,29 +144,110 @@ export function ChapterPlayer({
 
       {!videoDone ? <p className="text-sm text-muted">{p.watchFirst}</p> : null}
 
-      <fieldset disabled={!videoDone} className={`flex flex-col gap-6 ${videoDone ? "" : "opacity-50"}`}>
-        {content.questions.map((q, i) => (
-          <QuestionCard
-            key={q.id}
-            index={i + 1}
-            q={q}
-            lang={lang}
-            answer={answers[q.id]}
-            onSaved={(a) => setAnswers((s) => ({ ...s, [q.id]: a }))}
-          />
-        ))}
-      </fieldset>
+      {videoDone && current ? (
+        <section className="mx-auto w-full max-w-3xl">
+          <div className="flex items-center justify-between gap-4">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">{p.questionOf(step + 1, questions.length)}</p>
+            <div className="flex gap-1.5" aria-hidden>
+              {questions.map((q, i) => (
+                <span
+                  key={q.id}
+                  className={`h-1.5 w-6 rounded-full ${i === step ? "bg-opulent" : isAnswered(q, answers[q.id]) ? "bg-celeste" : "bg-line"}`}
+                />
+              ))}
+            </div>
+          </div>
 
-      <div className="flex flex-wrap items-center gap-4">
-        <button
-          onClick={finish}
-          disabled={!canFinish || finishing}
-          className="cursor-pointer rounded-lg bg-opulent px-6 py-3 font-display font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isLast ? p.finishProgram : p.nextChapter} →
-        </button>
-        {videoDone && pending > 0 ? <span className="text-sm text-muted">{p.pending(pending)}</span> : null}
-      </div>
+          <div key={current.id} className="mp-fade-up mt-4 rounded-2xl border border-line bg-surface p-6 md:p-8">
+            <h2 className="text-lg font-medium leading-relaxed md:text-xl">{current.prompt}</h2>
+            {current.kind === "simple" ? (
+              <div role="radiogroup" aria-label={current.prompt} className="mt-6 flex flex-col gap-2.5">
+                {current.options.map((o) => {
+                  const checked = answers[current.id]?.optionId === o.id;
+                  return (
+                    <label
+                      key={o.id}
+                      className={`flex cursor-pointer gap-3 rounded-xl border p-4 text-[15px] leading-relaxed transition-colors ${
+                        checked ? "border-celeste bg-celeste/10" : "border-line hover:border-celeste/60"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name={current.id}
+                        className="mt-1 accent-[#399ab8]"
+                        checked={checked}
+                        onChange={() => save(current, o.id, null)}
+                      />
+                      <span>{o.text}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            ) : (
+              <textarea
+                value={draft}
+                maxLength={4000}
+                rows={6}
+                onChange={(e) => {
+                  setDrafts((s) => ({ ...s, [current.id]: e.target.value }));
+                  setSaving("idle");
+                }}
+                onBlur={() => saveDraftIfNeeded()}
+                placeholder={p.writeHere}
+                className="mt-6 w-full rounded-xl border border-line bg-bg p-4 text-[15px] leading-relaxed outline-none focus:border-celeste"
+              />
+            )}
+            <p aria-live="polite" className={`mt-3 h-4 text-xs ${saving === "error" ? "text-danger" : "text-ok"}`}>
+              {saving === "saved" ? `✓ ${p.saved}` : saving === "error" ? p.saveError : ""}
+            </p>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+            <button
+              type="button"
+              onClick={async () => {
+                if (await saveDraftIfNeeded()) setStep((s) => Math.max(0, s - 1));
+              }}
+              disabled={step === 0}
+              className="cursor-pointer px-2 py-2 font-display text-sm text-muted hover:text-ink disabled:invisible"
+            >
+              ← {p.previous}
+            </button>
+            {onLast ? (
+              <button
+                onClick={finish}
+                disabled={!finishEnabled || finishing}
+                className="cursor-pointer rounded-lg bg-opulent px-6 py-3 font-display font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isLast ? p.finishProgram : p.nextChapter} →
+              </button>
+            ) : (
+              <button
+                onClick={goNext}
+                disabled={!currentReady || saving === "saving"}
+                className="cursor-pointer rounded-lg bg-opulent px-6 py-3 font-display font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {p.next} →
+              </button>
+            )}
+          </div>
+          {onLast && !allAnswered && !finishEnabled && currentReady ? (
+            <p className="mt-3 text-right text-sm text-muted">{p.pending(questions.filter((q) => !isAnswered(q, answers[q.id])).length)}</p>
+          ) : null}
+        </section>
+      ) : null}
+
+      {videoDone && !current ? (
+        <div>
+          <button
+            onClick={finish}
+            disabled={finishing}
+            className="cursor-pointer rounded-lg bg-opulent px-6 py-3 font-display font-semibold text-white disabled:opacity-50"
+          >
+            {isLast ? p.finishProgram : p.nextChapter} →
+          </button>
+        </div>
+      ) : null}
 
       {rating ? (
         <RatingDialog
@@ -135,89 +260,6 @@ export function ChapterPlayer({
         />
       ) : null}
     </div>
-  );
-}
-
-function QuestionCard({
-  index,
-  q,
-  lang,
-  answer,
-  onSaved,
-}: {
-  index: number;
-  q: ChapterContent["questions"][number];
-  lang: ProgramLang;
-  answer: Answer | null;
-  onSaved: (a: Answer) => void;
-}) {
-  const p = programText(lang);
-  const [text, setText] = useState(answer?.text ?? "");
-  const [state, setState] = useState<"idle" | "saving" | "saved" | "error">(answer ? "saved" : "idle");
-
-  async function save(optionId: string | null, value: string | null) {
-    setState("saving");
-    const res = await answerQuestion(q.id, optionId, value);
-    if (res.ok) {
-      setState("saved");
-      onSaved({ optionId, text: value });
-    } else setState("error");
-  }
-
-  return (
-    <section className="rounded-2xl border border-line bg-surface p-5 md:p-6">
-      <p className="font-mono text-xs text-muted">{index}</p>
-      <h2 className="mt-1 text-[17px] font-medium leading-relaxed">{q.prompt}</h2>
-      {q.kind === "simple" ? (
-        <div role="radiogroup" aria-label={q.prompt} className="mt-4 flex flex-col gap-2">
-          {q.options.map((o) => {
-            const checked = answer?.optionId === o.id;
-            return (
-              <label
-                key={o.id}
-                className={`flex cursor-pointer gap-3 rounded-xl border p-3.5 text-[15px] leading-relaxed transition-colors ${
-                  checked ? "border-celeste bg-celeste/10" : "border-line hover:border-celeste/60"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name={q.id}
-                  className="mt-1 accent-[#399ab8]"
-                  checked={checked}
-                  onChange={() => save(o.id, null)}
-                />
-                <span>{o.text}</span>
-              </label>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="mt-4">
-          <textarea
-            value={text}
-            maxLength={4000}
-            rows={5}
-            onChange={(e) => {
-              setText(e.target.value);
-              if (state === "saved") setState("idle");
-            }}
-            placeholder={p.writeHere}
-            className="w-full rounded-xl border border-line bg-bg p-3.5 text-[15px] leading-relaxed outline-none focus:border-celeste"
-          />
-          <button
-            type="button"
-            onClick={() => save(null, text)}
-            disabled={!text.trim() || state === "saving" || (state === "saved" && text === answer?.text)}
-            className="mt-2 cursor-pointer rounded-lg border border-line px-4 py-2 font-display text-sm font-medium hover:border-celeste disabled:opacity-50"
-          >
-            {p.saveAnswer}
-          </button>
-        </div>
-      )}
-      <p aria-live="polite" className={`mt-2 h-4 text-xs ${state === "error" ? "text-danger" : "text-ok"}`}>
-        {state === "saved" ? `✓ ${p.saved}` : state === "error" ? p.saveError : ""}
-      </p>
-    </section>
   );
 }
 

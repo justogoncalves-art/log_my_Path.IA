@@ -32,7 +32,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ id: st
   return (
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
-      <main className="mx-auto max-w-3xl px-5 pb-24 pt-10 md:px-8">
+      <main className="mx-auto max-w-5xl px-5 pb-24 pt-10 md:px-8">
         <Link href={`/m/${id}/${programId}`} className="text-sm text-muted hover:text-ink">
           ← {program.title}
         </Link>

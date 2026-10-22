@@ -3,7 +3,8 @@ import { AppHeader } from "@/components/app-header";
 import { getDict } from "@/lib/i18n";
 import { languageLabel, programText } from "@/lib/i18n-program";
 import { requireModule } from "@/lib/module-access";
-import { getMyPrograms } from "@/lib/programs";
+import { getChapters, getMyPrograms } from "@/lib/programs";
+import { MentoHome } from "./mento-home";
 
 // Punto de entrada de cada módulo: los programas asignados con su avance.
 export default async function ModulePage({ params }: { params: Promise<{ id: string }> }) {
@@ -11,18 +12,23 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
   const [{ me, mod }, { t, lang }] = await Promise.all([requireModule(id), getDict()]);
   const p = programText(lang);
   const programs = await getMyPrograms(id);
+  // Mento.IA: programa principal = el primero sin terminar (o el último si terminó todos)
+  const main = id === "mento" ? (programs.find((x) => x.completed < x.chapters) ?? programs[programs.length - 1]) : undefined;
+  const mainChapters = main ? await getChapters(main.id, me.personId) : [];
 
   return (
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
-      <main className="mx-auto max-w-4xl px-5 pb-20 pt-12 md:px-8">
+      <main className="mx-auto max-w-5xl px-5 pb-20 pt-12 md:px-8">
         <Link href="/" className="text-sm text-muted hover:text-ink">
           ← {p.backHome}
         </Link>
         <p className="eyebrow mt-8">{mod.name}</p>
-        <h1 className="mt-3 font-display text-4xl font-bold">{p.myPrograms}</h1>
+        <h1 className="mt-3 font-display text-4xl font-bold">{main ? `${t.hello}, ${me.firstName}` : p.myPrograms}</h1>
 
-        {programs.length ? (
+        {main ? (
+          <MentoHome lang={lang} program={main} chapters={mainChapters} others={programs.filter((x) => x.id !== main.id)} />
+        ) : programs.length ? (
           <ul className="mt-10 flex flex-col gap-4">
             {programs.map((pr) => {
               const pct = pr.chapters ? Math.round((pr.completed / pr.chapters) * 100) : 0;
