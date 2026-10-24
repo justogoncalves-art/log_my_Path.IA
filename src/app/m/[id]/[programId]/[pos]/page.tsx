@@ -48,8 +48,9 @@ export default async function ChapterPage({ params }: { params: Promise<{ id: st
           content={{ ...content, playbackId: playable }}
           tokens={tokens}
           programId={programId}
+          position={position}
           completed={chapters[idx].completed}
-          nextHref={next ? `/m/${id}/${programId}/${next.position}` : `/m/${id}/${programId}`}
+          nextHref={next ? `/m/${id}/${programId}/${next.position}` : `/m/${id}/${programId}/reporte`}
           isLast={!next}
           askMid={position === Math.ceil(chapters.length / 2) && !program.mid_rated && chapters.length > 1}
           askFinal={!next && !program.final_rated}

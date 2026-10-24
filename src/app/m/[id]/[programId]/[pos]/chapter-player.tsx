@@ -18,6 +18,7 @@ export function ChapterPlayer({
   content,
   tokens,
   programId,
+  position,
   completed,
   nextHref,
   isLast,
@@ -28,6 +29,7 @@ export function ChapterPlayer({
   content: ChapterContent;
   tokens: PlaybackTokens | null;
   programId: string;
+  position: number;
   completed: boolean;
   nextHref: string;
   isLast: boolean;
@@ -49,6 +51,7 @@ export function ChapterPlayer({
   });
   const [saving, setSaving] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [rating, setRating] = useState<"mitad" | "final" | null>(null);
+  const [celebrate, setCelebrate] = useState(false);
   const [finishing, startFinish] = useTransition();
   const watched = useRef({ seconds: 0, last: 0 });
   const started = useRef(0);
@@ -110,10 +113,16 @@ export function ChapterPlayer({
         const res = await completeChapter(content.id, seconds);
         if (!res.ok) return setSaving("error");
       }
-      if (askMid) setRating("mitad");
-      else if (askFinal) setRating("final");
-      else router.push(nextHref);
+      setCelebrate(true);
     });
+  }
+
+  // Después del cuadro de felicitación: encuesta (si toca) y luego al capítulo siguiente
+  function afterCelebrate() {
+    setCelebrate(false);
+    if (askMid) setRating("mitad");
+    else if (askFinal) setRating("final");
+    else router.push(nextHref);
   }
 
   const finishEnabled = videoDone && (questions.length === 0 || (onLast && currentReady && questions.every((q) => q.id === current?.id || isAnswered(q, answers[q.id]))));
@@ -249,6 +258,8 @@ export function ChapterPlayer({
         </div>
       ) : null}
 
+      {celebrate ? <DoneDialog lang={lang} position={position} isLast={isLast} onContinue={afterCelebrate} /> : null}
+
       {rating ? (
         <RatingDialog
           lang={lang}
@@ -260,6 +271,43 @@ export function ChapterPlayer({
         />
       ) : null}
     </div>
+  );
+}
+
+function DoneDialog({ lang, position, isLast, onContinue }: { lang: ProgramLang; position: number; isLast: boolean; onContinue: () => void }) {
+  const p = programText(lang);
+  const ref = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    ref.current?.showModal();
+  }, []);
+
+  return (
+    <dialog
+      ref={ref}
+      aria-labelledby="done-title"
+      onCancel={(e) => {
+        e.preventDefault();
+        onContinue();
+      }}
+      className="m-auto w-[min(92vw,440px)] rounded-2xl border border-line bg-surface p-7 text-center text-ink backdrop:bg-opulent/60"
+    >
+      <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-celeste/20 text-2xl text-opulent" aria-hidden>
+        ✓
+      </span>
+      <h2 id="done-title" className="mt-4 font-display text-2xl font-semibold">
+        {isLast ? p.doneLastTitle : p.doneTitle(position)}
+      </h2>
+      <p className="mt-2 text-muted">{isLast ? p.doneLast : p.doneNext}</p>
+      <button
+        type="button"
+        autoFocus
+        onClick={onContinue}
+        className="mt-6 w-full cursor-pointer rounded-lg bg-opulent px-5 py-3 font-display font-semibold text-white"
+      >
+        {isLast ? p.seeReport : p.keepGoing} →
+      </button>
+    </dialog>
   );
 }
 

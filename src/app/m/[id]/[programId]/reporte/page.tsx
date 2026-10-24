@@ -6,7 +6,7 @@ import { reportLang, reportText } from "@/lib/i18n-report";
 import { requireModule } from "@/lib/module-access";
 import { getMyPrograms } from "@/lib/programs";
 import type { ReportContent } from "@/lib/report";
-import { topDimensions } from "@/lib/report";
+import { programAssessments, topDimensions } from "@/lib/report";
 import { createClient } from "@/lib/supabase/server";
 import { ReportPending } from "./report-pending";
 import { ReportView, type EvalCard } from "./report-view";
@@ -37,7 +37,8 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
   } else if (report?.status === "listo" && report.content) {
     const content = report.content as ReportContent;
     const names = new Map((assessments ?? []).map((a) => [a.id as string, (rl === "en" ? a.name_en : a.name_es) as string]));
-    const evals: EvalCard[] = content.evaluations.map((e) => ({
+    const included = new Set<string>(programAssessments(content.scores));
+    const evals: EvalCard[] = content.evaluations.filter((e) => included.has(e.assessment)).map((e) => ({
       ...e,
       name: names.get(e.assessment) ?? e.assessment,
       top: topDimensions(content.scores, e.assessment),
