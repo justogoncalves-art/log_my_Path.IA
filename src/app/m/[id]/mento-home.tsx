@@ -63,18 +63,30 @@ export function MentoHome({
       </Link>
 
       {/* Reporte */}
-      <article
-        className={`flex min-h-[220px] flex-col justify-between rounded-2xl border border-line bg-surface p-6 ${done ? "" : "opacity-70"}`}
-      >
-        <div className="flex items-start justify-between gap-3">
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">{p.reportTag}</span>
-          {done ? null : <LockBadge label={p.lockedBadge} />}
-        </div>
-        <div>
-          <h3 className="font-display text-2xl font-semibold">{p.reportTitle}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted">{done ? p.reportPreparing : p.reportLocked}</p>
-        </div>
-      </article>
+      {done ? (
+        <Link
+          href={`/m/mento/${program.id}/reporte`}
+          className="group flex min-h-[220px] flex-col justify-between rounded-2xl bg-opulent p-6 text-white transition-transform duration-300 hover:-translate-y-1"
+        >
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-celeste">{p.reportTag}</span>
+          <div>
+            <h3 className="font-display text-2xl font-semibold">{p.reportTitle}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-white/80">{p.reportPreparing}</p>
+            <span className="mt-4 inline-block rounded-lg bg-white px-4 py-2 font-display text-sm font-semibold text-opulent">{p.reportOpen} →</span>
+          </div>
+        </Link>
+      ) : (
+        <article className="flex min-h-[220px] flex-col justify-between rounded-2xl border border-line bg-surface p-6 opacity-70">
+          <div className="flex items-start justify-between gap-3">
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">{p.reportTag}</span>
+            <LockBadge label={p.lockedBadge} />
+          </div>
+          <div>
+            <h3 className="font-display text-2xl font-semibold">{p.reportTitle}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted">{p.reportLocked}</p>
+          </div>
+        </article>
+      )}
 
       {/* My Campus */}
       <article

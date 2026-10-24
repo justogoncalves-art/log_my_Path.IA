@@ -7,6 +7,9 @@ import { signPlayback } from "@/lib/mux";
 import { getChapterContent, getChapters, getMyPrograms } from "@/lib/programs";
 import { ChapterPlayer } from "./chapter-player";
 
+// Al terminar el último capítulo se genera el reporte en segundo plano (puede tardar unos minutos)
+export const maxDuration = 300;
+
 export default async function ChapterPage({ params }: { params: Promise<{ id: string; programId: string; pos: string }> }) {
   const { id, programId, pos } = await params;
   const position = Number(pos);

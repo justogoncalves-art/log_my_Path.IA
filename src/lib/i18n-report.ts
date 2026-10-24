@@ -1,0 +1,93 @@
+// Textos fijos del reporte (los demás los escribe la IA en el idioma del programa). Seguro para el cliente.
+
+export type ReportLang = "es" | "en";
+
+const text = {
+  es: {
+    eyebrow: "Tu reporte · Mento.IA",
+    title: "Tu perfil vocacional, en profundidad",
+    tabs: ["Evaluaciones", "Resultados", "Ikigai", "Tips"],
+    evaluations: "Evaluaciones",
+    evaluation: "Evaluación",
+    previous: "Anterior",
+    next: "Siguiente",
+    aiAnalysis: "Análisis IA",
+    keyQuestion: "Pregunta clave al ver carreras",
+    yourScores: "Tus puntajes",
+    dominantArea: "Área dominante · Tu sector ideal",
+    affinity: "Afinidad",
+    careers: "Carreras sugeridas con mayor afinidad",
+    ikigaiEyebrow: "Extra de valor · Ikigai",
+    ikigaiTitle: "Tu ikigai: el punto donde todo se encuentra",
+    ikigaiIntro:
+      "Ikigai es un concepto japonés que significa \"razón de ser\". Aparece cuando se cruzan cuatro dimensiones de tu vida: lo que amas, aquello en lo que eres bueno, lo que el mundo necesita y aquello por lo que te pueden pagar. Elegir una carrera desde ese centro, y no desde una sola de esas piezas, es lo que sostiene una decisión en el tiempo.",
+    love: "Lo que amas",
+    good: "En lo que eres bueno",
+    world: "Lo que el mundo necesita",
+    paid: "Por lo que te pueden pagar",
+    passion: "Pasión",
+    mission: "Misión",
+    profession: "Profesión",
+    vocation: "Vocación",
+    howToRead: "Cómo leer tu ikigai",
+    errorsTitle: "Lo que nadie te dice sobre elegir carrera",
+    seek: "Lo que debes buscar",
+    avoid: "Lo que debes evitar o revisar",
+    note: "Este reporte describe tu perfil de hoy, no uno definitivo. Úsalo para conocerte y conversar con tu familia y tu orientador.",
+    generatingTitle: "Estamos preparando tu reporte",
+    generatingBody: "La IA está leyendo tus respuestas y armando tu perfil. Suele tardar entre 1 y 3 minutos; esta página se actualiza sola.",
+    errorTitle: "No pudimos preparar tu reporte",
+    errorBody: "Lo intentaremos de nuevo. Si el problema sigue, avisá al equipo de tu colegio.",
+    retry: "Intentar de nuevo",
+    notDone: "El reporte se habilita cuando termines todos los capítulos del programa.",
+    back: "Volver",
+    profile: "Tu perfil",
+  },
+  en: {
+    eyebrow: "Your report · Mento.IA",
+    title: "Your vocational profile, in depth",
+    tabs: ["Assessments", "Results", "Ikigai", "Tips"],
+    evaluations: "Assessments",
+    evaluation: "Assessment",
+    previous: "Previous",
+    next: "Next",
+    aiAnalysis: "AI analysis",
+    keyQuestion: "Key question when looking at careers",
+    yourScores: "Your scores",
+    dominantArea: "Dominant area · Your ideal field",
+    affinity: "Affinity",
+    careers: "Careers with the highest affinity",
+    ikigaiEyebrow: "Bonus · Ikigai",
+    ikigaiTitle: "Your ikigai: where everything meets",
+    ikigaiIntro:
+      "Ikigai is a Japanese concept meaning \"reason for being\". It appears where four dimensions of your life meet: what you love, what you are good at, what the world needs and what you can be paid for. Choosing a career from that centre, not from just one of those pieces, is what makes a decision last.",
+    love: "What you love",
+    good: "What you are good at",
+    world: "What the world needs",
+    paid: "What you can be paid for",
+    passion: "Passion",
+    mission: "Mission",
+    profession: "Profession",
+    vocation: "Vocation",
+    howToRead: "How to read your ikigai",
+    errorsTitle: "What nobody tells you about choosing a career",
+    seek: "What to look for",
+    avoid: "What to avoid or review",
+    note: "This report describes who you are today, not forever. Use it to get to know yourself and to talk with your family and your counsellor.",
+    generatingTitle: "We're preparing your report",
+    generatingBody: "The AI is reading your answers and building your profile. It usually takes 1 to 3 minutes; this page updates by itself.",
+    errorTitle: "We couldn't prepare your report",
+    errorBody: "We'll try again. If the problem continues, let your school team know.",
+    retry: "Try again",
+    notDone: "The report unlocks when you finish every chapter of the program.",
+    back: "Back",
+    profile: "Your profile",
+  },
+};
+
+export function reportText(lang: ReportLang) {
+  return text[lang];
+}
+
+// El reporte se muestra en el idioma del programa, no en el de la interfaz
+export const reportLang = (programLanguage: string): ReportLang => (programLanguage === "en" ? "en" : "es");

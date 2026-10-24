@@ -29,6 +29,7 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Programas con preguntas (Mento.IA y otros): Excel de 55 columnas → admin/Programas (`admin_import_program`). Cada carga crea una versión nueva (no se borra nada). Preguntas `simple` (una opción, con ponderaciones por dimensión en `option_weights`, que el alumno nunca ve) o `abierta` (texto). Respuestas en `responses` (solo la persona y el admin). Puntaje T teórico por dimensión: `admin_program_scores`.
 - Videos: entorno "MY PATH" de Mux, reproducción `signed` (permiso firmado en el servidor por 6 h, `src/lib/mux.ts`). Admin → Programas → programa: "Buscar videos en Mux" une por nombre de archivo `<año>-<programa>_<IDIOMA>_cap<n>`. Claves: `MUX_SIGNING_KEY_ID`, `MUX_SIGNING_KEY_PRIVATE`, `MUX_TOKEN_ID`, `MUX_TOKEN_SECRET` (solo lectura).
 - Códigos de idioma del Excel: AR=es-AR, ES=es-ES, LAT=es-419, EN=en, PT=pt.
+- Reporte de programa con IA (Claude, `src/lib/report.ts`): se genera solo al completar el programa (`after()` en `completeChapter`) o al abrir `/m/mento/<programa>/reporte`. Tabla `program_reports` (el alumno la lee; solo el servidor escribe con `report_claim/report_input/report_save`). A la IA van programa, país, puntajes T y respuestas: nunca nombre, mail ni documento. Hasta 3 intentos si falla. Diseño del prototipo: Evaluaciones, Resultados, Ikigai, Tips. Clave `ANTHROPIC_API_KEY`.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
 ## Entorno
