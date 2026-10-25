@@ -44,6 +44,8 @@ export function ChapterPlayer({
   const [drafts, setDrafts] = useState<Record<string, string>>(
     Object.fromEntries(questions.filter((q) => q.kind === "abierta").map((q) => [q.id, q.answer?.text ?? ""])),
   );
+  // Un capítulo terminado queda cerrado: sus respuestas se ven pero no se cambian (la base también lo impide)
+  const locked = completed;
   // Arranca en la primera pregunta sin responder
   const [step, setStep] = useState(() => {
     const i = questions.findIndex((q) => !isAnswered(q, q.answer));
@@ -94,7 +96,7 @@ export function ChapterPlayer({
 
   // Las abiertas se guardan al avanzar (si cambió el texto)
   async function saveDraftIfNeeded() {
-    if (!current || current.kind !== "abierta") return true;
+    if (locked || !current || current.kind !== "abierta") return true;
     if (draft.trim() === (answers[current.id]?.text ?? "").trim()) return true;
     return save(current, null, draft);
   }
@@ -112,8 +114,10 @@ export function ChapterPlayer({
         const seconds = Math.max(watched.current.seconds, (Date.now() - started.current) / 1000);
         const res = await completeChapter(content.id, seconds);
         if (!res.ok) return setSaving("error");
+        setCelebrate(true);
+      } else {
+        router.push(nextHref);
       }
-      setCelebrate(true);
     });
   }
 
@@ -167,6 +171,9 @@ export function ChapterPlayer({
             </div>
           </div>
 
+          {locked ? (
+            <p className="mt-4 rounded-xl border border-ok/30 bg-ok/10 px-4 py-3 text-sm text-ok">✓ {p.chapterClosed}</p>
+          ) : null}
           <div key={current.id} className="mp-fade-up mt-4 rounded-2xl border border-line bg-surface p-6 md:p-8">
             <h2 className="text-lg font-medium leading-relaxed md:text-xl">{current.prompt}</h2>
             {current.kind === "simple" ? (
@@ -176,8 +183,8 @@ export function ChapterPlayer({
                   return (
                     <label
                       key={o.id}
-                      className={`flex cursor-pointer gap-3 rounded-xl border p-4 text-[15px] leading-relaxed transition-colors ${
-                        checked ? "border-celeste bg-celeste/10" : "border-line hover:border-celeste/60"
+                      className={`flex gap-3 rounded-xl border p-4 text-[15px] leading-relaxed transition-colors ${
+                        checked ? "border-celeste bg-celeste/10" : locked ? "border-line opacity-60" : "cursor-pointer border-line hover:border-celeste/60"
                       }`}
                     >
                       <input
@@ -185,7 +192,8 @@ export function ChapterPlayer({
                         name={current.id}
                         className="mt-1 accent-[#399ab8]"
                         checked={checked}
-                        onChange={() => save(current, o.id, null)}
+                        disabled={locked}
+                        onChange={() => !locked && save(current, o.id, null)}
                       />
                       <span>{o.text}</span>
                     </label>
@@ -195,6 +203,7 @@ export function ChapterPlayer({
             ) : (
               <textarea
                 value={draft}
+                readOnly={locked}
                 maxLength={4000}
                 rows={6}
                 onChange={(e) => {
