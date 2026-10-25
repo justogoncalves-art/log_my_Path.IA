@@ -12,8 +12,8 @@ function colIndex(ref: string): number {
   return n - 1;
 }
 
-export async function readFirstSheet(file: File): Promise<string[][]> {
-  if (file.size > MAX_BYTES) throw new Error("El archivo supera 5 MB");
+export async function readFirstSheet(file: File, maxBytes = MAX_BYTES): Promise<string[][]> {
+  if (file.size > maxBytes) throw new Error(`El archivo supera ${Math.round(maxBytes / 1024 / 1024)} MB`);
   const zip = unzipSync(new Uint8Array(await file.arrayBuffer()), {
     filter: (f) => f.name === "xl/sharedStrings.xml" || f.name === "xl/workbook.xml" || f.name.startsWith("xl/worksheets/sheet"),
   });

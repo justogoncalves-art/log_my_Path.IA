@@ -56,7 +56,7 @@ const SAFE_ERRORS = [
   "módulo inexistente", "idioma inexistente", "capítulos inválidos", "tipo de pregunta inválido", "dimensión inexistente",
   "datos inválidos", "clase inexistente", "programa inexistente", "la persona no pertenece a la organización",
   "clase de otra organización", "el alumno tiene que tener una sola clase", "un coordinador ve todas las clases",
-  "mail inválido", "el mail ya lo usa otra persona", "tope inválido", "límite diario inválido", "la plantilla tiene que incluir {{contrasena}}",
+  "mail inválido", "el mail ya lo usa otra persona", "tope inválido", "límite diario inválido", "carreras sin su universidad", "la plantilla tiene que incluir {{contrasena}}",
 ];
 
 async function rpc(fn: string, args: Record<string, unknown>) {
@@ -402,4 +402,38 @@ export async function setAiSettings(_prev: ActionResult | undefined, form: FormD
     p_email: parsed.data.email || null,
   });
   return done(error, "Guardado");
+}
+
+// ─────────────────────────────────────────────────────────────
+// Campus: carga del catálogo en tandas (actualiza lo existente, agrega lo nuevo, no borra)
+// ─────────────────────────────────────────────────────────────
+const s = (max: number) => z.string().max(max).nullable();
+const campusUniversity = z.object({
+  country_code: z.string().regex(/^[A-Z]{2}$/), official_name: z.string().min(2).max(200), short_name: s(60),
+  region: s(120), city: s(120), ownership: s(80), institution_type: s(80), instruction_language: s(80),
+  rank_qs: z.number().int().nullable(), rank_the: z.number().int().nullable(), rank_arwu: z.number().int().nullable(),
+  rank_national: z.number().int().nullable(), accreditations: s(400), students: s(40), founded: z.number().int().nullable(),
+  website: s(300), description_es: s(3000), description_en: s(3000), data_source: s(500), data_updated: s(300), notes: s(2000),
+});
+const campusProgram = z.object({
+  country_code: z.string().regex(/^[A-Z]{2}$/), university: z.string().min(2).max(200), name: z.string().min(1).max(200),
+  program_type: s(80), modality: s(80), name_en: s(200), knowledge_area: s(120), professional_family: s(120),
+  riasec_primary: z.enum(["R", "I", "A", "S", "E", "C"]).nullable(), riasec_secondary: z.enum(["R", "I", "A", "S", "E", "C"]).nullable(),
+  duration_years: z.number().min(0).max(99).nullable(), language: s(80), annual_cost: s(300), scholarships: s(200),
+  admission: s(500), cutoff_type: s(200), cutoff_source: s(500), employment_rate: s(40), avg_salary: s(120), url: s(400),
+  description: s(3000), curriculum: s(1500), source: s(500), data_updated: s(60),
+});
+const campusBatch = z.object({ universities: z.array(campusUniversity).max(500), programs: z.array(campusProgram).max(3000) });
+
+export type CampusBatchResult =
+  | { ok: true; universities_new: number; universities_updated: number; programs_new: number; programs_updated: number }
+  | { ok: false; error: string };
+
+export async function importCampusBatch(batch: unknown): Promise<CampusBatchResult> {
+  const parsed = campusBatch.safeParse(batch);
+  if (!parsed.success) return { ok: false, error: "Hay datos con un formato que no reconocemos" };
+  const { data, error } = await rpc("admin_import_campus", { p_universities: parsed.data.universities, p_programs: parsed.data.programs });
+  if (error) return { ok: false, error };
+  const row = (data as { universities_new: number; universities_updated: number; programs_new: number; programs_updated: number }[])[0];
+  return { ok: true, ...row };
 }

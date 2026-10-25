@@ -15,7 +15,7 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Compras siempre en la web (Stripe); la app móvil solo para usar lo comprado.
 - Datos separados en capas educativa / clínica / sanitaria con permisos propios.
 - Programas: un programa = módulo + nivel/año + idioma (+ track). Cada idioma es un programa propio porque tiene sus videos (Mux). Se asignan masivamente por clase o individualmente.
-- Campus es un catálogo global (22 países) cargado desde admin; Campus y EdFin solo se muestran desde cierto año (`modules.min_level/min_grade`).
+- Campus: catálogo global (`campus_universities`, `campus_programs`; notas internas aparte en `campus_university_notes`, solo admin). Se carga en admin → Campus con el Excel de 43 columnas (completo o por país): actualiza lo existente, agrega lo nuevo, nunca borra (`admin_import_campus`, en tandas). Clave: país ISO + nombre oficial; carrera: universidad + nombre + tipo + modalidad. Los links de relleno (`xx-000.`) se guardan vacíos. Campus y EdFin solo se muestran desde cierto año (`modules.min_level/min_grade`).
 - Reporte de programa y perfil holístico con IA: se generan por detrás, no se configuran en el admin.
 - Reseller: entre admin y colegio/profesional. Solo ve estadísticas agregadas de sus organizaciones (`org_stats`, `reseller_overview`); nunca datos personales ni puede modificar nada. El admin ve las de todos los resellers.
 - Idiomas en la tabla `languages` (es-ES, es-419, es-AR voseo, en, pt): se suman sin cambiar el esquema.
