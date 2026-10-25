@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
 import { getDict } from "@/lib/i18n";
 import { languageLabel, programText } from "@/lib/i18n-program";
+import { getMyModules } from "@/lib/dal";
 import { requireModule } from "@/lib/module-access";
 import { getChapters, getMyPrograms } from "@/lib/programs";
 import { MentoHome } from "./mento-home";
@@ -14,7 +15,11 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
   const programs = await getMyPrograms(id);
   // Mento.IA: programa principal = el primero sin terminar (o el último si terminó todos)
   const main = id === "mento" ? (programs.find((x) => x.completed < x.chapters) ?? programs[programs.length - 1]) : undefined;
-  const mainChapters = main ? await getChapters(main.id, me.personId) : [];
+  const [mainChapters, modules] = await Promise.all([
+    main ? getChapters(main.id, me.personId) : Promise.resolve([]),
+    main && me.organizationId ? getMyModules(me.organizationId) : Promise.resolve([]),
+  ]);
+  const campusActive = modules.some((m) => m.id === "campus" && m.active);
 
   return (
     <div className="min-h-screen">
@@ -27,7 +32,7 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
         <h1 className="mt-3 font-display text-4xl font-bold">{main ? `${t.hello}, ${me.firstName}` : p.myPrograms}</h1>
 
         {main ? (
-          <MentoHome lang={lang} program={main} chapters={mainChapters} others={programs.filter((x) => x.id !== main.id)} />
+          <MentoHome lang={lang} program={main} chapters={mainChapters} others={programs.filter((x) => x.id !== main.id)} campusActive={campusActive} />
         ) : programs.length ? (
           <ul className="mt-10 flex flex-col gap-4">
             {programs.map((pr) => {

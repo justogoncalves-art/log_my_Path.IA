@@ -10,11 +10,13 @@ export function MentoHome({
   program,
   chapters,
   others,
+  campusActive,
 }: {
   lang: ProgramLang;
   program: MyProgram;
   chapters: ChapterSummary[];
   others: MyProgram[];
+  campusActive: boolean;
 }) {
   const p = programText(lang);
   const done = program.chapters > 0 && program.completed >= program.chapters;
@@ -88,21 +90,19 @@ export function MentoHome({
         </article>
       )}
 
-      {/* My Campus */}
-      <article
-        className={`relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-line p-6 ${done ? "" : "opacity-70"}`}
-      >
-        <Image src="/img/imagen-my-unni.jpg" alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className={`object-cover ${done ? "" : "grayscale"}`} style={{ objectPosition: "center 60%" }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-opulent/95 via-opulent/60 to-opulent/30" />
-        <div className="relative flex items-start justify-between gap-3">
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/80">{p.campusTag}</span>
-          {done ? null : <LockBadge label={p.lockedBadge} light />}
-        </div>
-        <div className="relative">
-          <h3 className="font-display text-2xl font-semibold text-white">{p.campusTitle}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-white/80">{done ? p.campusSoon : p.campusLocked}</p>
-        </div>
-      </article>
+      {/* My Campus: se abre al terminar el programa, si el colegio tiene el módulo activo */}
+      {done && campusActive ? (
+        <Link
+          href="/m/campus"
+          className="relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-line p-6 transition-transform duration-300 hover:-translate-y-1"
+        >
+          <CampusCardBody p={p} done={done} text={p.campusOpen} />
+        </Link>
+      ) : (
+        <article className={`relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-line p-6 ${done ? "" : "opacity-70"}`}>
+          <CampusCardBody p={p} done={done} text={done ? p.campusSoon : p.campusLocked} />
+        </article>
+      )}
 
       {others.length ? (
         <section className="md:col-span-2">
@@ -126,6 +126,23 @@ export function MentoHome({
         </section>
       ) : null}
     </div>
+  );
+}
+
+function CampusCardBody({ p, done, text }: { p: ReturnType<typeof programText>; done: boolean; text: string }) {
+  return (
+    <>
+      <Image src="/img/imagen-my-unni.jpg" alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className={`object-cover ${done ? "" : "grayscale"}`} style={{ objectPosition: "center 60%" }} />
+      <div className="absolute inset-0 bg-gradient-to-t from-opulent/95 via-opulent/60 to-opulent/30" />
+      <div className="relative flex items-start justify-between gap-3">
+        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/80">{p.campusTag}</span>
+        {done ? null : <LockBadge label={p.lockedBadge} light />}
+      </div>
+      <div className="relative">
+        <h3 className="font-display text-2xl font-semibold text-white">{p.campusTitle}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-white/80">{text}</p>
+      </div>
+    </>
   );
 }
 
