@@ -56,7 +56,7 @@ const SAFE_ERRORS = [
   "módulo inexistente", "idioma inexistente", "capítulos inválidos", "tipo de pregunta inválido", "dimensión inexistente",
   "datos inválidos", "clase inexistente", "programa inexistente", "la persona no pertenece a la organización",
   "clase de otra organización", "el alumno tiene que tener una sola clase", "un coordinador ve todas las clases",
-  "mail inválido", "el mail ya lo usa otra persona", "la plantilla tiene que incluir {{contrasena}}",
+  "mail inválido", "el mail ya lo usa otra persona", "tope inválido", "límite diario inválido", "la plantilla tiene que incluir {{contrasena}}",
 ];
 
 async function rpc(fn: string, args: Record<string, unknown>) {
@@ -380,4 +380,26 @@ export async function setChapterVideos(items: unknown): Promise<ActionResult> {
     if (error) return { ok: false, error };
   }
   return done(null, `Videos guardados en ${parsed.data.length} capítulos`);
+}
+
+// ─────────────────────────────────────────────────────────────
+// IA: tope de gasto, freno diario, interruptor y mail de avisos
+// ─────────────────────────────────────────────────────────────
+export async function setAiSettings(_prev: ActionResult | undefined, form: FormData): Promise<ActionResult> {
+  const parsed = z
+    .object({
+      enabled: z.boolean(),
+      budget: z.coerce.number().min(0).max(1000),
+      daily: z.coerce.number().int().min(0).max(5000),
+      email: z.union([z.email(), z.literal("")]),
+    })
+    .safeParse({ enabled: form.get("enabled") === "on", budget: form.get("budget"), daily: form.get("daily"), email: String(form.get("email") ?? "").trim() });
+  if (!parsed.success) return { ok: false, error: "Revisá los valores" };
+  const { error } = await rpc("admin_set_ai_settings", {
+    p_enabled: parsed.data.enabled,
+    p_budget: parsed.data.budget,
+    p_daily: parsed.data.daily,
+    p_email: parsed.data.email || null,
+  });
+  return done(error, "Guardado");
 }

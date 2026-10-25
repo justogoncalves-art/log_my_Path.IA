@@ -2,6 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { z } from "zod";
+import { mailConfigured, sendBatch } from "@/lib/mail";
 import { serviceClient } from "@/lib/supabase/admin";
 
 // Reporte de programa (Mento.IA) generado con Claude.
@@ -129,11 +130,24 @@ Escribí el reporte completo.`;
 let client: Anthropic | null = null;
 export const reportConfigured = () => Boolean(process.env.ANTHROPIC_API_KEY);
 
-async function writeReport(input: ReportInput): Promise<{ text: ReportText; model: string; usage: { input: number; output: number } }> {
-  client ??= new Anthropic();
+// Precio por millón de tokens (USD). Un modelo desconocido (p. ej. uno de respaldo) se cuenta al precio más caro.
+const PRICES: Record<string, { input: number; output: number }> = {
+  "claude-opus-5-5": { input: 4, output: 20 },
+  "claude-opus-5": { input: 5, output: 25 },
+};
+const costUsd = (model: string, input: number, output: number) => {
+  const p = PRICES[model] ?? { input: 5, output: 25 };
+  return (input * p.input + output * p.output) / 1_000_000;
+};
+
+type Usage = { model: string; input: number; output: number };
+
+async function writeReport(input: ReportInput): Promise<{ text: ReportText; usage: Usage }> {
+  // Reintenta solo los errores pasajeros (saturación, red) y corta a los 4 minutos
+  client ??= new Anthropic({ maxRetries: 3, timeout: 240_000 });
   const stream = client.beta.messages.stream({
     model: MODEL,
-    max_tokens: 32000,
+    max_tokens: 32000, // techo por llamada: como mucho ~0,70 USD
     thinking: { type: "adaptive" },
     output_config: { effort: "high", format: betaZodOutputFormat(ReportSchema) },
     // Si el modelo principal está saturado, la API usa automáticamente otro modelo equivalente
@@ -143,34 +157,76 @@ async function writeReport(input: ReportInput): Promise<{ text: ReportText; mode
     messages: [{ role: "user", content: buildPrompt(input) }],
   });
   const message = await stream.finalMessage();
-  if (message.stop_reason === "refusal") throw new ReportError("rechazo");
-  if (message.stop_reason === "max_tokens") throw new ReportError("incompleto");
-  if (!message.parsed_output) throw new ReportError("formato");
-  return { text: message.parsed_output, model: message.model, usage: { input: message.usage.input_tokens, output: message.usage.output_tokens } };
+  const usage = { model: message.model, input: message.usage.input_tokens, output: message.usage.output_tokens };
+  if (message.stop_reason === "refusal") throw new ReportError("rechazo", usage);
+  if (message.stop_reason === "max_tokens") throw new ReportError("incompleto", usage);
+  if (!message.parsed_output) throw new ReportError("formato", usage);
+  return { text: message.parsed_output, usage };
 }
 
 class ReportError extends Error {
-  constructor(public code: string) {
+  constructor(
+    public code: string,
+    public usage?: Usage,
+  ) {
     super(code);
   }
 }
 
 function errorCode(e: unknown): string {
   if (e instanceof ReportError) return e.code;
+  if (e instanceof Anthropic.AuthenticationError || e instanceof Anthropic.PermissionDeniedError) return "clave";
   if (e instanceof Anthropic.RateLimitError) return "limite";
-  if (e instanceof Anthropic.AuthenticationError) return "clave";
   if (e instanceof Anthropic.APIConnectionError) return "conexion";
+  // Sin saldo en la cuenta de Anthropic
+  if (e instanceof Anthropic.APIError && /credit|billing|balance/i.test(e.message)) return "sin_saldo";
   if (e instanceof Anthropic.APIError) return `api_${e.status ?? "x"}`;
   return "desconocido";
 }
 
-// Genera y guarda el reporte si el programa está completo y nadie lo está generando.
-// Pensado para correr dentro de after(): no devuelve nada al alumno.
-export async function generateReport(personId: string, programId: string): Promise<void> {
+const escape = (v: string) => v.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+
+// Aviso al admin de My Path. Sin datos del alumno: solo códigos y montos.
+async function alertAdmin(to: string | null | undefined, subject: string, body: string) {
+  const dest = to || process.env.ALERT_EMAIL;
+  if (!dest || !mailConfigured()) return;
+  try {
+    await sendBatch([{ to: dest, subject: `MY PATH · ${subject}`, html: `<p>${escape(body)}</p><p>Panel: admin → Resumen → IA.</p>` }]);
+  } catch {
+    console.error("reporte: no se pudo enviar el aviso");
+  }
+}
+
+async function logUsage(db: NonNullable<ReturnType<typeof serviceClient>>, programId: string, usage: Usage | undefined, ok: boolean) {
+  const cost = usage ? costUsd(usage.model, usage.input, usage.output) : 0;
+  const { data } = await db.rpc("ai_log_usage", {
+    p_program: programId,
+    p_model: usage?.model ?? MODEL,
+    p_in: usage?.input ?? 0,
+    p_out: usage?.output ?? 0,
+    p_cost: cost,
+    p_ok: ok,
+  });
+  const row = (data as { spend: number; budget: number; alert_80: boolean; alert_email: string | null }[] | null)?.[0];
+  if (row?.alert_80) {
+    await alertAdmin(row.alert_email, "IA al 80 % del tope mensual", `Gasto del mes: US$ ${Number(row.spend).toFixed(2)} de US$ ${Number(row.budget).toFixed(2)}. Al llegar al tope, los reportes nuevos quedan en cola hasta el mes siguiente o hasta que subas el tope.`);
+  }
+  return row;
+}
+
+export type TakeResult = "ok" | "incompleto" | "listo" | "ocupado" | "espera" | "pausado" | "presupuesto" | "limite_diario" | "sin_clave";
+
+// Genera y guarda el reporte si le toca. Si no se puede (tope, pausa, error), queda en cola y
+// se reintenta solo (cron diario, al abrir el reporte o al terminar otro capítulo): nunca se descarta.
+export async function generateReport(personId: string, programId: string): Promise<TakeResult> {
   const db = serviceClient();
-  if (!db || !reportConfigured()) return;
-  const { data: claimed } = await db.rpc("report_claim", { p_person: personId, p_program: programId });
-  if (!claimed) return;
+  if (!db) return "sin_clave";
+  if (!reportConfigured()) {
+    await db.rpc("report_wait", { p_person: personId, p_program: programId, p_reason: "sin_clave" });
+    return "sin_clave";
+  }
+  const { data: taken } = await db.rpc("report_take", { p_person: personId, p_program: programId });
+  if (taken !== "ok") return (taken ?? "espera") as TakeResult;
 
   try {
     const { data: input, error } = await db.rpc("report_input", { p_person: personId, p_program: programId });
@@ -182,17 +238,47 @@ export async function generateReport(personId: string, programId: string): Promi
     const english = data.program.language === "en";
     const scores: ScoreRow[] = data.scores.map((s) => ({ ...s, name: english ? (nameEn.get(s.dimension) ?? s.name) : s.name }));
 
-    const { text, model, usage } = await writeReport(data);
+    const { text, usage } = await writeReport(data);
+    await logUsage(db, programId, usage, true);
     // Solo las evaluaciones del programa, una vez cada una y en el orden del método
     const evaluations = programAssessments(scores).flatMap((id) => text.evaluations.find((e) => e.assessment === id) ?? []);
-    const content: ReportContent = { ...text, evaluations, scores, language: data.program.language, usage };
-    await db.rpc("report_save", { p_person: personId, p_program: programId, p_status: "listo", p_content: content, p_model: model, p_error: null });
+    const content: ReportContent = { ...text, evaluations, scores, language: data.program.language, usage: { input: usage.input, output: usage.output } };
+    const { error: saveError } = await db.rpc("report_save", { p_person: personId, p_program: programId, p_status: "listo", p_content: content, p_model: usage.model, p_error: null });
+    if (saveError) throw new ReportError("guardar");
+    return "ok";
   } catch (e) {
     // Solo el código del error: nunca datos del alumno en los logs
     const code = errorCode(e);
     console.error("reporte: error al generar", code);
+    if (e instanceof ReportError && e.usage) await logUsage(db, programId, e.usage, false);
+    else await logUsage(db, programId, undefined, false);
+
+    const { data: settings } = await db.from("ai_settings").select("alert_email").eq("id", 1).maybeSingle();
+    if (code === "clave" || code === "sin_saldo") {
+      // Problema de cuenta, no del reporte: espera sin gastar intentos y avisa
+      await db.rpc("report_wait", { p_person: personId, p_program: programId, p_reason: code === "clave" ? "sin_clave" : "sin_saldo" });
+      await alertAdmin(settings?.alert_email, code === "clave" ? "La clave de IA no funciona" : "Sin saldo en Anthropic", "Los reportes quedan en cola y se generan solos cuando se resuelva.");
+      return "espera";
+    }
     await db.rpc("report_save", { p_person: personId, p_program: programId, p_status: "error", p_content: null, p_model: null, p_error: code });
+    // Tras 3 fallos seguidos, un aviso (una sola vez por reporte); se sigue reintentando igual
+    const { data: row } = await db.from("program_reports").select("attempts").eq("person_id", personId).eq("program_id", programId).maybeSingle();
+    if ((row?.attempts ?? 0) >= 3) {
+      const { data: first } = await db.rpc("report_mark_alerted", { p_person: personId, p_program: programId });
+      if (first) await alertAdmin(settings?.alert_email, "Un reporte falló 3 veces", `Código: ${code}. Se sigue reintentando automáticamente.`);
+    }
+    return "espera";
   }
+}
+
+// Procesa la cola (lo llama el cron): de a varios en paralelo, dentro del tiempo de la función
+export async function processReportQueue(limit = 5): Promise<{ processed: number; results: TakeResult[] }> {
+  const db = serviceClient();
+  if (!db) return { processed: 0, results: [] };
+  const { data } = await db.rpc("report_queue", { p_limit: limit });
+  const rows = (data ?? []) as { person_id: string; program_id: string }[];
+  const results = await Promise.all(rows.map((r) => generateReport(r.person_id, r.program_id).catch((): TakeResult => "espera")));
+  return { processed: rows.length, results };
 }
 
 // Las 3 dimensiones más altas de una evaluación, con 1 a 5 estrellas según la banda del puntaje T

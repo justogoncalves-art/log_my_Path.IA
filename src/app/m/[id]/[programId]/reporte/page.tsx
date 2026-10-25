@@ -45,7 +45,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
     }));
     body = <ReportView lang={rl} content={content} evals={evals} />;
   } else {
-    body = <ReportPending lang={rl} programId={programId} status={report?.status ?? "pendiente"} />;
+    body = <ReportPending lang={rl} programId={programId} />;
   }
 
   return (

@@ -29,7 +29,8 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Programas con preguntas (Mento.IA y otros): Excel de 55 columnas → admin/Programas (`admin_import_program`). Cada carga crea una versión nueva (no se borra nada). Preguntas `simple` (una opción, con ponderaciones por dimensión en `option_weights`, que el alumno nunca ve) o `abierta` (texto). Respuestas en `responses` (solo la persona y el admin). Puntaje T teórico por dimensión: `admin_program_scores`.
 - Videos: entorno "MY PATH" de Mux, reproducción `signed` (permiso firmado en el servidor por 6 h, `src/lib/mux.ts`). Admin → Programas → programa: "Buscar videos en Mux" une por nombre de archivo `<año>-<programa>_<IDIOMA>_cap<n>`. Claves: `MUX_SIGNING_KEY_ID`, `MUX_SIGNING_KEY_PRIVATE`, `MUX_TOKEN_ID`, `MUX_TOKEN_SECRET` (solo lectura).
 - Códigos de idioma del Excel: AR=es-AR, ES=es-ES, LAT=es-419, EN=en, PT=pt.
-- Reporte de programa con IA (Claude, `src/lib/report.ts`): se genera solo al completar el programa (`after()` en `completeChapter`) o al abrir `/m/mento/<programa>/reporte`. Tabla `program_reports` (el alumno la lee; solo el servidor escribe con `report_claim/report_input/report_save`). A la IA van programa, país, puntajes T y respuestas: nunca nombre, mail ni documento. Hasta 3 intentos si falla. Diseño del prototipo: Evaluaciones, Resultados, Ikigai, Tips. Clave `ANTHROPIC_API_KEY`.
+- Reporte de programa con IA (Claude, `src/lib/report.ts`): al completar un programa de Mento el reporte entra solo en cola (`program_reports`, disparador sobre `program_completions`) y se genera por detrás (`after()` al terminar el capítulo, al abrir `/m/mento/<programa>/reporte` y cron diario `/api/cron/reports`). Nunca se descarta: si falla, reintenta con espera creciente (5 min → 12 h); sin clave o sin saldo espera y avisa. El alumno nunca ve un error. A la IA van programa, país, puntajes T y respuestas: nunca nombre, mail ni documento. Solo comenta las evaluaciones que el programa incluye.
+- Gasto de IA: `ai_settings` (tope mensual en USD, por defecto 32 ≈ 30 €; máximo de llamadas en 24 h; interruptor; mail de avisos) y `ai_usage` (cada llamada con tokens y costo, sin datos personales). Ningún reporte empieza si el gasto del mes + 1 USD pasa el tope; aviso al 80 %. Se configura en admin → Resumen. El tope real contra una clave filtrada es el límite de gasto de la consola de Anthropic.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
 ## Entorno
@@ -39,6 +40,10 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - La herramienta MCP de Supabase pide confirmación humana para `DROP`/`DELETE`: preferir `ALTER`/`REVOKE` o avisar al usuario.
 - Next.js 16: leer `node_modules/next/dist/docs/` antes de usar APIs nuevas. El middleware se llama `src/proxy.ts`.
 - Este contenedor no tiene salida a supabase.co ni vercel.com: probar permisos con SQL simulando el rol y la app en el despliegue de Vercel.
+
+## Pendientes para producción
+- IA en modo pago: activarla junto con los planes pagos de Vercel (Pro) y Supabase (Pro). Hoy es una versión interna: workspace propio en la consola de Anthropic con límite de gasto mensual, clave solo de ese workspace y recarga automática acotada.
+- Con Vercel Pro, pasar el cron de reportes de diario a cada 15 minutos.
 
 ## Skills
 - Las skills del proyecto están en `.claude/skills/` (ver `.claude/skills/LEEME.md`).

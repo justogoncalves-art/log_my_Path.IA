@@ -40,9 +40,10 @@ export async function completeChapter(chapterId: string, seconds: number): Promi
   return { ok: true };
 }
 
-export type ReportStatus = "pendiente" | "generando" | "listo" | "error";
+export type ReportStatus = "generando" | "listo";
 
-// Pide el reporte del programa (si falta o falló) y devuelve en qué estado está.
+// Pide el reporte del programa y devuelve si ya está. Para el alumno nunca hay "error":
+// si la IA falla o no hay saldo, el reporte queda en cola y se sigue intentando solo.
 export async function requestReport(programId: string): Promise<ReportStatus | null> {
   if (!uuid.safeParse(programId).success) return null;
   const me = await getMe();
@@ -51,16 +52,14 @@ export async function requestReport(programId: string): Promise<ReportStatus | n
   if (!(mine ?? []).some((p: { id: string }) => p.id === programId)) return null;
   const { data } = await supabase
     .from("program_reports")
-    .select("status, attempts")
+    .select("status")
     .eq("person_id", me.personId)
     .eq("program_id", programId)
     .maybeSingle();
   if (data?.status === "listo") return "listo";
-  if (!data || data.status === "pendiente" || (data.status === "error" && data.attempts < 3)) {
-    after(() => generateReport(me.personId, programId));
-    return "generando";
-  }
-  return data.status as ReportStatus;
+  // La base decide si toca intentar ahora (turno, espera entre intentos, tope de gasto)
+  if (data?.status !== "generando") after(() => generateReport(me.personId, programId));
+  return "generando";
 }
 
 export async function rateProgram(programId: string, moment: "mitad" | "final", rating: number, comment: string): Promise<StudentResult> {
