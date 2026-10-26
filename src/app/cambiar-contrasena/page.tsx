@@ -21,6 +21,8 @@ export default async function ChangePasswordPage() {
             rule: t.passwordRule,
             save: t.save,
             saving: t.saving,
+            show: t.showPassword,
+            hide: t.hidePassword,
           }}
         />
       </div>

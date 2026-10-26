@@ -1,8 +1,12 @@
 "use server";
 
+import { createHmac } from "node:crypto";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { after } from "next/server";
 import { z } from "zod";
+import { appUrl, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
+import { serviceClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { getDict } from "@/lib/i18n";
 
@@ -57,6 +61,49 @@ export async function changePassword(_prev: FormState, formData: FormData): Prom
   const { error: rpcError } = await supabase.rpc("complete_password_change");
   if (rpcError) return { error: t.genericError };
   redirect("/");
+}
+
+// ─────────────────────────────────────────────────────────────
+// "¿Olvidaste tu contraseña?": el mail sale de nuestro servidor (Resend) con un link a nuestro dominio,
+// que se valida en /auth/recuperar. Siempre responde lo mismo, exista o no el mail.
+// ─────────────────────────────────────────────────────────────
+export type RecoverState = { sent?: boolean; error?: string } | undefined;
+
+const fingerprint = (value: string) => createHmac("sha256", process.env.SUPABASE_SECRET_KEY ?? "mypath").update(value).digest("hex");
+
+export async function requestPasswordReset(_prev: RecoverState, formData: FormData): Promise<RecoverState> {
+  const { t, lang } = await getDict();
+  const parsed = z.string().trim().toLowerCase().email().max(254).safeParse(formData.get("email"));
+  if (!parsed.success) return { error: t.genericError };
+  const email = parsed.data;
+  const h = await headers();
+  const ip = (h.get("x-forwarded-for") ?? h.get("x-real-ip") ?? "").split(",")[0].trim() || "sin-ip";
+  const baseUrl = await appUrl();
+
+  // El trabajo va después de responder: la respuesta tarda lo mismo exista o no la cuenta
+  after(async () => {
+    const svc = serviceClient();
+    if (!svc || !mailConfigured()) return;
+    const { data: allowed } = await svc.rpc("password_reset_allowed", { p_email_hash: fingerprint(email), p_ip_hash: fingerprint(ip) });
+    if (!allowed) return;
+    const { data, error } = await svc.auth.admin.generateLink({ type: "recovery", email });
+    if (error || !data.properties?.hashed_token) return; // mail no registrado: no se avisa nada
+    const link = `${baseUrl}/auth/recuperar?token_hash=${encodeURIComponent(data.properties.hashed_token)}`;
+    const en = lang === "en";
+    await sendBatch([
+      {
+        to: email,
+        subject: en ? "Choose your new MY PATH.IA password" : "Elegí tu nueva contraseña de MY PATH.IA",
+        html: renderTemplate(
+          en
+            ? '<p>Hi,</p><p>We received a request to change your MY PATH.IA password.</p><p><a href="{{link}}">Choose my new password</a></p><p>The link is valid for 1 hour and works only once. If you didn\'t ask for it, ignore this email: your password stays the same.</p>'
+            : '<p>Hola:</p><p>Recibimos un pedido para cambiar tu contraseña de MY PATH.IA.</p><p><a href="{{link}}">Elegir mi contraseña nueva</a></p><p>El link vale 1 hora y se usa una sola vez. Si no lo pediste, ignorá este mail: tu contraseña sigue igual.</p>',
+          { link },
+        ),
+      },
+    ]).catch(() => console.error("recuperar: no se pudo enviar el mail"));
+  });
+  return { sent: true };
 }
 
 export async function logout() {

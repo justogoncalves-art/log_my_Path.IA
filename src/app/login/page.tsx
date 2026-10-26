@@ -16,7 +16,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <p className="mt-5 text-[15px] leading-relaxed text-muted">{t.welcomeLead}</p>
       <div className="mt-8">
         <LoginForm
-          labels={{ email: t.email, password: t.password, signIn: t.signIn, signingIn: t.signingIn }}
+          labels={{ email: t.email, password: t.password, signIn: t.signIn, signingIn: t.signingIn, show: t.showPassword, hide: t.hidePassword, forgot: t.forgot }}
           initialError={e === "perfil" ? t.noOrg : undefined}
         />
       </div>
