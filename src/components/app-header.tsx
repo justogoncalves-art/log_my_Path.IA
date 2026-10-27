@@ -17,9 +17,23 @@ export function AppHeader({
   isAdmin: boolean;
 }) {
   return (
-    <header className="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5">
+    <header className="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5 md:px-10">
       <div className="flex min-w-0 items-center gap-4">
-        <Brand compact />
+        <Link href="/" aria-label={t.homeHint} className="shrink-0">
+          <Brand compact />
+        </Link>
+        <Link
+          href="/"
+          title={t.homeHint}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 font-display text-sm font-medium hover:border-celeste"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M3 10.5 12 3l9 7.5" />
+            <path d="M5 9.5V21h14V9.5" />
+            <path d="M10 21v-6h4v6" />
+          </svg>
+          {t.home}
+        </Link>
         {orgName ? (
           <span className="hidden truncate border-l border-line pl-4 font-display text-sm font-medium sm:inline">{orgName}</span>
         ) : null}

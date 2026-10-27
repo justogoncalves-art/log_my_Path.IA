@@ -7,7 +7,7 @@ const KIND: Record<string, string> = { colegio: "Colegio", profesional: "Profesi
 export default async function OrgsPage() {
   const [orgs, resellers] = await Promise.all([listOrgs(), listResellers()]);
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="mx-auto w-full max-w-[1600px]">
       <p className="eyebrow">Administración</p>
       <h1 className="mt-3 font-display text-3xl font-bold">Organizaciones</h1>
 

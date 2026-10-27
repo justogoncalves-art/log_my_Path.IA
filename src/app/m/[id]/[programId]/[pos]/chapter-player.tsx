@@ -137,7 +137,7 @@ export function ChapterPlayer({
       {content.playbackId ? (
         <div
           className={`overflow-hidden rounded-2xl bg-black shadow-sm transition-[max-width] duration-700 ease-out motion-reduce:transition-none ${
-            videoDone && questions.length ? "w-full max-w-sm" : "w-full max-w-none"
+            videoDone && questions.length ? "mx-auto w-full max-w-sm" : "mx-auto w-full max-w-6xl"
           }`}
         >
           <MuxPlayer

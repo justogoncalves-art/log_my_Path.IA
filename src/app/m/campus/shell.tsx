@@ -21,7 +21,7 @@ export function CampusShell({ me, t, lang, section, children }: { me: Me; t: Dic
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
       <nav aria-label={c.module} className="border-b border-line bg-surface">
-        <ul className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-5 md:px-8">
+        <ul className="mx-auto flex w-full max-w-[1600px] gap-1 overflow-x-auto px-5 md:px-10">
           {tabs.map(([key, label, href]) => (
             <li key={key}>
               <Link
@@ -37,7 +37,7 @@ export function CampusShell({ me, t, lang, section, children }: { me: Me; t: Dic
           ))}
         </ul>
       </nav>
-      <main className="mx-auto max-w-6xl px-5 pb-28 pt-10 md:px-8">{children}</main>
+      <main className="mx-auto w-full max-w-[1600px] px-5 md:px-10 pb-28 pt-8">{children}</main>
       <CompareBar lang={lang} hidden={section === "comparar"} />
     </div>
   );

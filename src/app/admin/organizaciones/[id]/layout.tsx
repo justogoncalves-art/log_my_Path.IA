@@ -14,7 +14,7 @@ export default async function OrgLayout({ children, params }: { children: React.
     { href: `/admin/alta?org=${id}`, label: "Alta de personas" },
   ];
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="mx-auto w-full max-w-[1600px]">
       <Link href="/admin/organizaciones" className="text-sm text-muted hover:text-ink">
         ← Organizaciones
       </Link>

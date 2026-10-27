@@ -18,7 +18,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
   return (
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
-      <main className="mx-auto max-w-3xl px-5 pb-20 pt-12 md:px-8">
+      <main className="mx-auto w-full max-w-[1600px] px-5 md:px-10 pb-20 pt-12">
         <Link href={`/m/${id}`} className="text-sm text-muted hover:text-ink">
           ← {mod.name}
         </Link>
@@ -31,7 +31,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
           <p className="mt-6 rounded-xl border border-ok/30 bg-ok/10 p-4 text-ok">{p.programDone}</p>
         ) : null}
 
-        <ol className="mt-10 flex flex-col gap-3">
+        <ol className="mt-10 grid gap-3 lg:grid-cols-2">
           {chapters.map((c, i) => {
             const unlocked = c.completed || i === 0 || chapters[i - 1].completed;
             const inner = (

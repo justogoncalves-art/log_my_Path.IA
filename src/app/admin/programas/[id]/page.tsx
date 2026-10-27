@@ -12,7 +12,7 @@ export default async function ProgramDetail({ params }: { params: Promise<{ id: 
   const excelLang = Object.entries(EXCEL_LANGUAGES).find(([, v]) => v === program.language)?.[0] ?? program.language;
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto w-full max-w-[1600px]">
       <Link href="/admin/programas" className="text-sm text-muted hover:text-ink">
         ← Programas
       </Link>

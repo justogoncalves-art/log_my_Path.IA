@@ -14,7 +14,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
-      <main className="mx-auto max-w-6xl px-5 pb-20 pt-14 md:px-8">
+      <main className="mx-auto w-full max-w-[1600px] px-5 md:px-10 pb-20 pt-14">
         <section className="mp-fade-up max-w-2xl">
           <p className="eyebrow">{t.yourSpace}</p>
           <h1 className="mt-4 font-display text-4xl font-bold tracking-tight md:text-5xl">

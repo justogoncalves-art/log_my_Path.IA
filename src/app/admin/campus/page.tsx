@@ -11,7 +11,7 @@ export default async function CampusAdminPage() {
   const total = stats.reduce((a, s) => ({ u: a.u + s.universities, p: a.p + s.programs }), { u: 0, p: 0 });
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto w-full max-w-[1600px]">
       <p className="eyebrow">Administración</p>
       <h1 className="mt-3 font-display text-3xl font-bold">My Campus.IA</h1>
       <p className="mt-3 max-w-3xl text-muted">

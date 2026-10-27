@@ -1,78 +1,71 @@
+import Image from "next/image";
 import Link from "next/link";
-import { countryStats, filtersSchema, homeCountry, PAGE_SIZE, searchUniversities } from "@/lib/campus";
+import { countryFilter, countryStats, filterOptions, filtersSchema, homeCountry, PAGE_SIZE, searchUniversities, universityPhoto, type UniversityHit } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
-import { campusText } from "@/lib/i18n-campus";
+import { campusText, type CampusLang } from "@/lib/i18n-campus";
 import { requireModule } from "@/lib/module-access";
-import { selectCls } from "../filters";
 import { Pager } from "../pager";
 import { CampusShell } from "../shell";
-
-const QS = [50, 100, 200, 500, 1000];
+import { FilterSidebar } from "../sidebar";
 
 export default async function UniversitiesPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const [{ me }, { t, lang }, sp] = await Promise.all([requireModule("campus"), getDict(), searchParams]);
   const c = campusText(lang);
   const f = filtersSchema.parse(sp);
-  const [stats, home] = await Promise.all([countryStats(), homeCountry(me.organizationId)]);
-  const country = f.pais === "todos" ? null : (f.pais?.toUpperCase() ?? (stats.some((s) => s.country_code === home) ? home : null));
-  const { rows, total, page } = await searchUniversities(f, country);
+  const [stats, options, home] = await Promise.all([countryStats(), filterOptions(), homeCountry(me.organizationId)]);
+  const { rows, total, page } = await searchUniversities(f, home);
   const names = new Intl.DisplayNames([lang], { type: "region" });
+  const grouped = !countryFilter(f) && !!home;
+  const local = grouped ? rows.filter((r) => r.is_home) : rows;
+  const abroad = grouped ? rows.filter((r) => !r.is_home) : [];
 
   return (
     <CampusShell me={me} t={t} lang={lang} section="universidades">
-      <p className="eyebrow">{c.universities}</p>
-      <h1 className="mt-3 font-display text-3xl font-bold md:text-4xl">{c.cardUnisTitle}</h1>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="eyebrow">{c.universities}</p>
+          <h1 className="mt-2 font-display text-3xl font-bold md:text-4xl">{c.cardUnisTitle}</h1>
+        </div>
+        <p className="text-sm text-muted">{c.results(total)}</p>
+      </div>
 
-      <form method="get" className="mt-6 grid gap-3 rounded-2xl border border-line bg-surface p-4 md:grid-cols-[2fr_1fr_1fr_1fr_auto]">
-        <input name="q" defaultValue={f.q ?? ""} placeholder={c.searchUnis} aria-label={c.searchUnis} maxLength={80} className={selectCls} />
-        <select name="pais" defaultValue={country ?? "todos"} aria-label={c.inCountry} className={selectCls}>
-          <option value="todos">{c.allCountries}</option>
-          {stats
-            .map((s) => ({ code: s.country_code, name: names.of(s.country_code) ?? s.country_code }))
-            .sort((a, b) => a.name.localeCompare(b.name, lang))
-            .map((s) => (
-              <option key={s.code} value={s.code}>
-                {s.name}
-              </option>
-            ))}
-        </select>
-        <select name="tipo" defaultValue={f.tipo ?? ""} aria-label={c.kind} className={selectCls}>
-          <option value="">{c.allKinds}</option>
-          <option value="publica">{c.publica}</option>
-          <option value="privada">{c.privada}</option>
-        </select>
-        <select name="qs" defaultValue={f.qs ? String(f.qs) : ""} aria-label={c.maxQs} className={selectCls}>
-          <option value="">
-            {c.maxQs}: {c.any}
-          </option>
-          {QS.map((n) => (
-            <option key={n} value={n}>
-              {c.maxQs} {n}
-            </option>
-          ))}
-        </select>
-        <button className="cursor-pointer rounded-lg bg-opulent px-5 py-2 font-display text-sm font-semibold text-white">{c.search}</button>
-      </form>
-
-      <p className="mt-6 text-sm text-muted">{c.results(total)}</p>
-      <ul className="mt-3 grid gap-3 md:grid-cols-2">
-        {rows.map((u) => (
-          <li key={u.id}>
-            <Link href={`/m/campus/u/${u.id}`} className="flex h-full flex-col justify-between gap-3 rounded-2xl border border-line bg-surface p-5 transition-colors hover:border-celeste">
-              <div>
-                <div className="flex items-start justify-between gap-3">
-                  <h2 className="font-display text-lg font-semibold">{u.official_name}</h2>
-                  {u.rank_qs ? <span className="shrink-0 rounded-full bg-opulent px-2.5 py-1 font-mono text-[11px] text-white">QS #{u.rank_qs}</span> : null}
-                </div>
-                <p className="mt-1 text-sm text-muted">{[u.city, names.of(u.country_code), u.ownership].filter(Boolean).join(" · ")}</p>
-              </div>
-              <p className="text-sm text-opulent">{c.programsCount(u.programs)} →</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {!rows.length ? <p className="mt-4 rounded-xl border border-line bg-surface p-5 text-muted">{c.noResults}</p> : null}
-      <Pager lang={lang} base="/m/campus/universidades" params={{ ...sp, pais: country ?? "todos" }} page={page} total={total} size={PAGE_SIZE} />
+      <div className="mt-6 grid gap-6 lg:grid-cols-[290px_1fr]">
+        <FilterSidebar lang={lang} kind="universities" f={f} stats={stats} institutions={options.institutions} base="/m/campus/universidades" />
+        <div>
+          {grouped && local.length ? <h2 className="mb-3 font-display text-lg font-bold">{c.inHome(names.of(home!) ?? home!)}</h2> : null}
+          <Cards rows={local} lang={lang} names={names} />
+          {abroad.length ? <h2 className={`mb-3 font-display text-lg font-bold ${local.length ? "mt-8" : ""}`}>{c.abroad}</h2> : null}
+          <Cards rows={abroad} lang={lang} names={names} />
+          {!rows.length ? <p className="rounded-xl border border-line bg-surface p-5 text-muted">{c.noResults}</p> : null}
+          <Pager lang={lang} base="/m/campus/universidades" params={sp} page={page} total={total} size={PAGE_SIZE} />
+        </div>
+      </div>
     </CampusShell>
+  );
+}
+
+function Cards({ rows, lang, names }: { rows: UniversityHit[]; lang: CampusLang; names: Intl.DisplayNames }) {
+  const c = campusText(lang);
+  if (!rows.length) return null;
+  return (
+    <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      {rows.map((u) => (
+        <li key={u.id}>
+          <Link href={`/m/campus/u/${u.id}`} className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-celeste">
+            <span className="relative block h-36 shrink-0">
+              <Image src={universityPhoto(u.id)} alt="" fill sizes="(min-width: 1536px) 25vw, (min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+              <span className="absolute inset-0 bg-gradient-to-t from-opulent/70 to-transparent" />
+              {u.rank_qs ? <span className="absolute right-3 top-3 rounded-full bg-opulent px-2.5 py-1 font-mono text-[11px] text-white">QS #{u.rank_qs}</span> : null}
+            </span>
+            <span className="flex flex-1 flex-col gap-1.5 p-4">
+              <span className="font-display font-semibold leading-snug">{u.official_name}</span>
+              <span className="text-sm text-muted">{[u.city, names.of(u.country_code)].filter(Boolean).join(", ")}</span>
+              <span className="text-sm text-muted">{u.institution_type ?? u.ownership}</span>
+              <span className="mt-auto pt-2 text-sm text-opulent">{c.programsCount(u.programs)} →</span>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

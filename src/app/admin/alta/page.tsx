@@ -11,7 +11,7 @@ export default async function AltaPage({ searchParams }: { searchParams: Promise
     .order("name");
 
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="mx-auto w-full max-w-[1600px]">
       <p className="eyebrow">Administración</p>
       <h1 className="mt-3 font-display text-3xl font-bold">Alta de personas</h1>
       <p className="mt-3 max-w-2xl text-muted">

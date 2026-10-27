@@ -51,7 +51,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
   return (
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
-      <main className="mx-auto max-w-5xl px-5 pb-24 pt-10 md:px-8">
+      <main className="mx-auto w-full max-w-[1600px] px-5 md:px-10 pb-24 pt-10">
         <Link href={`/m/${id}`} className="text-sm text-muted hover:text-ink">
           ← {r.back}
         </Link>
