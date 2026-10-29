@@ -40,6 +40,7 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Resumen IA de la clase (`src/lib/class-report.ts`, `class_reports`): solo cuando el 100 % de la clase terminó; a la IA van agregados y respuestas abiertas anónimas al azar. Mismo tope de gasto, cola y cron que los reportes.
 - PDF del programa (guía/actividades): admin → Programas → programa → "Documentos para el docente". Bucket privado `program-docs`, atados al código del programa (y opcionalmente al idioma); el docente los abre por `/api/docs/<id>` (link firmado de 5 min).
 - Módulos no contratados: el docente ve la ficha (`/docente/modulo/<id>`) con "Quiero saber más" (`module_interest` + aviso a `ALERT_EMAIL`).
+- Seguridad: anon y authenticated no escriben tablas directo (todo por funciones `admin_*`/`staff_*`/etc.); `people.doc_hash`/`doc_cipher` no se leen por la API. Login con límite propio (`login_attempts`: 8 fallos por cuenta y 40 por IP en 15 min, huellas HMAC). Tablas nuevas: activar RLS y no dar permisos de escritura.
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
 ## Entorno
