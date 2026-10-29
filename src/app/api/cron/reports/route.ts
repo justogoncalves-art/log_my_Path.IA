@@ -1,4 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
+import { processClassReportQueue } from "@/lib/class-report";
 import { processReportQueue } from "@/lib/report";
 
 // Vercel Cron llama acá con "Authorization: Bearer $CRON_SECRET" para generar los reportes
@@ -15,6 +16,6 @@ function authorized(header: string | null) {
 
 export async function GET(request: Request) {
   if (!authorized(request.headers.get("authorization"))) return new Response("No autorizado", { status: 401 });
-  const result = await processReportQueue(5);
-  return Response.json(result);
+  const [reports, classes] = await Promise.all([processReportQueue(5), processClassReportQueue(3)]);
+  return Response.json({ ...reports, classes: classes.processed });
 }

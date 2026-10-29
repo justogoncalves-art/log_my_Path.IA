@@ -11,7 +11,9 @@ const IMAGES: Record<string, { src: string; pos: string }> = {
   edfin: { src: "/img/works-globe.jpeg", pos: "center" },
 };
 
-export function ModuleTileCard({ m, t, lang, large }: { m: ModuleTile; t: Dict; lang: Lang; large: boolean }) {
+export const MODULE_IMAGES = IMAGES;
+
+export function ModuleTileCard({ m, t, lang, large, staff = false }: { m: ModuleTile; t: Dict; lang: Lang; large: boolean; staff?: boolean }) {
   const img = IMAGES[m.id] ?? IMAGES.edfin;
   const summary = lang === "es" ? m.summaryEs : m.summaryEn;
   const body = (
@@ -50,6 +52,14 @@ export function ModuleTileCard({ m, t, lang, large }: { m: ModuleTile; t: Dict; 
   if (m.active) {
     return (
       <a href={`/m/${m.id}`} className={className}>
+        {body}
+      </a>
+    );
+  }
+  // Docentes y coordinadores: ficha del módulo con "Quiero saber más"
+  if (staff) {
+    return (
+      <a href={`/docente/modulo/${m.id}`} className={className}>
         {body}
       </a>
     );

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProgramWithChapters } from "@/lib/admin-data";
 import { EXCEL_LANGUAGES } from "@/lib/program-import";
+import { createClient } from "@/lib/supabase/server";
+import { ProgramDocuments } from "./documents";
 import { VideoLinker } from "./video-linker";
 
 export default async function ProgramDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -10,6 +12,13 @@ export default async function ProgramDetail({ params }: { params: Promise<{ id: 
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const program = await getProgramWithChapters(id);
   if (!program) notFound();
+  const supabase = await createClient();
+  const { data: docs } = await supabase
+    .from("program_documents")
+    .select("id, kind, title, position, language, size_bytes, active")
+    .eq("program_code", program.code)
+    .order("kind")
+    .order("position");
   const excelLang = Object.entries(EXCEL_LANGUAGES).find(([, v]) => v === program.language)?.[0] ?? program.language;
 
   return (
@@ -39,6 +48,7 @@ export default async function ProgramDetail({ params }: { params: Promise<{ id: 
           excelLang={excelLang}
         />
       </section>
+      <ProgramDocuments code={program.code} language={program.language} docs={(docs ?? []).filter((d) => !d.language || d.language === program.language)} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ import { serviceClient } from "@/lib/supabase/admin";
 // nunca nombre, mail ni documento. El texto lo escribe la IA; los puntajes y las estrellas se
 // calculan acá a partir de la base, así no dependen del modelo.
 
-const MODEL = "claude-opus-5-5";
+export const MODEL = "claude-opus-5-5";
 
 export const ASSESSMENTS = ["via", "riasec", "bigfive", "schein", "ie", "avk", "proposito", "intencionalidad"] as const;
 type AssessmentId = (typeof ASSESSMENTS)[number];
@@ -66,7 +66,7 @@ type ReportInput = {
   answers: { chapter: string; evaluation: string | null; kind: "simple" | "abierta"; question: string; answer: string }[];
 };
 
-const REGISTER: Record<string, string> = {
+export const REGISTER: Record<string, string> = {
   "es-AR": "Español rioplatense con voseo (vos tenés, elegí, sos). Vocabulario argentino.",
   "es-ES": "Español de España con tuteo (tú tienes, elige). Vocabulario peninsular; nada de voseo.",
   "es-419": "Español latinoamericano neutro con tuteo (tú tienes, elige). Sin voseo ni vosotros.",
@@ -140,7 +140,7 @@ const costUsd = (model: string, input: number, output: number) => {
   return (input * p.input + output * p.output) / 1_000_000;
 };
 
-type Usage = { model: string; input: number; output: number };
+export type Usage = { model: string; input: number; output: number };
 
 async function writeReport(input: ReportInput): Promise<{ text: ReportText; usage: Usage }> {
   // Reintenta solo los errores pasajeros (saturación, red) y corta a los 4 minutos
@@ -164,7 +164,7 @@ async function writeReport(input: ReportInput): Promise<{ text: ReportText; usag
   return { text: message.parsed_output, usage };
 }
 
-class ReportError extends Error {
+export class ReportError extends Error {
   constructor(
     public code: string,
     public usage?: Usage,
@@ -173,7 +173,7 @@ class ReportError extends Error {
   }
 }
 
-function errorCode(e: unknown): string {
+export function errorCode(e: unknown): string {
   if (e instanceof ReportError) return e.code;
   if (e instanceof Anthropic.AuthenticationError || e instanceof Anthropic.PermissionDeniedError) return "clave";
   if (e instanceof Anthropic.RateLimitError) return "limite";
@@ -187,7 +187,7 @@ function errorCode(e: unknown): string {
 const escape = (v: string) => v.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 // Aviso al admin de My Path. Sin datos del alumno: solo códigos y montos.
-async function alertAdmin(to: string | null | undefined, subject: string, body: string) {
+export async function alertAdmin(to: string | null | undefined, subject: string, body: string) {
   const dest = to || process.env.ALERT_EMAIL;
   if (!dest || !mailConfigured()) return;
   try {
@@ -197,7 +197,7 @@ async function alertAdmin(to: string | null | undefined, subject: string, body: 
   }
 }
 
-async function logUsage(db: NonNullable<ReturnType<typeof serviceClient>>, programId: string, usage: Usage | undefined, ok: boolean) {
+export async function logUsage(db: NonNullable<ReturnType<typeof serviceClient>>, programId: string, usage: Usage | undefined, ok: boolean) {
   const cost = usage ? costUsd(usage.model, usage.input, usage.output) : 0;
   const { data } = await db.rpc("ai_log_usage", {
     p_program: programId,

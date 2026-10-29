@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { AppHeader } from "@/components/app-header";
 import { getDict } from "@/lib/i18n";
 import { languageLabel, programText } from "@/lib/i18n-program";
@@ -11,6 +12,8 @@ import { MentoHome } from "./mento-home";
 export default async function ModulePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [{ me, mod }, { t, lang }] = await Promise.all([requireModule(id), getDict()]);
+  // Docentes y coordinadores tienen su propia vista de Mento.IA
+  if (id === "mento" && (me.role === "docente" || me.role === "coordinador")) redirect("/docente/mento");
   const p = programText(lang);
   const programs = await getMyPrograms(id);
   // Mento.IA: programa principal = el primero sin terminar (o el último si terminó todos)

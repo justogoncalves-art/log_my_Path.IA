@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { z } from "zod";
 import { getMe } from "@/lib/dal";
+import { classReportsForStudent } from "@/lib/class-report";
 import { generateReport } from "@/lib/report";
 import { createClient } from "@/lib/supabase/server";
 
@@ -34,7 +35,8 @@ export async function completeChapter(chapterId: string, seconds: number): Promi
   const { data: chapter } = await supabase.from("chapters").select("program_id").eq("id", chapterId).maybeSingle();
   if (chapter) {
     const me = await getMe();
-    after(() => generateReport(me.personId, chapter.program_id));
+    // En paralelo: si era el último alumno de la clase, también el resumen IA del curso
+    after(() => Promise.all([generateReport(me.personId, chapter.program_id), classReportsForStudent(me.personId, chapter.program_id)]));
   }
   revalidatePath("/m", "layout");
   return { ok: true };

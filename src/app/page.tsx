@@ -33,7 +33,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 gap-5 md:grid-cols-6">
               {modules.map((m, i) => (
                 <div key={m.id} className={`mp-fade-up ${i < 2 ? "md:col-span-3" : "md:col-span-2"}`} style={{ animationDelay: `${0.05 + i * 0.07}s` }}>
-                  <ModuleTileCard m={m} t={t} lang={lang} large={i < 2} />
+                  <ModuleTileCard m={m} t={t} lang={lang} large={i < 2} staff={!isStudent} />
                 </div>
               ))}
             </div>

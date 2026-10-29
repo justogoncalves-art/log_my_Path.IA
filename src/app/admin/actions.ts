@@ -520,3 +520,47 @@ export async function wizardSavePrograms(items: unknown): Promise<ActionResult> 
   }
   return done(null, "Programas guardados");
 }
+
+// ─────────────────────────────────────────────────────────────
+// Documentos PDF del programa (guía didáctica, actividades). El navegador sube el archivo directo
+// a Storage con un permiso firmado de un solo uso; después se registra en la base.
+// ─────────────────────────────────────────────────────────────
+const docSchema = z.object({
+  code: z.string().regex(/^[a-z0-9-]{3,60}$/),
+  language: z.string().max(10),
+  kind: z.enum(["guia", "actividad"]),
+  title: z.string().trim().min(2).max(200),
+  position: z.number().int().min(1).max(99),
+  size: z.number().int().min(1).max(50 * 1024 * 1024),
+});
+
+export async function documentUploadUrl(code: string): Promise<{ ok: true; path: string; url: string } | { ok: false; error: string }> {
+  const me = await getMe();
+  if (!me.isAdmin) return { ok: false, error: "Sin acceso" };
+  if (!/^[a-z0-9-]{3,60}$/.test(code)) return { ok: false, error: "Datos inválidos" };
+  const svc = serviceClient();
+  if (!svc) return { ok: false, error: "Falta la clave del servidor" };
+  const path = `${code}/${crypto.randomUUID()}.pdf`;
+  const { data, error } = await svc.storage.from("program-docs").createSignedUploadUrl(path);
+  if (error || !data) return { ok: false, error: "No pudimos preparar la subida" };
+  return { ok: true, path, url: data.signedUrl };
+}
+
+export async function addDocument(input: unknown, path: string): Promise<ActionResult> {
+  const parsed = docSchema.safeParse(input);
+  if (!parsed.success || !/^[a-z0-9-]{3,60}\/[0-9a-f-]{36}\.pdf$/.test(path)) return done("Revisá el título y el archivo (PDF de hasta 50 MB)");
+  const d = parsed.data;
+  if (!path.startsWith(`${d.code}/`)) return done("Datos inválidos");
+  const { error } = await rpc("admin_add_document", {
+    p_code: d.code, p_language: d.language, p_kind: d.kind, p_title: d.title, p_position: d.position, p_path: path, p_size: d.size,
+  });
+  revalidatePath("/admin/programas/[id]", "page");
+  return done(error, "Documento agregado");
+}
+
+export async function setDocumentActive(docId: string, active: boolean): Promise<ActionResult> {
+  if (!z.uuid().safeParse(docId).success) return done("Datos inválidos");
+  const { error } = await rpc("admin_set_document_active", { p_doc: docId, p_active: active });
+  revalidatePath("/admin/programas/[id]", "page");
+  return done(error, active ? "Documento visible" : "Documento oculto");
+}

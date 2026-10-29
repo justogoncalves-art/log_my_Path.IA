@@ -4,7 +4,7 @@ import { env } from "@/lib/env";
 import { sessionCookieOptions } from "@/lib/supabase/cookies";
 
 // /api/cron valida su propio secreto
-const PUBLIC_PATHS = ["/login", "/recuperar", "/auth/recuperar", "/api/cron/"];
+const PUBLIC_PATHS = ["/login", "/recuperar", "/auth/recuperar", "/api/cron/", "/r/"];
 
 function buildCsp(nonce: string) {
   const isDev = process.env.NODE_ENV === "development";
