@@ -236,3 +236,32 @@ export async function getProgramWithChapters(id: string) {
     .sort((a, b) => a.position - b.position);
   return { ...data, chapters };
 }
+
+// Resumen de la organización para el asistente de alta (sin datos personales: solo conteos)
+export type OrgSummary = {
+  people: number;
+  byRole: Record<string, number>;
+  studentsWithoutClass: number;
+  minorsWithoutConsent: number;
+  campaigns: number;
+};
+
+export async function orgSummary(orgId: string): Promise<OrgSummary> {
+  const supabase = await createClient();
+  const [{ data: members }, { count: campaigns }] = await Promise.all([
+    supabase.from("memberships").select("role, class_id, active, people(guardian_consent, birth_date, deleted_at)").eq("organization_id", orgId).eq("active", true),
+    supabase.from("welcome_campaigns").select("id", { count: "exact", head: true }).eq("organization_id", orgId).neq("status", "cancelado"),
+  ]);
+  const rows = (members ?? []) as unknown as Array<{ role: string; class_id: string | null; people: { guardian_consent: boolean | null; birth_date: string | null; deleted_at: string | null } | null }>;
+  const live = rows.filter((r) => r.people && !r.people.deleted_at);
+  const byRole: Record<string, number> = {};
+  for (const r of live) byRole[r.role] = (byRole[r.role] ?? 0) + 1;
+  const minor = (b: string | null) => !b || Date.now() - new Date(b).getTime() < 18 * 365.25 * 86400000;
+  return {
+    people: live.length,
+    byRole,
+    studentsWithoutClass: live.filter((r) => r.role === "alumno" && !r.class_id).length,
+    minorsWithoutConsent: live.filter((r) => r.role === "alumno" && minor(r.people!.birth_date) && !r.people!.guardian_consent).length,
+    campaigns: campaigns ?? 0,
+  };
+}

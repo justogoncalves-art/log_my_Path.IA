@@ -28,7 +28,8 @@ function maskDoc(doc: string) {
   return d.length > 3 ? `•••${d.slice(-3)}` : d;
 }
 
-export function AltaPersonas({ orgs, initialOrg }: { orgs: Org[]; initialOrg?: string }) {
+// lockOrg: dentro del asistente la organización ya está elegida; onSaved avisa cuando se guardó el alta
+export function AltaPersonas({ orgs, initialOrg, lockOrg = false, onSaved }: { orgs: Org[]; initialOrg?: string; lockOrg?: boolean; onSaved?: () => void }) {
   const [org, setOrg] = useState(initialOrg ?? (orgs.length === 1 ? orgs[0].id : ""));
   const [tab, setTab] = useState<"excel" | "una">("excel");
   const [rows, setRows] = useState<ImportRow[]>([]);
@@ -65,6 +66,7 @@ export function AltaPersonas({ orgs, initialOrg }: { orgs: Org[]; initialOrg?: s
       setSaved(`Listo: ${created} personas nuevas y ${res.results.length - created} actualizadas.`);
       setResults(null);
       setRows([]);
+      onSaved?.();
     });
   }
 
@@ -110,7 +112,7 @@ export function AltaPersonas({ orgs, initialOrg }: { orgs: Org[]; initialOrg?: s
   return (
     <div className="mt-8 flex flex-col gap-6">
       <div className="flex flex-wrap items-end gap-4">
-        <label className="block min-w-64">
+        <label className={`block min-w-64 ${lockOrg ? "hidden" : ""}`}>
           <span className="mb-1.5 block font-display text-sm font-medium">Organización</span>
           <select
             className={inputCls}

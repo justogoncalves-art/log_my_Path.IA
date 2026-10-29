@@ -22,6 +22,7 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - Campus y EdFin: 5º y 6º de secundaria.
 - Encuesta: "¿Te ha gustado My Path?" (1-5 estrellas) a mitad y al final del programa (`rate_program`); con 3 o menos se pide "¿Qué mejorarías?". Al completar el 100% se registra en `program_completions` y se envía por mail un formulario extenso.
 - Documento: `doc_hash` (HMAC-SHA256) y `doc_cipher` (AES-256) con claves generadas en Supabase Vault; las funciones `private.doc_*` no las puede llamar nadie desde la API.
+- Alta de organización = asistente paso a paso en admin → Organizaciones → "Nueva organización" (`/admin/organizaciones/nueva?org=…&paso=…`): organización (país de lista) → personas (Excel) → clases (nivel y año obligatorios) → módulos y licencias → programas por clase (idioma sugerido por país) → mail de bienvenida → revisión. Cada paso guarda en la base; se puede retomar. Programas en el admin: "Título + código" (Tu Manifiesto AR / ES / LAT / EN, `src/lib/program-names.ts`).
 - Alta de personas: `admin_import_people` (validar y después guardar todo o nada). La cuenta de acceso se crea al enviar el mail de bienvenida. Si el documento ya existe con otro mail, se avisa y se mantiene el registrado.
 - El panel de admin es solo para My Path: por ahora en español.
 - Acciones del admin = funciones `admin_*` en la base (validan admin y dejan `audit_log`). Lo que toca cuentas de acceso (contraseñas, bloquear, cambiar mail) lo hace el servidor con `SUPABASE_SECRET_KEY`.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { programName } from "@/lib/program-names";
 import { assignProgram, saveClass, setClassModules, setOrgModule } from "@/app/admin/actions";
 import { ActionForm, btnCls, btnGhostCls, inputCls, Label, Result, useAction } from "@/app/admin/ui";
 import type { ClassInfo, ModuleInfo, ProgramInfo } from "@/lib/admin-data";
@@ -128,7 +129,7 @@ function ClassCard({ orgId, c, modules }: { orgId: string; c: ClassInfo; modules
             {c.programs.map((p) => (
               <li key={p.id} className="flex items-center justify-between gap-2 text-sm">
                 <span>
-                  {p.title} <span className="text-muted">· {p.language}</span>
+                  {programName(p.title, p.language)}
                 </span>
                 <button
                   className="cursor-pointer text-xs text-danger hover:underline"
@@ -194,7 +195,7 @@ export function AssignProgram({ programs, classes, modules }: { programs: Progra
             <option value="">{options.length ? "Elegí un programa" : "Este módulo todavía no tiene programas cargados"}</option>
             {options.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.title} · {p.level} {p.grade}º · {p.language} · {p.chapters} capítulos
+                {programName(p.title, p.language)} · {p.level} {p.grade}º · {p.chapters} capítulos
               </option>
             ))}
           </select>

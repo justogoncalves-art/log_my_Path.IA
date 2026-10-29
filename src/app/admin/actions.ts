@@ -438,3 +438,85 @@ export async function importCampusBatch(batch: unknown): Promise<CampusBatchResu
   const row = (data as { universities_new: number; universities_updated: number; programs_new: number; programs_updated: number }[])[0];
   return { ok: true, ...row };
 }
+
+// ─────────────────────────────────────────────────────────────
+// Asistente de alta de organización (paso a paso)
+// ─────────────────────────────────────────────────────────────
+export async function wizardSaveOrg(input: unknown): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
+  const parsed = orgSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "Completá el nombre (mínimo 2 letras) y elegí el país" };
+  const d = parsed.data;
+  const { data, error } = await rpc("admin_save_org", {
+    p_id: d.id ?? null, p_name: d.name, p_kind: d.kind, p_country: d.country, p_reseller: d.reseller ?? null,
+  });
+  if (error || !data) return { ok: false, error: error ?? "No pudimos guardar la organización" };
+  revalidatePath("/admin", "layout");
+  return { ok: true, id: String(data) };
+}
+
+const classItems = z
+  .array(z.object({ id: z.uuid(), name: z.string().trim().min(1).max(40), level: z.enum(["primaria", "secundaria"]), grade: z.number().int().min(1).max(7) }))
+  .min(1)
+  .max(200);
+
+export async function wizardSaveClasses(org: string, items: unknown): Promise<ActionResult> {
+  const parsedOrg = uuid.safeParse(org);
+  const parsed = classItems.safeParse(items);
+  if (!parsedOrg.success || !parsed.success) return { ok: false, error: "Cada clase necesita nivel y año" };
+  for (const c of parsed.data) {
+    const { error } = await rpc("admin_save_class", { p_org: org, p_id: c.id, p_name: c.name, p_level: c.level, p_grade: c.grade });
+    if (error) return { ok: false, error: `${c.name}: ${error}` };
+  }
+  return done(null, "Clases guardadas");
+}
+
+const moduleItems = z
+  .array(
+    z.object({
+      module: z.string().regex(/^[a-z]{2,20}$/),
+      active: z.boolean(),
+      starts: z.iso.date().nullable(),
+      ends: z.iso.date().nullable(),
+      seats: z.number().int().min(0).max(100000).nullable(),
+    }),
+  )
+  .max(20);
+
+// Guarda los módulos contratados y los habilita en todas las clases de la organización
+export async function wizardSaveModules(org: string, items: unknown, classIds: string[]): Promise<ActionResult> {
+  const parsed = moduleItems.safeParse(items);
+  if (!uuid.safeParse(org).success || !parsed.success || !uuids.safeParse(classIds).success) return { ok: false, error: "Revisá las fechas y los cupos" };
+  for (const m of parsed.data) {
+    if (m.active && (!m.starts || !m.ends || m.ends < m.starts)) return { ok: false, error: `Revisá las fechas de ${m.module}` };
+    const { error } = await rpc("admin_set_org_module", {
+      p_org: org, p_module: m.module, p_active: m.active, p_starts: m.starts, p_ends: m.ends, p_seats: m.seats,
+    });
+    if (error) return { ok: false, error };
+  }
+  const active = parsed.data.filter((m) => m.active).map((m) => m.module);
+  for (const c of classIds) {
+    const { error } = await rpc("admin_set_class_modules", { p_class: c, p_modules: active });
+    if (error) return { ok: false, error };
+  }
+  return done(null, "Módulos guardados");
+}
+
+// Deja en cada clase exactamente los programas elegidos
+export async function wizardSavePrograms(items: unknown): Promise<ActionResult> {
+  const parsed = z
+    .array(z.object({ classId: z.uuid(), add: z.array(z.uuid()).max(50), remove: z.array(z.uuid()).max(50) }))
+    .max(200)
+    .safeParse(items);
+  if (!parsed.success) return { ok: false, error: "Datos inválidos" };
+  for (const c of parsed.data) {
+    for (const p of c.add) {
+      const { error } = await rpc("admin_assign_program", { p_program: p, p_classes: [c.classId], p_assign: true });
+      if (error) return { ok: false, error };
+    }
+    for (const p of c.remove) {
+      const { error } = await rpc("admin_assign_program", { p_program: p, p_classes: [c.classId], p_assign: false });
+      if (error) return { ok: false, error };
+    }
+  }
+  return done(null, "Programas guardados");
+}

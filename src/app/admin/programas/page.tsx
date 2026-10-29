@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { dimensionLabels, listModulesAndLanguages, listProgramsDetailed } from "@/lib/admin-data";
+import { programName } from "@/lib/program-names";
 import { ProgramImport } from "./program-import";
 
 export default async function ProgramsPage() {
@@ -36,7 +37,7 @@ export default async function ProgramsPage() {
               <tr key={p.id}>
                 <td className="border-b border-line/60 px-4 py-3">
                   <Link href={`/admin/programas/${p.id}`} className="font-semibold underline-offset-2 hover:underline">
-                    {p.title}
+                    {programName(p.title, p.language)}
                   </Link>
                   <span className="block text-xs text-muted">
                     {modName[p.module_id] ?? p.module_id} · {p.code}

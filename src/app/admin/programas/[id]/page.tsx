@@ -1,3 +1,4 @@
+import { programName } from "@/lib/program-names";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProgramWithChapters } from "@/lib/admin-data";
@@ -16,7 +17,7 @@ export default async function ProgramDetail({ params }: { params: Promise<{ id: 
       <Link href="/admin/programas" className="text-sm text-muted hover:text-ink">
         ← Programas
       </Link>
-      <h1 className="mt-2 font-display text-3xl font-bold">{program.title}</h1>
+      <h1 className="mt-2 font-display text-3xl font-bold">{programName(program.title, program.language)}</h1>
       <p className="mt-2 text-muted">
         {program.grade}º {program.level} · {program.language} · v{program.version}
         {program.active ? "" : " · versión anterior (inactiva)"}
