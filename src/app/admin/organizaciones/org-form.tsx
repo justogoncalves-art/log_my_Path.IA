@@ -3,6 +3,9 @@
 import { saveOrg } from "@/app/admin/actions";
 import { ActionForm, inputCls, Label } from "@/app/admin/ui";
 import type { OrgRow } from "@/lib/admin-data";
+import { COUNTRY_CODES } from "@/lib/countries";
+
+const names = new Intl.DisplayNames(["es"], { type: "region" });
 
 export function OrgForm({ resellers, org }: { resellers: Array<{ id: string; name: string }>; org?: OrgRow }) {
   return (
@@ -18,8 +21,17 @@ export function OrgForm({ resellers, org }: { resellers: Array<{ id: string; nam
           <option value="particular">Particular</option>
         </select>
       </Label>
-      <Label text="País (código, ej. AR)">
-        <input name="country" required maxLength={2} defaultValue={org?.country ?? "AR"} className={`${inputCls} uppercase`} />
+      <Label text="País">
+        <select name="country" required defaultValue={org?.country ?? "AR"} className={inputCls}>
+          {org && !(COUNTRY_CODES as readonly string[]).includes(org.country) ? <option value={org.country}>{org.country} (código no válido)</option> : null}
+          {COUNTRY_CODES.map((c) => ({ c, n: names.of(c) ?? c }))
+            .sort((a, b) => a.n.localeCompare(b.n, "es"))
+            .map(({ c, n }) => (
+              <option key={c} value={c}>
+                {n} ({c})
+              </option>
+            ))}
+        </select>
       </Label>
       <Label text="Reseller">
         <select name="reseller" defaultValue={org?.reseller_id ?? ""} className={inputCls}>

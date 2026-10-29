@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getMe } from "@/lib/dal";
 import { importRowsSchema, type ImportResult } from "@/lib/people-import";
+import { isCountryCode } from "@/lib/countries";
 import { appUrl, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
 import { listMuxAssets, muxApiConfigured } from "@/lib/mux";
 import type { MuxAssetInfo } from "@/lib/mux-match";
@@ -81,7 +82,7 @@ const orgSchema = z.object({
   id: z.uuid().optional(),
   name: z.string().trim().min(2).max(120),
   kind: z.enum(["colegio", "profesional", "particular"]),
-  country: z.string().trim().regex(/^[A-Za-z]{2}$/),
+  country: z.string().trim().toUpperCase().refine(isCountryCode),
   reseller: z.uuid().optional(),
 });
 
