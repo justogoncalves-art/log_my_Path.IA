@@ -564,3 +564,22 @@ export async function setDocumentActive(docId: string, active: boolean): Promise
   revalidatePath("/admin/programas/[id]", "page");
   return done(error, active ? "Documento visible" : "Documento oculto");
 }
+
+// ─────────────────────────────────────────────────────────────
+// Estado de la plataforma
+// ─────────────────────────────────────────────────────────────
+export async function setHealthSettings(_prev: ActionResult | undefined, form: FormData): Promise<ActionResult> {
+  const url = String(form.get("app_url") ?? "").trim().replace(/\/+$/, "");
+  if (url && !/^https:\/\/[a-z0-9.-]+(:\d+)?$/.test(url)) return { ok: false, error: "La dirección tiene que ser https://dominio (sin rutas)" };
+  const { error } = await rpc("admin_set_health_settings", { p_app_url: url || null, p_enabled: form.get("enabled") === "on" });
+  return done(error, "Guardado");
+}
+
+export async function checkHealthNow(): Promise<ActionResult> {
+  const me = await getMe();
+  if (!me.isAdmin) return { ok: false, error: "Sin acceso" };
+  const { runHealthCheck } = await import("@/lib/health");
+  const r = await runHealthCheck();
+  revalidatePath("/admin/estado");
+  return r.ok ? { ok: true, message: "Medición hecha" } : { ok: false, error: "Falta la clave del servidor" };
+}

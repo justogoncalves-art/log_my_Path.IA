@@ -41,6 +41,7 @@ Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) �
 - PDF del programa (guía/actividades): admin → Programas → programa → "Documentos para el docente". Bucket privado `program-docs`, atados al código del programa (y opcionalmente al idioma); el docente los abre por `/api/docs/<id>` (link firmado de 5 min).
 - Módulos no contratados: el docente ve la ficha (`/docente/modulo/<id>`) con "Quiero saber más" (`module_interest` + aviso a `ALERT_EMAIL`).
 - Seguridad: anon y authenticated no escriben tablas directo (todo por funciones `admin_*`/`staff_*`/etc.); `people.doc_hash`/`doc_cipher` no se leen por la API. Login con límite propio (`login_attempts`: 8 fallos por cuenta y 40 por IP en 15 min, huellas HMAC). Tablas nuevas: activar RLS y no dar permisos de escritura.
+- Estado de la plataforma (admin → Estado): `pg_cron` mide la base cada 5 min (`private.health_snapshot` → `health_samples`, umbrales → `health_alerts`, sin repetir la misma en 1 h). Si `health_settings.app_url` está cargada, la base llama con `pg_net` a `/api/health/ping` (token interno generado en la base) y el servidor suma CPU/RAM/disco (métricas Prometheus de Supabase), tiempos de respuesta y manda las alertas por mail. Respaldo: cron diario `/api/cron/health`. Eventos de seguridad en `security_events` (solo huellas de IP).
 - Multi-región: LATAM en São Paulo; Europa (España) tendrá su propia base en la UE.
 
 ## Entorno

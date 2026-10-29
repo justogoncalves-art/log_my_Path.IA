@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 import { after } from "next/server";
 import { z } from "zod";
+import { securityEvent } from "@/lib/health";
 import { appUrl, mailConfigured, renderTemplate, sendBatch } from "@/lib/mail";
 import { serviceClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -40,7 +41,10 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
   const ipHash = fingerprint(await clientIp());
   if (svc) {
     const { data: allowed } = await svc.rpc("login_allowed", { p_email_hash: emailHash, p_ip_hash: ipHash });
-    if (allowed === false) return { error: t.tooMany };
+    if (allowed === false) {
+      await securityEvent("login_bloqueado", await clientIp());
+      return { error: t.tooMany };
+    }
   }
 
   const supabase = await createClient();
@@ -101,7 +105,7 @@ export async function requestPasswordReset(_prev: RecoverState, formData: FormDa
     const svc = serviceClient();
     if (!svc || !mailConfigured()) return;
     const { data: allowed } = await svc.rpc("password_reset_allowed", { p_email_hash: fingerprint(email), p_ip_hash: fingerprint(ip) });
-    if (!allowed) return;
+    if (!allowed) return void (await securityEvent("recuperar_bloqueado", ip));
     const { data, error } = await svc.auth.admin.generateLink({ type: "recovery", email });
     if (error || !data.properties?.hashed_token) return; // mail no registrado: no se avisa nada
     const link = `${baseUrl}/auth/recuperar?token_hash=${encodeURIComponent(data.properties.hashed_token)}`;

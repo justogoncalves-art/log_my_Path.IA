@@ -1,4 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
+import { requestIp, securityEvent } from "@/lib/health";
 import { processClassReportQueue } from "@/lib/class-report";
 import { processReportQueue } from "@/lib/report";
 
@@ -15,7 +16,10 @@ function authorized(header: string | null) {
 }
 
 export async function GET(request: Request) {
-  if (!authorized(request.headers.get("authorization"))) return new Response("No autorizado", { status: 401 });
+  if (!authorized(request.headers.get("authorization"))) {
+    await securityEvent("cron_no_autorizado", requestIp(request.headers));
+    return new Response("No autorizado", { status: 401 });
+  }
   const [reports, classes] = await Promise.all([processReportQueue(5), processClassReportQueue(3)]);
   return Response.json({ ...reports, classes: classes.processed });
 }

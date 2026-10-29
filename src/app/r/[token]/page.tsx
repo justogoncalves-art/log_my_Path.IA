@@ -1,11 +1,13 @@
 import { createHash } from "node:crypto";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { ReportView } from "@/app/m/[id]/[programId]/reporte/report-view";
 import { Brand } from "@/components/brand";
 import { reportLang, reportText } from "@/lib/i18n-report";
 import { programName } from "@/lib/program-names";
 import type { ReportContent } from "@/lib/report";
 import { reportEvals } from "@/lib/report-evals";
+import { requestIp, securityEvent } from "@/lib/health";
 import { serviceClient } from "@/lib/supabase/admin";
 
 // Reporte compartido por un docente: se abre sin cuenta con un link que vence.
@@ -21,6 +23,8 @@ export default async function SharedReportPage({ params }: { params: Promise<{ t
   const share = data as null | { content: ReportContent | null; first_name: string; last_name: string; program: { title: string; language: string } };
 
   if (!share?.content || !db) {
+    // Muchos links inválidos seguidos = alguien probando tokens
+    await securityEvent("share_invalido", requestIp(await headers()));
     return (
       <main className="mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center gap-4 px-5 text-center">
         <Brand />

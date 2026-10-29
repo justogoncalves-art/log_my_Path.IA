@@ -1,4 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
+import { requestIp, securityEvent } from "@/lib/health";
 import { runWelcomeCampaigns } from "@/lib/welcome";
 
 // Vercel Cron llama acá con "Authorization: Bearer $CRON_SECRET".
@@ -13,7 +14,10 @@ function authorized(header: string | null) {
 }
 
 export async function GET(request: Request) {
-  if (!authorized(request.headers.get("authorization"))) return new Response("No autorizado", { status: 401 });
+  if (!authorized(request.headers.get("authorization"))) {
+    await securityEvent("cron_no_autorizado", requestIp(request.headers));
+    return new Response("No autorizado", { status: 401 });
+  }
   const result = await runWelcomeCampaigns();
   return Response.json(result, { status: result.ok ? 200 : 500 });
 }
