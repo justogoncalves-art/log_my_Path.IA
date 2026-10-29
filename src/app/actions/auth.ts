@@ -12,6 +12,14 @@ import { getDict } from "@/lib/i18n";
 
 export type FormState = { error?: string } | undefined;
 
+// Huella HMAC con una clave del servidor: no se puede revertir al mail o a la IP
+const fingerprint = (value: string) => createHmac("sha256", process.env.SUPABASE_SECRET_KEY ?? "").update(value).digest("hex");
+
+async function clientIp() {
+  const h = await headers();
+  return (h.get("x-forwarded-for") ?? h.get("x-real-ip") ?? "").split(",")[0].trim() || "sin-ip";
+}
+
 const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email().max(254),
   password: z.string().min(1).max(128),
@@ -26,8 +34,18 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
   // Mismo mensaje para cualquier fallo: no revela si el mail existe.
   if (!parsed.success) return { error: t.badCredentials };
 
+  // Límite propio de intentos por cuenta y por IP (solo huellas HMAC)
+  const svc = serviceClient();
+  const emailHash = fingerprint(parsed.data.email);
+  const ipHash = fingerprint(await clientIp());
+  if (svc) {
+    const { data: allowed } = await svc.rpc("login_allowed", { p_email_hash: emailHash, p_ip_hash: ipHash });
+    if (allowed === false) return { error: t.tooMany };
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  if (svc) await svc.rpc("login_record", { p_email_hash: emailHash, p_ip_hash: ipHash, p_ok: !error });
   if (error) {
     if (error.status === 429) return { error: t.tooMany };
     return { error: t.badCredentials };
@@ -69,15 +87,13 @@ export async function changePassword(_prev: FormState, formData: FormData): Prom
 // ─────────────────────────────────────────────────────────────
 export type RecoverState = { sent?: boolean; error?: string } | undefined;
 
-const fingerprint = (value: string) => createHmac("sha256", process.env.SUPABASE_SECRET_KEY ?? "mypath").update(value).digest("hex");
 
 export async function requestPasswordReset(_prev: RecoverState, formData: FormData): Promise<RecoverState> {
   const { t, lang } = await getDict();
   const parsed = z.string().trim().toLowerCase().email().max(254).safeParse(formData.get("email"));
   if (!parsed.success) return { error: t.genericError };
   const email = parsed.data;
-  const h = await headers();
-  const ip = (h.get("x-forwarded-for") ?? h.get("x-real-ip") ?? "").split(",")[0].trim() || "sin-ip";
+  const ip = await clientIp();
   const baseUrl = await appUrl();
 
   // El trabajo va después de responder: la respuesta tarda lo mismo exista o no la cuenta
