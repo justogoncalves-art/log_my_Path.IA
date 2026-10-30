@@ -179,3 +179,67 @@ export async function getProgramsForCompare(ids: string[]) {
   );
   return valid.flatMap((id) => rows.find((r) => r.id === id) ?? []);
 }
+
+// ─────────────────────────────────────────────────────────────
+// Favoritos del alumno y vista del docente
+// ─────────────────────────────────────────────────────────────
+export type FavoriteKind = "carrera" | "universidad";
+
+export async function myFavorites(): Promise<Set<string>> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("my_campus_favorites");
+  return new Set(((data ?? []) as { kind: FavoriteKind; item_id: string }[]).map((f) => `${f.kind}:${f.item_id}`));
+}
+
+export type StaffCampusStudent = {
+  person_id: string; first_name: string; last_name: string; holland: string | null;
+  favorite_programs: number; favorite_universities: number; last_favorite_at: string | null;
+};
+export async function staffCampusStudents(classId: string): Promise<StaffCampusStudent[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_campus_students", { p_class: classId });
+  return (data ?? []) as StaffCampusStudent[];
+}
+
+export type StaffCampusFile = {
+  first_name: string; last_name: string; country: string | null; profile: Record<string, number>; holland: string | null;
+  top_programs: { name: string; rp: string; rs: string | null; area: string | null; universities: number; affinity: number | null }[];
+  favorite_programs: { id: string; name: string; program_type: string | null; university_id: string; university: string; country_code: string; city: string | null; riasec: string; affinity: number | null; saved_at: string }[];
+  favorite_universities: { id: string; name: string; country_code: string; city: string | null; rank_qs: number | null; saved_at: string }[];
+};
+export async function staffCampusStudent(personId: string): Promise<StaffCampusFile | null> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_campus_student", { p_person: personId });
+  return (data ?? null) as StaffCampusFile | null;
+}
+
+export type StaffCampusClass = {
+  students: number; with_profile: number; with_favorites: number; holland: Record<string, number>;
+  top_programs: { name: string; n: number; universities: number }[];
+  top_universities: { id: string; name: string; country_code: string; n: number }[];
+};
+export async function staffCampusClass(classId: string): Promise<StaffCampusClass | null> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_campus_class", { p_class: classId });
+  return (data ?? null) as StaffCampusClass | null;
+}
+
+// Detalle de los favoritos propios (para la página del alumno)
+export async function favoriteItems(favs: Set<string>) {
+  const ids = (kind: FavoriteKind) => [...favs].filter((f) => f.startsWith(`${kind}:`)).map((f) => f.slice(kind.length + 1)).slice(0, 300);
+  const programIds = ids("carrera");
+  const uniIds = ids("universidad");
+  const supabase = await createClient();
+  const [{ data: programs }, { data: unis }] = await Promise.all([
+    programIds.length
+      ? supabase.from("campus_programs").select(`${PROGRAM_FIELDS}, university:campus_universities (id, official_name, country_code, city, rank_qs)`).in("id", programIds)
+      : Promise.resolve({ data: [] }),
+    uniIds.length ? supabase.from("campus_universities").select(UNI_FIELDS).in("id", uniIds) : Promise.resolve({ data: [] }),
+  ]);
+  return {
+    programs: await withAffinity(
+      (programs ?? []) as unknown as (Program & { university: { id: string; official_name: string; country_code: string; city: string | null; rank_qs: number | null } })[],
+    ),
+    universities: (unis ?? []) as University[],
+  };
+}

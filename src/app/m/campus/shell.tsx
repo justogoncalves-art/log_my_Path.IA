@@ -5,18 +5,31 @@ import { campusText } from "@/lib/i18n-campus";
 import type { Me } from "@/lib/dal";
 import { CompareBar } from "./compare";
 
-export type CampusSection = "home" | "afinidad" | "carreras" | "universidades" | "comparar";
+export type CampusSection = "home" | "afinidad" | "carreras" | "universidades" | "comparar" | "favoritos" | "alumnos" | "clase";
+
+// Docentes y coordinadores ven Campus con sus propios bloques
+export const isCampusStaff = (me: Me) => me.isAdmin || me.role === "docente" || me.role === "coordinador";
 
 // Marco común de My Campus.IA: encabezado, menú de secciones y barra de comparación
 export function CampusShell({ me, t, lang, section, children }: { me: Me; t: Dict; lang: Lang; section: CampusSection; children: React.ReactNode }) {
   const c = campusText(lang);
-  const tabs: [CampusSection, string, string][] = [
-    ["home", c.home, "/m/campus"],
-    ["afinidad", c.affinity, "/m/campus/afinidad"],
-    ["carreras", c.programs, "/m/campus/carreras"],
-    ["universidades", c.universities, "/m/campus/universidades"],
-    ["comparar", c.compare, "/m/campus/comparar"],
-  ];
+  const staff = isCampusStaff(me);
+  const tabs: [CampusSection, string, string][] = staff
+    ? [
+        ["home", c.home, "/docente/campus"],
+        ["universidades", c.universities, "/m/campus/universidades"],
+        ["carreras", c.programs, "/m/campus/carreras"],
+        ["alumnos", c.students, "/docente/campus/alumnos"],
+        ["clase", c.tileClass, "/docente/campus/clase"],
+      ]
+    : [
+        ["home", c.home, "/m/campus"],
+        ["afinidad", c.affinity, "/m/campus/afinidad"],
+        ["carreras", c.programs, "/m/campus/carreras"],
+        ["universidades", c.universities, "/m/campus/universidades"],
+        ["favoritos", c.favorites, "/m/campus/favoritos"],
+        ["comparar", c.compare, "/m/campus/comparar"],
+      ];
   return (
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
@@ -38,7 +51,7 @@ export function CampusShell({ me, t, lang, section, children }: { me: Me; t: Dic
         </ul>
       </nav>
       <main className="mx-auto w-full max-w-[1600px] px-5 md:px-10 pb-28 pt-8">{children}</main>
-      <CompareBar lang={lang} hidden={section === "comparar"} />
+      <CompareBar lang={lang} hidden={staff || section === "comparar"} />
     </div>
   );
 }

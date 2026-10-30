@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getUniversity } from "@/lib/campus";
+import { getUniversity, myFavorites } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText } from "@/lib/i18n-campus";
 import { requireModule } from "@/lib/module-access";
 import { CompareButton } from "../../compare";
-import { CampusShell } from "../../shell";
+import { FavoriteButton } from "../../favorite";
+import { CampusShell, isCampusStaff } from "../../shell";
 
 // Solo links http(s): nunca otro esquema que venga en el Excel
 const safeUrl = (u: string | null) => (u && /^https?:\/\//i.test(u) ? u : null);
@@ -13,7 +14,8 @@ const safeUrl = (u: string | null) => (u && /^https?:\/\//i.test(u) ? u : null);
 export default async function UniversityPage({ params }: { params: Promise<{ uniId: string }> }) {
   const [{ me }, { t, lang }, { uniId }] = await Promise.all([requireModule("campus"), getDict(), params]);
   const c = campusText(lang);
-  const data = await getUniversity(uniId);
+  const staff = isCampusStaff(me);
+  const [data, favs] = await Promise.all([getUniversity(uniId), staff ? Promise.resolve(null) : myFavorites()]);
   if (!data) notFound();
   const { university: u, programs } = data;
   const names = new Intl.DisplayNames([lang], { type: "region" });
@@ -43,7 +45,10 @@ export default async function UniversityPage({ params }: { params: Promise<{ uni
         <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-celeste">
           {names.of(u.country_code)} {u.short_name ? `· ${u.short_name}` : ""}
         </span>
-        <h1 className="mt-3 font-display text-3xl font-bold md:text-4xl">{u.official_name}</h1>
+        <div className="mt-3 flex items-start justify-between gap-4">
+          <h1 className="font-display text-3xl font-bold md:text-4xl">{u.official_name}</h1>
+          {favs ? <FavoriteButton kind="universidad" id={u.id} saved={favs.has(`universidad:${u.id}`)} lang={lang} variant="overlay" /> : null}
+        </div>
         {ranks.length ? (
           <div className="mt-4 flex flex-wrap gap-2">
             {ranks.map((r) => (
@@ -79,7 +84,12 @@ export default async function UniversityPage({ params }: { params: Promise<{ uni
                       </p>
                     </div>
                     {p.affinity !== null && p.affinity !== undefined ? <span className="font-display text-lg font-bold text-opulent">{p.affinity}%</span> : null}
-                    <CompareButton id={p.id} lang={lang} />
+                    {favs ? (
+                      <>
+                        <FavoriteButton kind="carrera" id={p.id} saved={favs.has(`carrera:${p.id}`)} lang={lang} />
+                        <CompareButton id={p.id} lang={lang} />
+                      </>
+                    ) : null}
                   </div>
                   {p.description || p.curriculum ? (
                     <details className="mt-2 text-sm">

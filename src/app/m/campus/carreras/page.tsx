@@ -1,19 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import { countryFilter, countryStats, filterOptions, filtersSchema, homeCountry, PAGE_SIZE, searchPrograms, universityPhoto, type ProgramHit } from "@/lib/campus";
+import { countryFilter, countryStats, filterOptions, filtersSchema, homeCountry, myFavorites, PAGE_SIZE, searchPrograms, universityPhoto, type ProgramHit } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText, type CampusLang } from "@/lib/i18n-campus";
 import { requireModule } from "@/lib/module-access";
 import { CompareButton } from "../compare";
 import { Pager } from "../pager";
-import { CampusShell } from "../shell";
+import { FavoriteButton } from "../favorite";
+import { CampusShell, isCampusStaff } from "../shell";
 import { FilterSidebar } from "../sidebar";
 
 export default async function ProgramsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const [{ me }, { t, lang }, sp] = await Promise.all([requireModule("campus"), getDict(), searchParams]);
   const c = campusText(lang);
   const f = filtersSchema.parse(sp);
-  const [stats, options, home] = await Promise.all([countryStats(), filterOptions(), homeCountry(me.organizationId)]);
+  const staff = isCampusStaff(me);
+  const [stats, options, home, favs] = await Promise.all([countryStats(), filterOptions(), homeCountry(me.organizationId), staff ? Promise.resolve(null) : myFavorites()]);
   const { rows, total, page } = await searchPrograms(f, home);
   const names = new Intl.DisplayNames([lang], { type: "region" });
   const grouped = !countryFilter(f) && !!home;
@@ -34,9 +36,9 @@ export default async function ProgramsPage({ searchParams }: { searchParams: Pro
         <FilterSidebar lang={lang} kind="programs" f={f} stats={stats} areas={options.areas} base="/m/campus/carreras" />
         <div>
           {grouped && local.length ? <GroupTitle text={c.inHome(names.of(home!) ?? home!)} /> : null}
-          <Cards rows={local} lang={lang} names={names} />
+          <Cards rows={local} lang={lang} names={names} favs={favs} />
           {abroad.length ? <GroupTitle text={c.abroad} spaced={local.length > 0} /> : null}
-          <Cards rows={abroad} lang={lang} names={names} />
+          <Cards rows={abroad} lang={lang} names={names} favs={favs} />
           {!rows.length ? <p className="rounded-xl border border-line bg-surface p-5 text-muted">{c.noResults}</p> : null}
           <Pager lang={lang} base="/m/campus/carreras" params={sp} page={page} total={total} size={PAGE_SIZE} />
         </div>
@@ -49,7 +51,8 @@ function GroupTitle({ text, spaced = false }: { text: string; spaced?: boolean }
   return <h2 className={`mb-3 font-display text-lg font-bold ${spaced ? "mt-8" : ""}`}>{text}</h2>;
 }
 
-function Cards({ rows, lang, names }: { rows: ProgramHit[]; lang: CampusLang; names: Intl.DisplayNames }) {
+// favs = null: vista del docente (sin guardar ni comparar)
+function Cards({ rows, lang, names, favs }: { rows: ProgramHit[]; lang: CampusLang; names: Intl.DisplayNames; favs: Set<string> | null }) {
   const c = campusText(lang);
   if (!rows.length) return null;
   return (
@@ -85,7 +88,12 @@ function Cards({ rows, lang, names }: { rows: ProgramHit[]; lang: CampusLang; na
               <Link href={`/m/campus/u/${r.university_id}`} className="text-sm text-opulent hover:underline">
                 {c.moreInfo} →
               </Link>
-              <CompareButton id={r.id} lang={lang} />
+              {favs ? (
+                <span className="flex items-center gap-2">
+                  <FavoriteButton kind="carrera" id={r.id} saved={favs.has(`carrera:${r.id}`)} lang={lang} />
+                  <CompareButton id={r.id} lang={lang} />
+                </span>
+              ) : null}
             </div>
           </div>
         </li>

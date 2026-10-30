@@ -3,12 +3,15 @@ import Link from "next/link";
 import { countryStats, hollandCode, homeCountry, myRiasec } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText, RIASEC_NAMES } from "@/lib/i18n-campus";
+import { redirect } from "next/navigation";
 import { requireModule } from "@/lib/module-access";
-import { CampusShell } from "./shell";
+import { CampusShell, isCampusStaff } from "./shell";
 
 // Inicio de My Campus.IA: mosaico de accesos con foto, de distintos tamaños
 export default async function CampusHome() {
   const [{ me }, { t, lang }] = await Promise.all([requireModule("campus"), getDict()]);
+  // Docentes y coordinadores tienen su propia vista de Campus
+  if (isCampusStaff(me)) redirect("/docente/campus");
   const c = campusText(lang);
   const [stats, riasec, home] = await Promise.all([countryStats(), myRiasec(), homeCountry(me.organizationId)]);
   const totals = stats.reduce((a, s) => ({ u: a.u + s.universities, p: a.p + s.programs }), { u: 0, p: 0 });

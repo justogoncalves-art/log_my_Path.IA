@@ -1,8 +1,9 @@
 import { getProgramsForCompare } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText } from "@/lib/i18n-campus";
+import { redirect } from "next/navigation";
 import { requireModule } from "@/lib/module-access";
-import { CampusShell } from "../shell";
+import { CampusShell, isCampusStaff } from "../shell";
 import { CompareSync } from "./compare-sync";
 
 // Primer número que aparece en un texto libre ("85%", "28000", "£22,000-45,000/yr")
@@ -13,6 +14,8 @@ const firstNumber = (s: string | null | undefined) => {
 
 export default async function ComparePage({ searchParams }: { searchParams: Promise<{ c?: string }> }) {
   const [{ me }, { t, lang }, sp] = await Promise.all([requireModule("campus"), getDict(), searchParams]);
+  // Docentes y coordinadores tienen su propia vista de Campus
+  if (isCampusStaff(me)) redirect("/docente/campus");
   const c = campusText(lang);
   const ids = (sp.c ?? "").split(",").filter(Boolean).slice(0, 4);
   const rows = await getProgramsForCompare(ids);

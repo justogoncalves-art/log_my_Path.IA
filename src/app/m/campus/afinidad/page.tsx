@@ -2,12 +2,15 @@ import Link from "next/link";
 import { affinityList, countryStats, filtersSchema, hollandCode, homeCountry, myRiasec } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText, RIASEC_NAMES } from "@/lib/i18n-campus";
+import { redirect } from "next/navigation";
 import { requireModule } from "@/lib/module-access";
 import { CountrySelect } from "../filters";
-import { CampusShell } from "../shell";
+import { CampusShell, isCampusStaff } from "../shell";
 
 export default async function AffinityPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const [{ me }, { t, lang }, sp] = await Promise.all([requireModule("campus"), getDict(), searchParams]);
+  // Docentes y coordinadores tienen su propia vista de Campus
+  if (isCampusStaff(me)) redirect("/docente/campus");
   const c = campusText(lang);
   const f = filtersSchema.parse(sp);
   const [riasec, stats, home] = await Promise.all([myRiasec(), countryStats(), homeCountry(me.organizationId)]);
