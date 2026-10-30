@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getUniversity, myFavorites } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText } from "@/lib/i18n-campus";
-import { requireModule } from "@/lib/module-access";
+import { requireCampus } from "@/lib/campus-access";
 import { CompareButton } from "../../compare";
 import { FavoriteButton } from "../../favorite";
 import { CampusShell, isCampusStaff } from "../../shell";
@@ -12,7 +12,7 @@ import { CampusShell, isCampusStaff } from "../../shell";
 const safeUrl = (u: string | null) => (u && /^https?:\/\//i.test(u) ? u : null);
 
 export default async function UniversityPage({ params }: { params: Promise<{ uniId: string }> }) {
-  const [{ me }, { t, lang }, { uniId }] = await Promise.all([requireModule("campus"), getDict(), params]);
+  const [{ me }, { t, lang }, { uniId }] = await Promise.all([requireCampus(), getDict(), params]);
   const c = campusText(lang);
   const staff = isCampusStaff(me);
   const [data, favs] = await Promise.all([getUniversity(uniId), staff ? Promise.resolve(null) : myFavorites()]);

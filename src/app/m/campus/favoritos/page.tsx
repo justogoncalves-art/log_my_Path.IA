@@ -4,14 +4,14 @@ import { redirect } from "next/navigation";
 import { favoriteItems, myFavorites, universityPhoto } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText } from "@/lib/i18n-campus";
-import { requireModule } from "@/lib/module-access";
+import { requireCampus } from "@/lib/campus-access";
 import { CompareButton } from "../compare";
 import { FavoriteButton } from "../favorite";
 import { CampusShell, isCampusStaff } from "../shell";
 
 // Favoritos del alumno: carreras y universidades que guardó
 export default async function FavoritesPage() {
-  const [{ me }, { t, lang }] = await Promise.all([requireModule("campus"), getDict()]);
+  const [{ me }, { t, lang }] = await Promise.all([requireCampus(), getDict()]);
   if (isCampusStaff(me)) redirect("/docente/campus");
   const c = campusText(lang);
   const favs = await myFavorites();

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ModuleTile } from "@/lib/dal";
 import type { Dict, Lang } from "@/lib/i18n";
+import { campusText } from "@/lib/i18n-campus";
 
 const IMAGES: Record<string, { src: string; pos: string }> = {
   mento: { src: "/img/mento-hero.jpg", pos: "center 25%" },
@@ -13,7 +14,8 @@ const IMAGES: Record<string, { src: string; pos: string }> = {
 
 export const MODULE_IMAGES = IMAGES;
 
-export function ModuleTileCard({ m, t, lang, large, staff = false }: { m: ModuleTile; t: Dict; lang: Lang; large: boolean; staff?: boolean }) {
+// locked: módulo contratado que todavía no se habilita para este alumno (Campus antes de terminar Mento)
+export function ModuleTileCard({ m, t, lang, large, staff = false, locked = false }: { m: ModuleTile; t: Dict; lang: Lang; large: boolean; staff?: boolean; locked?: boolean }) {
   const img = IMAGES[m.id] ?? IMAGES.edfin;
   const summary = lang === "es" ? m.summaryEs : m.summaryEn;
   const body = (
@@ -33,7 +35,7 @@ export function ModuleTileCard({ m, t, lang, large, staff = false }: { m: Module
         }`}
       >
         <span className={`size-1.5 rounded-full ${m.active ? "bg-ok" : "bg-white/40"}`} />
-        {m.active ? t.active : t.inactive}
+        {locked ? `🔒 ${campusText(lang).lockedTile}` : m.active ? t.active : t.inactive}
       </span>
       <div className="absolute inset-x-6 bottom-6">
         <h3 className={`font-display font-semibold ${large ? "text-2xl" : "text-xl"} ${m.active ? "text-white" : "text-white/60"}`}>

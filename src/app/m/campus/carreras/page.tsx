@@ -3,7 +3,7 @@ import Link from "next/link";
 import { countryFilter, countryStats, filterOptions, filtersSchema, homeCountry, myFavorites, PAGE_SIZE, searchPrograms, universityPhoto, type ProgramHit } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText, type CampusLang } from "@/lib/i18n-campus";
-import { requireModule } from "@/lib/module-access";
+import { requireCampus } from "@/lib/campus-access";
 import { CompareButton } from "../compare";
 import { Pager } from "../pager";
 import { FavoriteButton } from "../favorite";
@@ -11,7 +11,7 @@ import { CampusShell, isCampusStaff } from "../shell";
 import { FilterSidebar } from "../sidebar";
 
 export default async function ProgramsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
-  const [{ me }, { t, lang }, sp] = await Promise.all([requireModule("campus"), getDict(), searchParams]);
+  const [{ me }, { t, lang }, sp] = await Promise.all([requireCampus(), getDict(), searchParams]);
   const c = campusText(lang);
   const f = filtersSchema.parse(sp);
   const staff = isCampusStaff(me);

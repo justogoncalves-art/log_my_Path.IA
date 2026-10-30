@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { AppHeader } from "@/components/app-header";
 import { ModuleTileCard } from "@/components/module-tile";
 import { getMe, getMyModules } from "@/lib/dal";
+import { campusUnlocked } from "@/lib/campus-access";
 import { getDict } from "@/lib/i18n";
 
 export default async function HomePage() {
@@ -10,6 +11,7 @@ export default async function HomePage() {
 
   const modules = me.organizationId ? await getMyModules(me.organizationId) : [];
   const isStudent = me.role === "alumno";
+  const campusLocked = modules.some((m) => m.id === "campus" && m.active) && !(await campusUnlocked(me));
 
   return (
     <div className="min-h-screen">
@@ -33,7 +35,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 gap-5 md:grid-cols-6">
               {modules.map((m, i) => (
                 <div key={m.id} className={`mp-fade-up ${i < 2 ? "md:col-span-3" : "md:col-span-2"}`} style={{ animationDelay: `${0.05 + i * 0.07}s` }}>
-                  <ModuleTileCard m={m} t={t} lang={lang} large={i < 2} staff={!isStudent} />
+                  <ModuleTileCard m={m} t={t} lang={lang} large={i < 2} staff={!isStudent} locked={m.id === "campus" && m.active && campusLocked} />
                 </div>
               ))}
             </div>

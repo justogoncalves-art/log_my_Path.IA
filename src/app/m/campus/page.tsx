@@ -4,12 +4,12 @@ import { countryStats, hollandCode, homeCountry, myRiasec } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText, RIASEC_NAMES } from "@/lib/i18n-campus";
 import { redirect } from "next/navigation";
-import { requireModule } from "@/lib/module-access";
+import { requireCampus } from "@/lib/campus-access";
 import { CampusShell, isCampusStaff } from "./shell";
 
 // Inicio de My Campus.IA: mosaico de accesos con foto, de distintos tamaños
 export default async function CampusHome() {
-  const [{ me }, { t, lang }] = await Promise.all([requireModule("campus"), getDict()]);
+  const [{ me }, { t, lang }] = await Promise.all([requireCampus(), getDict()]);
   // Docentes y coordinadores tienen su propia vista de Campus
   if (isCampusStaff(me)) redirect("/docente/campus");
   const c = campusText(lang);

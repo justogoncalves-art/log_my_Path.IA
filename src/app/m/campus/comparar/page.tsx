@@ -2,7 +2,7 @@ import { getProgramsForCompare } from "@/lib/campus";
 import { getDict } from "@/lib/i18n";
 import { campusText } from "@/lib/i18n-campus";
 import { redirect } from "next/navigation";
-import { requireModule } from "@/lib/module-access";
+import { requireCampus } from "@/lib/campus-access";
 import { CampusShell, isCampusStaff } from "../shell";
 import { CompareSync } from "./compare-sync";
 
@@ -13,7 +13,7 @@ const firstNumber = (s: string | null | undefined) => {
 };
 
 export default async function ComparePage({ searchParams }: { searchParams: Promise<{ c?: string }> }) {
-  const [{ me }, { t, lang }, sp] = await Promise.all([requireModule("campus"), getDict(), searchParams]);
+  const [{ me }, { t, lang }, sp] = await Promise.all([requireCampus(), getDict(), searchParams]);
   // Docentes y coordinadores tienen su propia vista de Campus
   if (isCampusStaff(me)) redirect("/docente/campus");
   const c = campusText(lang);
