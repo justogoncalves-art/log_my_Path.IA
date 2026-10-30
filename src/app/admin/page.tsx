@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { AiSettingsForm } from "./ai-settings";
+import { RunQueueButton } from "./run-queue";
+
+// "Generar reportes en cola ahora" llama a la IA desde esta página (puede tardar unos minutos)
+export const maxDuration = 300;
 
 type AiOverview = {
   reports_enabled: boolean;
@@ -76,6 +80,7 @@ export default async function AdminPage() {
           </dl>
           <p className="mt-2 text-xs text-muted">Llamadas a la IA en las últimas 24 h: {ai.last24h_calls} de {ai.daily_max_calls} permitidas.</p>
 
+          <RunQueueButton />
           <AiSettingsForm enabled={ai.reports_enabled} budget={budget} daily={ai.daily_max_calls} email={ai.alert_email ?? ""} />
         </section>
       ) : null}

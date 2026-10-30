@@ -583,3 +583,16 @@ export async function checkHealthNow(): Promise<ActionResult> {
   revalidatePath("/admin/estado");
   return r.ok ? { ok: true, message: "Medición hecha" } : { ok: false, error: "Falta la clave del servidor" };
 }
+
+// Procesa ya la cola de reportes (sin esperar al cron diario)
+export async function runReportQueueNow(): Promise<ActionResult> {
+  const me = await getMe();
+  if (!me.isAdmin) return { ok: false, error: "Sin acceso" };
+  const { processReportQueue } = await import("@/lib/report");
+  const { processClassReportQueue } = await import("@/lib/class-report");
+  const [r, c] = await Promise.all([processReportQueue(3), processClassReportQueue(2)]);
+  revalidatePath("/admin");
+  const ok = r.results.filter((x) => x === "ok").length;
+  if (!r.processed && !c.processed) return { ok: true, message: "No había reportes en cola" };
+  return { ok: true, message: `Procesados: ${r.processed} reportes (${ok} generados) y ${c.processed} resúmenes de clase. Lo que no se generó sigue en cola.` };
+}
