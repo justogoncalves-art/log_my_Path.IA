@@ -18,12 +18,12 @@ export function HealthControls({ appUrl, enabled }: { appUrl: string; enabled: b
       </div>
       <p className="mt-1 text-sm text-muted">
         Los avisos llegan al «Mail para avisos» de Resumen → IA. La base avisa a la plataforma cada 5 minutos en esta dirección
-        (en producción: https://app.mypathia.app). Sin dirección, la CPU, la RAM y los mails se actualizan una vez por día o con «Medir ahora».
+        (en producción: https://www.mypathia.app). Sin dirección, la CPU, la RAM y los mails se actualizan una vez por día o con «Medir ahora».
       </p>
       <ActionForm action={setHealthSettings} submit="Guardar" className="mt-4 flex flex-col gap-4">
         <div className="max-w-xl">
           <Label text="Dirección pública de la plataforma">
-            <input name="app_url" type="url" defaultValue={appUrl} placeholder="https://app.mypathia.app" className={inputCls} />
+            <input name="app_url" type="url" defaultValue={appUrl} placeholder="https://www.mypathia.app" className={inputCls} />
           </Label>
         </div>
         <label className="flex items-center gap-2 text-sm">

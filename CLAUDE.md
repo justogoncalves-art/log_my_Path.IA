@@ -7,7 +7,7 @@ Los módulos (Mento.IA, My Campus.IA, My Mind.IA, My Cognition.IA, Linno) se act
 Next.js en Vercel · Supabase (Postgres + Auth + RLS) · Stripe · IA (Claude) · app móvil con Expo / React Native.
 
 ## Dominio
-- Plataforma: `app.mypathia.app` · Mails (Resend): `send.mypathia.app` · DNS en Namecheap.
+- Plataforma: `www.mypathia.app` (`mypathia.app` redirige a www) · Mails (Resend): `send.mypathia.app` · DNS en Namecheap.
 
 ## Decisiones tomadas
 - Identidad: una persona = un ID por documento (país + tipo + número). El mail queda atado a la persona; solo el admin lo cambia.

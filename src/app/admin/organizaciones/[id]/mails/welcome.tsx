@@ -70,7 +70,7 @@ export function CampaignList({ campaigns, classNames }: { campaigns: Campaign[];
 }
 
 function preview(html: string) {
-  const values: Record<string, string> = { nombre: "Ana", apellido: "Prueba", mail: "ana@colegio.edu", contrasena: "Xk7pR2mQ9a", link: "https://app.mypathia.app/login" };
+  const values: Record<string, string> = { nombre: "Ana", apellido: "Prueba", mail: "ana@colegio.edu", contrasena: "Xk7pR2mQ9a", link: "https://www.mypathia.app/login" };
   return html.replace(/\{\{\s*(\w+)\s*\}\}/g, (m, k: string) => values[k] ?? m);
 }
 

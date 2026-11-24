@@ -39,7 +39,7 @@ export async function sendBatch(mails: Mail[]): Promise<boolean[]> {
   return results;
 }
 
-const PROD_URL = "https://app.mypathia.app";
+const PROD_URL = "https://www.mypathia.app";
 
 // Dirección de la plataforma para los links de los mails: en producción la oficial;
 // en la versión de prueba, la misma desde la que se hizo el envío.
