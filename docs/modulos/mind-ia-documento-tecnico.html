@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mind.IA — Documento Técnico-Pedagógico v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sol:#FFB830; --sol-l:#FFF3D0; --sol-d:#C8860A;
+  --cielo:#4BBDE8; --cielo-l:#E0F5FC; --cielo-d:#1A7FA8;
+  --bosque:#3DBF8C; --bosque-l:#DFF5EC; --bosque-d:#1A8A61;
+  --coral:#FF6B6B; --coral-l:#FFE8E8; --coral-d:#C83B3B;
+  --lila:#9B8FE8; --lila-l:#EEEAFB; --lila-d:#6355C2;
+  --tinta:#1E1C2E; --tinta2:#5A5870; --tinta3:#9896A8;
+  --crema:#FFFDF7; --surface:#F4F2EE; --borde:#E8E5DF; --blanco:#FFFFFF;
+  --r:10px; --r-sm:6px; --r-lg:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lora',serif;background:var(--crema);color:var(--tinta);line-height:1.8;font-size:15px;}
+
+/* COVER */
+.cover{background:var(--tinta);min-height:100vh;padding:80px 80px 60px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;page-break-after:always;}
+.cover::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(75,189,232,0.1) 0%,transparent 70%);top:-200px;right:-150px;}
+.cover::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,184,48,0.08) 0%,transparent 70%);bottom:-100px;left:200px;}
+.cover-top{position:relative;z-index:1;}
+.cover-brand{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinta3);margin-bottom:48px;}
+.cover-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;color:var(--tinta3);margin-bottom:16px;text-transform:uppercase;}
+.cover-title{font-family:'Nunito',sans-serif;font-size:52px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-1.5px;margin-bottom:12px;}
+.cover-title em{color:var(--sol);}
+.cover-subtitle{font-family:'Lora',serif;font-size:20px;color:#888;font-style:italic;margin-bottom:40px;line-height:1.4;}
+.cover-tags{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:60px;}
+.ctag{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;padding:6px 16px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);color:#aaa;}
+.cover-meta{border-top:1px solid rgba(255,255,255,0.08);padding-top:32px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;position:relative;z-index:1;}
+.cm-label{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tinta3);margin-bottom:4px;}
+.cm-val{font-size:13px;color:#ccc;}
+.cover-bottom{position:relative;z-index:1;}
+.cover-disclaimer{font-size:12px;color:#444;font-family:'Space Grotesk',sans-serif;margin-top:24px;}
+
+/* TOC */
+.toc{background:var(--blanco);padding:60px 80px;border-bottom:1px solid var(--borde);}
+.toc-title{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;margin-bottom:32px;color:var(--tinta);}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;}
+.toc-item{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.toc-num{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--tinta3);flex-shrink:0;width:28px;}
+.toc-name{color:var(--tinta2);flex:1;}
+.toc-sub{font-size:12px;color:var(--tinta3);padding:4px 0 4px 38px;font-style:italic;}
+
+/* LAYOUT */
+.doc{max-width:100%;padding:0;}
+.section{padding:60px 80px;border-bottom:1px solid var(--borde);}
+.section:last-child{border-bottom:none;}
+.section.alt{background:var(--blanco);}
+
+/* SECTION HEADERS */
+.sec-num{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinta3);margin-bottom:8px;}
+.sec-title{font-family:'Nunito',sans-serif;font-size:30px;font-weight:900;color:var(--tinta);letter-spacing:-0.5px;margin-bottom:6px;}
+.sec-title em{color:var(--sol);font-style:normal;}
+.sec-lead{font-family:'Lora',serif;font-size:16px;color:var(--tinta2);font-style:italic;margin-bottom:32px;line-height:1.7;padding-bottom:24px;border-bottom:1px solid var(--borde);}
+
+/* TYPOGRAPHY */
+h2{font-family:'Nunito',sans-serif;font-size:20px;font-weight:800;color:var(--tinta);margin:32px 0 12px;letter-spacing:-0.2px;}
+h3{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--tinta2);margin:24px 0 10px;text-transform:uppercase;letter-spacing:0.5px;}
+p{margin-bottom:16px;color:var(--tinta2);line-height:1.8;}
+p strong{color:var(--tinta);}
+
+/* CALLOUT */
+.callout{border-radius:var(--r);padding:20px 24px;margin:24px 0;border-left:3px solid;}
+.callout-title{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px;}
+.callout-body{font-size:14px;line-height:1.6;}
+.co-sol{background:var(--sol-l);border-color:var(--sol);}.co-sol .callout-title{color:var(--sol-d);}
+.co-cielo{background:var(--cielo-l);border-color:var(--cielo);}.co-cielo .callout-title{color:var(--cielo-d);}
+.co-bosque{background:var(--bosque-l);border-color:var(--bosque);}.co-bosque .callout-title{color:var(--bosque-d);}
+.co-coral{background:var(--coral-l);border-color:var(--coral);}.co-coral .callout-title{color:var(--coral-d);}
+.co-lila{background:var(--lila-l);border-color:var(--lila);}.co-lila .callout-title{color:var(--lila-d);}
+.co-dark{background:var(--tinta);border-color:var(--sol);}.co-dark .callout-title{color:var(--sol);}.co-dark .callout-body{color:#ccc;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0;}
+.stat-card{background:var(--blanco);border:1.5px solid var(--borde);border-radius:var(--r);padding:20px 16px;text-align:center;}
+.stat-num{font-family:'Nunito',sans-serif;font-size:36px;font-weight:900;line-height:1;margin-bottom:4px;}
+.stat-label{font-size:12px;color:var(--tinta3);line-height:1.4;font-family:'Space Grotesk',sans-serif;}
+
+/* TABLE */
+.doc-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:13px;}
+.doc-table th{background:var(--tinta);color:#fff;padding:10px 14px;text-align:left;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.3px;}
+.doc-table td{padding:10px 14px;border-bottom:1px solid var(--borde);vertical-align:top;line-height:1.5;color:var(--tinta2);}
+.doc-table tr:nth-child(even) td{background:var(--surface);}
+.doc-table tr:hover td{background:var(--sol-l);}
+.doc-table td strong{color:var(--tinta);}
+
+/* PROTOCOL STEPS */
+.steps{display:flex;flex-direction:column;gap:0;margin:24px 0;}
+.step{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid var(--borde);}
+.step:last-child{border-bottom:none;}
+.step-num{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--borde);line-height:1;padding-top:4px;}
+.step-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--tinta);margin-bottom:6px;}
+.step-body{font-size:14px;color:var(--tinta2);line-height:1.6;}
+
+/* INSTRUMENT CARDS */
+.instruments-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0;}
+.inst-card{background:var(--blanco);border:1.5px solid var(--borde);border-radius:var(--r);overflow:hidden;}
+.inst-top{padding:16px 18px 12px;}
+.inst-tag{font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;}
+.inst-name{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;margin-bottom:4px;}
+.inst-full{font-size:12px;font-style:italic;margin-bottom:8px;}
+.inst-desc{font-size:12px;color:var(--tinta2);line-height:1.5;}
+.inst-body{padding:12px 18px;border-top:1px solid var(--borde);background:var(--surface);}
+.inst-row{display:grid;grid-template-columns:80px 1fr;font-size:11px;padding:3px 0;gap:8px;}
+.inst-row-label{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--tinta3);}
+.inst-row-val{color:var(--tinta2);}
+.inst-refs{padding:10px 18px;border-top:1px solid var(--borde);font-size:11px;color:var(--tinta3);font-style:italic;}
+
+/* YEAR BLOCKS */
+.year-block{background:var(--blanco);border:1.5px solid var(--borde);border-radius:var(--r-lg);margin-bottom:20px;overflow:hidden;}
+.year-block-hdr{padding:18px 24px;display:flex;align-items:center;gap:16px;}
+.yb-badge{font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;padding:6px 14px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.yb-info{}
+.yb-curso{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:2px;}
+.yb-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;}
+.yb-body{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-top:1px solid var(--borde);}
+.yb-col{padding:16px 18px;border-right:1px solid var(--borde);}
+.yb-col:last-child{border-right:none;}
+.yb-col-label{font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--tinta3);margin-bottom:10px;}
+.yb-item{font-size:12px;color:var(--tinta2);padding:4px 0;border-bottom:1px solid var(--borde);line-height:1.4;display:flex;gap:6px;}
+.yb-item:last-child{border-bottom:none;}
+.yb-item::before{content:'→';font-size:10px;color:var(--tinta3);flex-shrink:0;margin-top:1px;}
+
+/* ALERT SYSTEM */
+.alert-levels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:24px 0;}
+.al-card{border-radius:var(--r);overflow:hidden;border:1.5px solid var(--borde);}
+.al-top{padding:16px 18px;}
+.al-bottom{padding:12px 18px;border-top:1px solid var(--borde);font-size:12px;color:var(--tinta2);}
+
+/* BIBLIOGRAPHY */
+.bib-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.bib-item{font-size:13px;color:var(--tinta2);line-height:1.6;padding:12px 16px;background:var(--blanco);border:1px solid var(--borde);border-radius:var(--r-sm);}
+.bib-item cite{font-style:italic;color:var(--tinta);}
+
+/* ETHICS BOX */
+.ethics-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0;}
+.eth-card{background:var(--blanco);border:1.5px solid var(--borde);border-radius:var(--r);padding:18px 20px;}
+.eth-icon{font-size:24px;margin-bottom:10px;}
+.eth-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;margin-bottom:6px;}
+.eth-text{font-size:13px;color:var(--tinta2);line-height:1.5;}
+
+/* FOOTER */
+.doc-footer{background:var(--tinta);padding:24px 80px;display:flex;align-items:center;justify-content:space-between;}
+.df-brand{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:#fff;}
+.df-brand span{color:var(--sol);}
+.df-txt{font-size:11px;color:#555;font-family:'Space Grotesk',sans-serif;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--borde);margin:32px 0;}
+.divider-label{display:flex;align-items:center;gap:16px;margin:32px 0;}
+.dl-line{flex:1;height:1px;background:var(--borde);}
+.dl-text{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tinta3);white-space:nowrap;}
+
+/* LIST STYLES */
+ul.doc-list{list-style:none;margin:12px 0 20px;display:flex;flex-direction:column;gap:6px;}
+ul.doc-list li{font-size:14px;color:var(--tinta2);padding-left:18px;position:relative;line-height:1.5;}
+ul.doc-list li::before{content:'—';position:absolute;left:0;color:var(--tinta3);font-size:12px;}
+
+/* QUOTE */
+blockquote{border-left:3px solid var(--sol);padding:16px 24px;margin:24px 0;background:var(--sol-l);border-radius:0 var(--r) var(--r) 0;}
+blockquote p{font-style:italic;color:var(--tinta);margin-bottom:4px;}
+blockquote cite{font-size:12px;color:var(--tinta3);font-style:normal;font-family:'Space Grotesk',sans-serif;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ PORTADA ═══════ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-brand">MyPath.IA Ecosystem · Mind.IA Platform</div>
+    <div class="cover-eyebrow">Documento Técnico-Pedagógico · Versión 1.0 · Uso Reservado</div>
+    <div class="cover-title">Mind<em>.</em>IA</div>
+    <div class="cover-subtitle">Sistema de Detección Temprana y Acompañamiento<br>Neuropsicológico Longitudinal en la Etapa de Primaria</div>
+    <div class="cover-tags">
+      <span class="ctag">6–12 años · Primaria</span>
+      <span class="ctag">Neurodivergencias</span>
+      <span class="ctag">Salud psicológica</span>
+      <span class="ctag">Situaciones de riesgo</span>
+      <span class="ctag">IA longitudinal</span>
+      <span class="ctag">Evidencia clínica</span>
+      <span class="ctag">RGPD · LOMLOE · LOPDGDD</span>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-meta">
+      <div>
+        <div class="cm-label">Clasificación</div>
+        <div class="cm-val">Documento técnico-pedagógico de uso interno y profesional</div>
+      </div>
+      <div>
+        <div class="cm-label">Versión</div>
+        <div class="cm-val">v1.0 · 2025 · Sujeto a revisión por comité científico</div>
+      </div>
+      <div>
+        <div class="cm-label">Ecosistema</div>
+        <div class="cm-val">MyPath.IA · Módulo primaria 6–12 años · Preludio a Mento.IA</div>
+      </div>
+    </div>
+    <div class="cover-disclaimer">Este documento es de uso exclusivo para profesionales del ámbito educativo, psicológico y clínico. No está destinado a su distribución pública ni comercial sin autorización expresa de MyPath.IA.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ ÍNDICE ════════ -->
+<div class="toc">
+  <div class="toc-title">Índice de contenidos</div>
+  <div class="toc-grid">
+    <div>
+      <div class="toc-item"><span class="toc-num">01</span><span class="toc-name">Resumen ejecutivo y propósito del documento</span></div>
+      <div class="toc-item"><span class="toc-num">02</span><span class="toc-name">Marco conceptual y justificación científica</span></div>
+      <div class="toc-sub">2.1 Neuroplasticidad y ventana crítica de desarrollo</div>
+      <div class="toc-sub">2.2 Epidemiología de las dificultades en la infancia</div>
+      <div class="toc-sub">2.3 Brecha entre detección y diagnóstico en España</div>
+      <div class="toc-item"><span class="toc-num">03</span><span class="toc-name">Qué es Mind.IA — definición y alcance</span></div>
+      <div class="toc-item"><span class="toc-num">04</span><span class="toc-name">Los tres ámbitos de detección</span></div>
+      <div class="toc-sub">4.1 Neurodivergencias y neurodesarrollo</div>
+      <div class="toc-sub">4.2 Salud psicológica y emocional</div>
+      <div class="toc-sub">4.3 Situaciones de riesgo y protección</div>
+      <div class="toc-item"><span class="toc-num">05</span><span class="toc-name">Metodología de detección en la plataforma</span></div>
+      <div class="toc-item"><span class="toc-num">06</span><span class="toc-name">Instrumentos clínicos validados</span></div>
+    </div>
+    <div>
+      <div class="toc-item"><span class="toc-num">07</span><span class="toc-name">Estructura por año escolar (1º–6º Primaria)</span></div>
+      <div class="toc-item"><span class="toc-num">08</span><span class="toc-name">Sistema de alertas y protocolo de actuación</span></div>
+      <div class="toc-item"><span class="toc-num">09</span><span class="toc-name">El rol del orientador y del profesional</span></div>
+      <div class="toc-item"><span class="toc-num">10</span><span class="toc-name">Marco ético, legal y de privacidad</span></div>
+      <div class="toc-sub">10.1 RGPD y Ley Orgánica 3/2018</div>
+      <div class="toc-sub">10.2 LOMLOE y atención a la diversidad</div>
+      <div class="toc-sub">10.3 Principio Detectar ≠ Diagnosticar</div>
+      <div class="toc-item"><span class="toc-num">11</span><span class="toc-name">Integración con Mento.IA — ecosistema MyPath.IA</span></div>
+      <div class="toc-item"><span class="toc-num">12</span><span class="toc-name">Limitaciones, sesgos y consideraciones críticas</span></div>
+      <div class="toc-item"><span class="toc-num">13</span><span class="toc-name">Referencias bibliográficas</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="doc">
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 01 ═══ -->
+<div class="section">
+  <div class="sec-num">Sección 01</div>
+  <div class="sec-title">Resumen <em>ejecutivo</em></div>
+  <div class="sec-lead">Mind.IA es un sistema digital de detección temprana y acompañamiento neuropsicológico longitudinal diseñado para la etapa de Educación Primaria (6–12 años). No es una plataforma de bienestar. Es infraestructura clínico-educativa.</div>
+
+  <p>El sistema acompaña al alumno durante los seis años de primaria, construyendo un perfil psicológico y neurológico progresivo mediante protocolos de evaluación clínica adaptados, check-ins emocionales diarios y análisis longitudinal por inteligencia artificial. El objetivo central es identificar, antes de que se cronifiquen, las dificultades que más impactan en el desarrollo y la trayectoria vital de un niño: neurodivergencias no diagnosticadas, estados psicológicos emergentes y situaciones de riesgo en el entorno.</p>
+
+  <p>Mind.IA opera bajo un principio ético irrenunciable: <strong>detectar no es diagnosticar</strong>. La plataforma genera señales clínicas estructuradas que llegan exclusivamente al orientador del centro educativo. El diagnóstico clínico compete siempre al sistema sanitario. La escuela observa, registra y deriva con evidencia.</p>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--sol)">1/5</div>
+      <div class="stat-label">alumnos presenta una neurodivergencia sin detectar al entrar a primaria</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--coral)">7 años</div>
+      <div class="stat-label">es la edad media de inicio de trastornos de ansiedad. Rara vez se detectan a tiempo</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--cielo)">30%</div>
+      <div class="stat-label">de los casos de abuso se detectan primero en el entorno escolar</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--bosque)">6 años</div>
+      <div class="stat-label">de acompañamiento longitudinal continuo. El perfil crece con el alumno</div>
+    </div>
+  </div>
+
+  <div class="callout co-dark">
+    <div class="callout-title">Propósito central del documento</div>
+    <div class="callout-body">Este documento está dirigido a profesionales del ámbito educativo, psicológico, neuropediátrico y de la salud pública. Su objetivo es describir con rigor científico y operativo qué hace Mind.IA, cómo lo hace, qué instrumentos utiliza, bajo qué marco ético opera y qué impacto espera generar en el alumno, el orientador y la institución educativa.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 02 ═══ -->
+<div class="section alt">
+  <div class="sec-num">Sección 02</div>
+  <div class="sec-title">Marco conceptual y <em>justificación científica</em></div>
+  <div class="sec-lead">La infancia temprana y media —especialmente entre los 6 y los 12 años— constituye la ventana más crítica y plástica del neurodesarrollo humano. Intervenir en este periodo no es una opción: es la única estrategia con evidencia de impacto real a largo plazo.</div>
+
+  <h2>2.1 Neuroplasticidad y ventana crítica de desarrollo</h2>
+  <p>La neuroplasticidad —la capacidad del cerebro para reorganizarse en respuesta a la experiencia— alcanza su máxima expresión durante la infancia. Los estudios de Shonkoff y Phillips (2000) en la National Academy of Sciences establecen que las arquitecturas neuronales que sustentan el aprendizaje, la regulación emocional y las habilidades sociales se consolidan fundamentalmente entre los 0 y los 12 años. Las intervenciones realizadas en este período tienen un retorno sobre la inversión demostrado de hasta 7–12 veces superior a las intervenciones en la adolescencia o la edad adulta (Heckman, 2006).</p>
+
+  <blockquote>
+    <p>"El desarrollo temprano del cerebro es la base sobre la que se construye toda la salud, el aprendizaje y la productividad futura. Las intervenciones en los primeros años tienen efectos que duran toda la vida."</p>
+    <cite>— Jack P. Shonkoff, Harvard Center on the Developing Child, 2017</cite>
+  </blockquote>
+
+  <p>En el contexto escolar, esta ventana de plasticidad máxima coincide exactamente con la etapa de Educación Primaria. Un alumno que llega a la ESO con un TDAH no diagnosticado, una dislexia no intervenida o un estado de ansiedad crónica no tratado, no solo ha perdido seis años de intervención temprana efectiva: ha construido además mecanismos de compensación disfuncionales que dificultan exponencialmente cualquier intervención posterior.</p>
+
+  <h2>2.2 Epidemiología de las dificultades en la infancia</h2>
+  <p>Los datos epidemiológicos justifican por sí solos la necesidad de un sistema de detección universal y longitudinal en la etapa primaria:</p>
+
+  <table class="doc-table">
+    <thead><tr><th>Condición</th><th>Prevalencia estimada en España</th><th>Edad media de diagnóstico</th><th>Brecha detección-diagnóstico</th></tr></thead>
+    <tbody>
+      <tr><td><strong>TDAH</strong></td><td>6–8% de la población escolar</td><td>8–9 años</td><td>2–4 años de retraso promedio</td></tr>
+      <tr><td><strong>Dislexia y trastornos lectoescritura</strong></td><td>10–15% de escolares</td><td>8–10 años</td><td>Frecuentemente no diagnosticada</td></tr>
+      <tr><td><strong>TEA (Trastorno del Espectro Autista)</strong></td><td>1–1.5% (casos leves subdiagnosticados)</td><td>4–7 años (formas severas), 8–12 (leves)</td><td>Hasta 5 años en formas de alto funcionamiento</td></tr>
+      <tr><td><strong>Trastornos de ansiedad infantil</strong></td><td>10–20% de la población infantil</td><td>Inicio ~7 años, diagnóstico ~11–14</td><td>4–7 años sin atención</td></tr>
+      <tr><td><strong>Depresión infantil</strong></td><td>2–5% en menores de 12 años</td><td>Frecuentemente infradiagnosticada</td><td>Alta tasa de no detección</td></tr>
+      <tr><td><strong>Altas capacidades (AACC)</strong></td><td>2–5% de la población escolar</td><td>Variable; muchos sin identificar</td><td>Alta invisibilidad en el sistema</td></tr>
+      <tr><td><strong>Bullying (víctima activa)</strong></td><td>23–30% en primaria según estudios CISNEROS</td><td>Pico 8–11 años</td><td>Mayoritariamente silenciado</td></tr>
+      <tr><td><strong>Abuso infantil (todas las formas)</strong></td><td>15–20% prevalencia vida (OMS, 2020)</td><td>Detección promedio: tardía</td><td>80% de casos no denunciados</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2.3 Brecha entre detección y diagnóstico en España</h2>
+  <p>El sistema educativo español enfrenta una paradoja estructural: es el primer y más constante punto de contacto con los niños durante su infancia, pero carece de herramientas sistemáticas de detección. Según datos del Ministerio de Educación (2023), la ratio media orientador-alumno en centros concertados y privados oscila entre 1:500 y 1:800, haciendo materialmente imposible la observación clínica individualizada sin apoyo tecnológico.</p>
+
+  <p>El resultado es predecible: las dificultades se detectan cuando ya han generado consecuencias medibles (fracaso escolar, conflicto conductual, derivación por crisis) en lugar de prevenirse en su fase emergente. Mind.IA existe para cerrar exactamente esta brecha.</p>
+
+  <div class="callout co-cielo">
+    <div class="callout-title">Fundamento de la intervención universal</div>
+    <div class="callout-body">La evidencia científica es unívoca: la detección universal —aplicada a toda la población escolar sin criterio de sospecha previo— es significativamente más efectiva que la detección por derivación, que está sesgada hacia los casos más visibles (hiperactividad, conflicto conductual) y pierde sistemáticamente los perfiles internalizantes (ansiedad, depresión, TEA de alto funcionamiento, abuso). Mind.IA adopta el modelo de cribado universal escalonado recomendado por el CDC, la SAMHSA y la guía NICE.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 03 ═══ -->
+<div class="section">
+  <div class="sec-num">Sección 03</div>
+  <div class="sec-title">Qué es <em>Mind.IA</em></div>
+  <div class="sec-lead">Mind.IA es un sistema clínico-educativo digital de detección temprana y acompañamiento neuropsicológico longitudinal, diseñado para operar de forma integrada en el entorno escolar durante toda la etapa de Educación Primaria.</div>
+
+  <p>La plataforma combina tres elementos interdependientes: <strong>instrumentos de evaluación clínica validados</strong>, adaptados para su administración digital en el contexto escolar; un <strong>motor de inteligencia artificial longitudinal</strong> que analiza patrones en el tiempo en lugar de momentos aislados; y un <strong>sistema de gestión de alertas</strong> que traslada las señales al orientador educativo con el nivel de evidencia y urgencia apropiados.</p>
+
+  <p>Mind.IA no sustituye al psicólogo, al neuropediatra ni al orientador. Es la infraestructura de datos que les permite actuar con evidencia, anticipación y sistematicidad allí donde hasta ahora solo podían actuar con intuición y reacción.</p>
+
+  <h2>Principios fundacionales</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div><div class="step-title">Detección invisible — el alumno no sabe que está siendo evaluado</div><div class="step-body">Los protocolos clínicos se integran en la experiencia del alumno como actividades naturales: juegos cognitivos, historias interactivas, check-ins emocionales. La evaluación es continua y discreta. Este principio no solo mejora la validez ecológica de los datos, sino que elimina la ansiedad de evaluación que puede distorsionar los resultados en poblaciones vulnerables.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div><div class="step-title">Longitudinalidad — el perfil crece con el alumno</div><div class="step-body">A diferencia de las evaluaciones puntuales, Mind.IA construye un perfil dinámico que se enriquece con cada interacción. El valor diagnóstico de una señal aislada es bajo; el valor de un patrón consolidado en 90 días de datos es clínicamente significativo. La IA distingue entre variabilidad normal del estado emocional y patrones estables que requieren atención profesional.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div><div class="step-title">El profesional siempre decide — la tecnología informa, el humano actúa</div><div class="step-body">Mind.IA no diagnostica, no prescribe ni interviene directamente. Genera datos estructurados, señales de alerta con nivel de evidencia explícito y recomendaciones de actuación basadas en los protocolos clínicos establecidos. La decisión de intervención, derivación o comunicación a la familia corresponde siempre al orientador y al equipo directivo del centro.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div><div class="step-title">Cero impacto en el alumno — los resultados no son suyos</div><div class="step-body">Los resultados del cribado, las alertas y el perfil neuropsicológico son datos exclusivos del orientador. El alumno nunca recibe puntuaciones, etiquetas ni retroalimentación clínica. Su experiencia en la plataforma es siempre positiva, normalizadora y de acompañamiento. La información fluye hacia el profesional, no hacia el niño.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 04 ═══ -->
+<div class="section alt">
+  <div class="sec-num">Sección 04</div>
+  <div class="sec-title">Los tres <em>ámbitos de detección</em></div>
+  <div class="sec-lead">Mind.IA articula su sistema de detección en torno a tres grandes ámbitos clínicos, cada uno con sus instrumentos específicos, sus señales de alerta características y su protocolo de actuación diferenciado.</div>
+
+  <h2>4.1 Neurodivergencias y neurodesarrollo</h2>
+  <p>Las neurodivergencias son variaciones neurológicas que afectan a la forma en que el cerebro procesa la información. No son enfermedades. Son perfiles cognitivos y conductuales que, sin la identificación y el apoyo adecuados, generan desajuste escolar, frustración crónica y consecuencias psicológicas secundarias severas. La primaria es la ventana crítica para su detección.</p>
+
+  <table class="doc-table">
+    <thead><tr><th>Condición</th><th>Señales primarias en primaria</th><th>Impacto sin detección</th><th>Instrumento Mind.IA</th></tr></thead>
+    <tbody>
+      <tr><td><strong>TDAH inatento</strong></td><td>Dificultad para sostener la atención, olvidos frecuentes, tareas incompletas, lentitud en trabajo autónomo</td><td>Fracaso escolar, baja autoestima, ansiedad secundaria, etiqueta de "vago"</td><td>SNAP-IV autoinforme + análisis IA de tiempos en juegos cognitivos</td></tr>
+      <tr><td><strong>TDAH hiperactivo/combinado</strong></td><td>Exceso de movimiento, impulsividad, dificultad para esperar, interrupciones constantes</td><td>Conflicto conductual, rechazo social, sanciones disciplinarias injustas</td><td>Conners Early Childhood + SNAP-IV + observación docente</td></tr>
+      <tr><td><strong>TEA alto funcionamiento</strong></td><td>Dificultad en reciprocidad social, intereses restringidos, rigidez en rutinas, comunicación literal</td><td>Exclusión social, ansiedad por incomprensión, crisis conductuales sin contexto aparente</td><td>ASSQ autoinforme + análisis de respuestas en historias sociales</td></tr>
+      <tr><td><strong>Dislexia</strong></td><td>Dificultad en decodificación, confusión de letras (b/d/p/q), lectura lenta y laboriosa, escritura con errores sistemáticos</td><td>Fracaso en todas las áreas curriculares, vergüenza, rechazo a leer en voz alta, abandono escolar</td><td>PROLEC-R subescalas + juegos fonológicos con análisis IA</td></tr>
+      <tr><td><strong>Discalculia</strong></td><td>Dificultad para comprender conceptos numéricos, errores en cálculo básico, desorientación espacial en matemáticas</td><td>Fracaso matemático crónico, etiqueta de "malo en matemáticas", evitación</td><td>Tareas numéricas integradas + análisis de patrones de error</td></tr>
+      <tr><td><strong>Altas capacidades</strong></td><td>Aburrimiento intenso, terminan tareas muy rápido, preguntas avanzadas, desajuste social con iguales</td><td>Fracaso escolar paradójico, desmotivación, aislamiento, ansiedad por infraestimulación</td><td>KBIT-2 subescala + análisis de velocidad y precisión en tareas</td></tr>
+      <tr><td><strong>Trastorno de coordinación (TDC)</strong></td><td>Torpeza motora, dificultad en manualidades y escritura, caídas frecuentes, evita deporte</td><td>Exclusión en juego físico, baja autoestima motora, evitación de actividad física</td><td>Observación en tareas de precisión motora dentro de la app</td></tr>
+      <tr><td><strong>Trastornos del lenguaje</strong></td><td>Dificultades articulatorias, vocabulario limitado, comprensión reducida, retraso en lectura</td><td>Fracaso en comprensión lectora, dificultades comunicativas, aislamiento</td><td>Análisis de respuestas verbales y escritas + marcadores lingüísticos IA</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4.2 Salud psicológica y emocional</h2>
+  <p>La salud mental infantil es el factor predictor más potente de la salud mental adulta. Los trastornos que se inician en la infancia sin intervención tienen una tasa de persistencia en la adolescencia y la adultez que supera el 50% en la mayoría de los casos (Kessler et al., 2005). La detección temprana en la etapa primaria no es asistencia: es prevención primaria con impacto de décadas.</p>
+
+  <table class="doc-table">
+    <thead><tr><th>Condición</th><th>Presentación clínica en primaria</th><th>Señales conductuales observables</th><th>Instrumento Mind.IA</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Ansiedad generalizada</strong></td><td>Preocupación excesiva, múltiples dominios, dificultad para controlar la inquietud, síntomas físicos (cefalea, dolor abdominal)</td><td>Rumiación visible, búsqueda constante de tranquilización, llanto sin causa aparente</td><td>SCARED versión alumno</td></tr>
+      <tr><td><strong>Ansiedad de separación</strong></td><td>Miedo intenso a separarse de figuras de apego, negativa a ir al colegio, pesadillas con separación</td><td>Llanto al entrada, quejas físicas matutinas, llamadas frecuentes a casa</td><td>SCARED subescala + check-in matutino</td></tr>
+      <tr><td><strong>Ansiedad social / fobia social</strong></td><td>Miedo intenso a la evaluación negativa por iguales, evitación de situaciones sociales, mutismo selectivo</td><td>Aislamiento en recreo, negativa a participar en clase, rubor, tartamudeo situacional</td><td>MASC-2 + escenarios sociales</td></tr>
+      <tr><td><strong>Fobia escolar / rechazo escolar</strong></td><td>Resistencia activa a acudir al centro, síntomas físicos matutinos que desaparecen al quedarse en casa</td><td>Absentismo creciente, quejas somáticas, mejoría en fin de semana</td><td>Check-in + patrón de asistencia + SCARED</td></tr>
+      <tr><td><strong>Depresión infantil</strong></td><td>Estado de ánimo disfórico o irritable (en niños más que tristeza), anhedonia, fatiga, autoestima muy baja</td><td>Llanto fácil, pérdida de interés en juego, verbalización de sentirse "inútil"</td><td>CDI-2 versión corta</td></tr>
+      <tr><td><strong>TOC en la infancia</strong></td><td>Pensamientos intrusivos, rituales repetitivos, compulsiones para reducir la ansiedad, interferencia significativa</td><td>Rituales visibles, dificultad para comenzar tareas, preguntas de reaseguramiento compulsivas</td><td>Preguntas específicas check-in + detección de patrones rituales</td></tr>
+      <tr><td><strong>Trastorno adaptativo</strong></td><td>Reacción desproporcionada a cambio identificable (divorcio, mudanza, pérdida), síntomas emocionales o conductuales</td><td>Cambio brusco de conducta tras evento vital identificable</td><td>Check-in longitudinal + análisis de cambio brusco IA</td></tr>
+      <tr><td><strong>Estrés postraumático (TEPT)</strong></td><td>Reexperimentación, evitación, alteración cognitiva, hiperactivación tras evento traumático</td><td>Pesadillas, sobresalto, flashbacks, regresiones conductuales</td><td>CPSS-V versión infantil</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4.3 Situaciones de riesgo y protección</h2>
+  <p>El tercer ámbito es el más sensible y el que activa los protocolos de mayor urgencia. La detección de situaciones de riesgo requiere un enfoque especialmente cuidadoso: las señales son frecuentemente indirectas, el miedo y la vergüenza del alumno dificultan la comunicación directa, y las consecuencias de una actuación inadecuada pueden ser tan graves como las de la no actuación.</p>
+
+  <div class="callout co-coral">
+    <div class="callout-title">Principio de máxima cautela en situaciones de riesgo</div>
+    <div class="callout-body">Mind.IA opera bajo el principio de que en situaciones de posible riesgo para el menor, el error de falso positivo (activar protocolo cuando no había riesgo real) es siempre preferible al falso negativo (no activar cuando sí lo había). El coste de una revisión innecesaria es incomparablemente menor al coste de un caso de abuso no detectado.</div>
+  </div>
+
+  <table class="doc-table">
+    <thead><tr><th>Situación de riesgo</th><th>Indicadores en la plataforma</th><th>Señales conductuales complementarias</th><th>Protocolo de activación</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Bullying — víctima</strong></td><td>Respuestas en escenarios sociales, check-in negativo persistente en relación con iguales, menciones directas en texto libre</td><td>Cambios en hábitos de recreo, evitación de compañeros específicos, deterioro académico súbito</td><td>Alerta media → revisión orientador en 48h</td></tr>
+      <tr><td><strong>Bullying — agresor</strong></td><td>Patrones de respuesta en escenarios que minimizan el daño a otros, justificación de la violencia</td><td>Conducta dominante, quejas de otros alumnos, incidentes registrados</td><td>Alerta preventiva → seguimiento orientador</td></tr>
+      <tr><td><strong>Ciberbullying</strong></td><td>Preguntas específicas sobre experiencias online, malestar relacionado con dispositivos</td><td>Cambio de conducta tras uso de dispositivos, secretismo, evitación de pantallas</td><td>Alerta media → revisión orientador</td></tr>
+      <tr><td><strong>Abuso físico</strong></td><td>Menciones indirectas de dolor, miedo a adultos específicos, patrones de respuesta en escenarios de adultos</td><td>Marcas físicas, ropa inapropiada para clima (ocultar marcas), sobresalto ante movimientos bruscos</td><td>Alerta crítica → protocolo urgente 24h</td></tr>
+      <tr><td><strong>Abuso emocional / negligencia</strong></td><td>Autoconcepto muy negativo, ausencia de referencias positivas al entorno familiar, respuestas de miedo ante figuras de autoridad</td><td>Falta de higiene básica, hambre frecuente, ropa inadecuada, cansancio extremo</td><td>Alerta crítica → protocolo urgente</td></tr>
+      <tr><td><strong>Abuso sexual</strong></td><td>Respuestas a preguntas sobre "secretos con adultos", malestar corporal, lenguaje sexual inapropiado para la edad en texto libre</td><td>Conducta hipersexualizada, regresiones, rechazo a determinadas personas, pesadillas</td><td>Alerta crítica máxima → protocolo inmediato</td></tr>
+      <tr><td><strong>Violencia doméstica (testigo)</strong></td><td>Referencias a conflictos en casa, miedo al entorno familiar, ansiedad anticipatoria ante el regreso a casa</td><td>Nerviosismo a final de jornada, reluctancia a irse a casa, hipervigilancia</td><td>Alerta crítica → protocolo urgente</td></tr>
+      <tr><td><strong>Ideación autolesiva</strong></td><td>Solo activo a partir de 10 años. Menciones directas en texto libre + análisis semántico IA. SIQ-Jr activado condicionalmente</td><td>Marcas físicas, búsquedas en dispositivos, verbalización de "no querer estar"</td><td>Alerta crítica máxima → protocolo inmediato + notificación familia</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 05 ═══ -->
+<div class="section">
+  <div class="sec-num">Sección 05</div>
+  <div class="sec-title">Metodología de <em>detección</em></div>
+  <div class="sec-lead">Mind.IA utiliza cuatro vectores de detección complementarios que operan de forma simultánea y se enriquecen mutuamente. Ningún vector aislado es suficiente para generar una alerta; es la convergencia de señales a lo largo del tiempo lo que otorga validez clínica a los datos.</div>
+
+  <h2>Vector 1 — Check-in longitudinal diario</h2>
+  <p>El check-in es el vector de mayor frecuencia y el que proporciona la base de datos longitudinal. Cada día de uso, el alumno responde 3–5 preguntas breves adaptadas a su edad y al curso en que se encuentra. El formato varía según la franja etaria: selección de emojis para 6–8 años, frases de elección para 9–10 años, y texto libre o escala Likert para 11–12 años.</p>
+
+  <p>El valor clínico del check-in no reside en ninguna respuesta individual, sino en el patrón agregado. La IA analiza ventanas temporales de 7, 14, 30, 60 y 90 días para detectar tendencias, cambios bruscos y patrones estables que pueden ser clínicamente significativos.</p>
+
+  <div class="callout co-sol">
+    <div class="callout-title">Ejemplos de preguntas por franja de edad</div>
+    <div class="callout-body">
+      <strong>6–7 años:</strong> "¿Cómo te has sentido hoy?" [6 emojis] · "¿Ha pasado algo raro?" [Sí / No / Más o menos]<br><br>
+      <strong>8–9 años:</strong> "¿Cómo ha ido el recreo hoy?" [Solo / Con amigos / Algo ha pasado] · "¿Hay algo que te preocupa mucho?" [texto corto opcional]<br><br>
+      <strong>10–11 años:</strong> "¿Del 1 al 5, cómo ha sido tu día?" · "¿Hay algo que te está costando mucho últimamente?" [texto libre] · "¿Sientes que puedes hablar con alguien en el cole si tienes un problema?" [Sí / No / A veces]<br><br>
+      <strong>11–12 años:</strong> "¿Cómo te sientes con tu grupo de amigos esta semana?" [escala 1–5] · "¿Hay adultos que te hacen sentir incómodo/a?" · "¿Hay cosas que te preocupan en casa?"
+    </div>
+  </div>
+
+  <h2>Vector 2 — Juegos cognitivos con análisis clínico embebido</h2>
+  <p>Los juegos cognitivos sirven un doble propósito: entrenar habilidades cognitivas reales (atención, memoria de trabajo, velocidad de procesamiento, control inhibitorio) y simultáneamente recoger datos clínicos sobre el perfil neurológico del alumno. El alumno percibe una actividad lúdica. La plataforma registra tiempos de reacción, tasas de error, patrones de confusión y evolución a lo largo del tiempo.</p>
+
+  <table class="doc-table">
+    <thead><tr><th>Juego</th><th>Habilidad entrenada</th><th>Marcador clínico</th><th>Condición evaluada</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Memory de pares (visual)</strong></td><td>Memoria de trabajo visual</td><td>Número de errores, tiempo entre intentos, decaimiento de la memoria</td><td>TDAH, dislexia (procesamiento visual)</td></tr>
+      <tr><td><strong>Encuentra la letra igual (b/d/p/q)</strong></td><td>Discriminación fonológica visual</td><td>Tasa de confusiones, lateralidad de errores, velocidad</td><td>Dislexia, trastorno del procesamiento visual</td></tr>
+      <tr><td><strong>Sigue el patrón</strong></td><td>Memoria secuencial, control inhibitorio</td><td>Errores de secuencia, impulsividad (respuestas prematuras)</td><td>TDAH, funciones ejecutivas</td></tr>
+      <tr><td><strong>¿Qué ha cambiado?</strong></td><td>Atención sostenida y selectiva</td><td>Tiempo de respuesta, detección parcial vs. completa</td><td>TDAH inatento</td></tr>
+      <tr><td><strong>Historia en orden</strong></td><td>Comprensión secuencial narrativa</td><td>Errores de orden, tiempo de comprensión</td><td>TEA (comprensión social), dislexia (comprensión lectora)</td></tr>
+      <tr><td><strong>Para cuando yo diga (Stop)</strong></td><td>Control inhibitorio</td><td>Errores de comisión (no parar), tiempo de reacción al stop</td><td>TDAH hiperactivo, impulsividad</td></tr>
+      <tr><td><strong>Tareas numéricas básicas</strong></td><td>Procesamiento numérico</td><td>Errores conceptuales vs. procedimentales, tiempo por operación</td><td>Discalculia</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Vector 3 — Escenarios y situaciones sociales</h2>
+  <p>El alumno se enfrenta a situaciones narrativas —presentadas como historias breves con personajes— en las que debe elegir qué haría, cómo se sentiría o qué piensa que es correcto. Las respuestas revelan aspectos del funcionamiento social, la percepción del entorno y posibles situaciones de riesgo que raramente emergen en preguntas directas.</p>
+
+  <p>Este vector es especialmente valioso para la detección de bullying (identificando el rol del alumno: víctima, agresor u observador activo/pasivo), abuso (mediante preguntas indirectas sobre secretos, incomodidad con adultos y límites corporales) y empatía y cognición social (marcadores de TEA).</p>
+
+  <h2>Vector 4 — Cribado formal anual</h2>
+  <p>Una vez al año, durante el segundo trimestre, el alumno completa un protocolo de evaluación estructurado de 20–35 minutos, distribuido en cuatro semanas. Este protocolo integra los instrumentos clínicos validados en su versión completa, garantizando que la evaluación formal cumple con los estándares psicométricos requeridos para que sus resultados sean clínicamente interpretables.</p>
+
+  <p>El cribado anual se presenta al alumno como "La Gran Misión de Lua" (el personaje guía de la plataforma), sin referencias explícitas a su naturaleza evaluativa. Los cuatro módulos semanales cubren sucesivamente: bienestar emocional, perfil cognitivo y atención, relaciones y entorno social, y revisión integradora.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 06 ═══ -->
+<div class="section alt">
+  <div class="sec-num">Sección 06</div>
+  <div class="sec-title">Instrumentos clínicos <em>validados</em></div>
+  <div class="sec-lead">Todos los instrumentos utilizados por Mind.IA tienen validación psicométrica en población española o europea comparable, y han sido seleccionados por su adecuación para administración digital, accesibilidad para el rango de edad correspondiente y robustez en contextos de cribado universal.</div>
+
+  <div class="instruments-grid">
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--lila-l)">
+        <div class="inst-tag" style="color:var(--lila-d)">Neurodivergencia · TDAH</div>
+        <div class="inst-name" style="color:var(--lila-d)">SNAP-IV</div>
+        <div class="inst-full">Swanson, Nolan and Pelham Rating Scale — Version IV</div>
+        <div class="inst-desc">Escala de cribado de síntomas de TDAH basada en los criterios DSM-IV/5. En Mind.IA se utiliza una versión autoinforme simplificada para el alumno (10–18 ítems según edad), complementada con la versión docente para las franjas 6–9 años.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">6–18 años (versiones adaptadas por franja)</div></div>
+        <div class="inst-row"><div class="inst-row-label">Duración</div><div class="inst-row-val">5–10 minutos</div></div>
+        <div class="inst-row"><div class="inst-row-label">Escalas</div><div class="inst-row-val">Inatención (9 ítems) · Hiperactividad-impulsividad (9 ítems)</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">Anual + datos continuos de juegos cognitivos</div></div>
+        <div class="inst-row"><div class="inst-row-label">Punto de corte</div><div class="inst-row-val">≥ 2.0 en escala de 0–3 por subescala (indicador de riesgo)</div></div>
+      </div>
+      <div class="inst-refs">Swanson et al. (1983, rev. 2001). Validación española: Miranda et al. (2006), Child Psychiatry Hum Dev.</div>
+    </div>
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--lila-l)">
+        <div class="inst-tag" style="color:var(--lila-d)">Neurodivergencia · TEA</div>
+        <div class="inst-name" style="color:var(--lila-d)">ASSQ</div>
+        <div class="inst-full">Autism Spectrum Screening Questionnaire</div>
+        <div class="inst-desc">Cuestionario de cribado del espectro autista diseñado para detectar TEA de alto funcionamiento y síndrome de Asperger en población escolar. Especialmente sensible para perfiles que no son detectados por los instrumentos clásicos de TEA más severo.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">6–17 años</div></div>
+        <div class="inst-row"><div class="inst-row-label">Ítems</div><div class="inst-row-val">27 ítems (versión docente/padres) + adaptación autoinforme</div></div>
+        <div class="inst-row"><div class="inst-row-label">Escalas</div><div class="inst-row-val">Habilidades sociales · Comunicación · Comportamientos restringidos</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">Anual</div></div>
+        <div class="inst-row"><div class="inst-row-label">Punto de corte</div><div class="inst-row-val">≥ 19 (docentes/padres) como indicador de riesgo moderado</div></div>
+      </div>
+      <div class="inst-refs">Ehlers & Gillberg (1993). Estudio de validación: Posserud et al. (2006), J Child Psychol Psychiatry.</div>
+    </div>
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--cielo-l)">
+        <div class="inst-tag" style="color:var(--cielo-d)">Neurodivergencia · Dislexia</div>
+        <div class="inst-name" style="color:var(--cielo-d)">PROLEC-R</div>
+        <div class="inst-full">Batería de Evaluación de los Procesos Lectores — Revisada</div>
+        <div class="inst-desc">Batería española de referencia para la evaluación de los procesos lectores en primaria. En Mind.IA se implementan las subescalas de identificación de letras, lectura de palabras y pseudopalabras, y conciencia fonológica, adaptadas en formato de juego digital con registro automatizado de tiempos y errores.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">6–12 años (1º–6º Primaria)</div></div>
+        <div class="inst-row"><div class="inst-row-label">Subescalas</div><div class="inst-row-val">Letras · Palabras · Pseudopalabras · Comprensión</div></div>
+        <div class="inst-row"><div class="inst-row-label">Marcadores</div><div class="inst-row-val">Velocidad lectora, tasa de errores, tipo de error (visual vs. fonológico)</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">Anual + datos continuos en juegos fonológicos</div></div>
+        <div class="inst-row"><div class="inst-row-label">Normativa</div><div class="inst-row-val">Baremos españoles por curso escolar</div></div>
+      </div>
+      <div class="inst-refs">Cuetos, Rodríguez, Ruano & Arribas (2007). TEA Ediciones. Validación española poblacional.</div>
+    </div>
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--bosque-l)">
+        <div class="inst-tag" style="color:var(--bosque-d)">Salud psicológica · Global</div>
+        <div class="inst-name" style="color:var(--bosque-d)">SDQ</div>
+        <div class="inst-full">Strengths and Difficulties Questionnaire</div>
+        <div class="inst-desc">Cuestionario de referencia internacional para el cribado de salud mental infantil. Disponible en versión autoinforme (11–17 años), padres y docentes. Cubre cinco dimensiones: síntomas emocionales, problemas de conducta, hiperactividad, problemas con compañeros y conducta prosocial. Gratuito y validado en más de 40 países.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">4–17 años (versiones por informante)</div></div>
+        <div class="inst-row"><div class="inst-row-label">Ítems</div><div class="inst-row-val">25 ítems + suplemento de impacto</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">2 veces al año (docente/familia + autoinforme desde 3º)</div></div>
+        <div class="inst-row"><div class="inst-row-label">Duración</div><div class="inst-row-val">5 minutos</div></div>
+        <div class="inst-row"><div class="inst-row-label">Disponibilidad</div><div class="inst-row-val">Acceso libre · www.sdqinfo.org</div></div>
+      </div>
+      <div class="inst-refs">Goodman (1997). Validación española: Rodríguez-Hernández et al. (2012), Rev Psiquiatr Salud Ment.</div>
+    </div>
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--sol-l)">
+        <div class="inst-tag" style="color:var(--sol-d)">Salud psicológica · Ansiedad</div>
+        <div class="inst-name" style="color:var(--sol-d)">SCARED</div>
+        <div class="inst-full">Screen for Child Anxiety Related Disorders</div>
+        <div class="inst-desc">Instrumento de cribado de trastornos de ansiedad en infancia y adolescencia. Cubre cinco subescalas que se corresponden con los principales trastornos de ansiedad: generalizada, de separación, social, escolar y por pánico. La versión de autoinforme es adecuada para niños a partir de 8 años.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">8–18 años (autoinforme) · 6+ con apoyo adulto</div></div>
+        <div class="inst-row"><div class="inst-row-label">Ítems</div><div class="inst-row-val">41 ítems · escala Likert 0–2</div></div>
+        <div class="inst-row"><div class="inst-row-label">Subescalas</div><div class="inst-row-val">Pánico · Ansiedad generalizada · Separación · Social · Escolar</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">2 veces al año</div></div>
+        <div class="inst-row"><div class="inst-row-label">Punto de corte</div><div class="inst-row-val">Total ≥ 25 · Subescala social ≥ 8</div></div>
+      </div>
+      <div class="inst-refs">Birmaher et al. (1997). Adaptación española: Wren et al. (2007), J Dev Behav Pediatrics.</div>
+    </div>
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--sol-l)">
+        <div class="inst-tag" style="color:var(--sol-d)">Salud psicológica · Depresión</div>
+        <div class="inst-name" style="color:var(--sol-d)">CDI-2</div>
+        <div class="inst-full">Children's Depression Inventory — Second Edition</div>
+        <div class="inst-desc">Instrumento de referencia para la evaluación de sintomatología depresiva en niños y adolescentes. Evalúa el estado de ánimo, los problemas interpersonales, la ineficacia, la anhedonia y la autoestima negativa. La versión corta (12 ítems) es adecuada para contextos de cribado.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">7–17 años</div></div>
+        <div class="inst-row"><div class="inst-row-label">Versión</div><div class="inst-row-val">CDI-2 corta (12 ítems) para cribado · escala 0–2</div></div>
+        <div class="inst-row"><div class="inst-row-label">Escalas</div><div class="inst-row-val">Estado de ánimo negativo · Problemas funcionales</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">2 veces al año a partir de 2º Primaria</div></div>
+        <div class="inst-row"><div class="inst-row-label">Editorial</div><div class="inst-row-val">MHS · Pearson. Requiere licencia.</div></div>
+      </div>
+      <div class="inst-refs">Kovacs (1992, 2011). Adaptación española: Del Barrio & Carrasco (2004), TEA Ediciones.</div>
+    </div>
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--coral-l)">
+        <div class="inst-tag" style="color:var(--coral-d)">Situaciones de riesgo · Bullying</div>
+        <div class="inst-name" style="color:var(--coral-d)">Cuestionario de Bullying (Olweus adaptado)</div>
+        <div class="inst-full">Adaptación del Olweus Bully/Victim Questionnaire</div>
+        <div class="inst-desc">El cuestionario de Olweus es el instrumento de referencia mundial para la evaluación de la victimización y agresión entre iguales. En Mind.IA se utiliza una versión adaptada y simplificada, integrada en el formato narrativo de la plataforma. Permite identificar víctimas, agresores y observadores.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">6–18 años (versiones por franja)</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">3 veces al año · trimestral</div></div>
+        <div class="inst-row"><div class="inst-row-label">Dimensiones</div><div class="inst-row-val">Víctima · Agresor · Observador activo/pasivo · Ciberbullying</div></div>
+        <div class="inst-row"><div class="inst-row-label">Formato Mind.IA</div><div class="inst-row-val">Escenarios narrativos + preguntas directas adaptadas por edad</div></div>
+      </div>
+      <div class="inst-refs">Olweus (1996). Adaptación española: Ortega et al. (2010), J Psychol.</div>
+    </div>
+
+    <div class="inst-card">
+      <div class="inst-top" style="background:var(--coral-l)">
+        <div class="inst-tag" style="color:var(--coral-d)">Situaciones de riesgo · Trauma</div>
+        <div class="inst-name" style="color:var(--coral-d)">CPSS-V</div>
+        <div class="inst-full">Child PTSD Symptom Scale for DSM-5</div>
+        <div class="inst-desc">Escala de autoinforme para la evaluación de síntomas de estrés postraumático en niños y adolescentes, alineada con los criterios DSM-5. Se activa en Mind.IA solo cuando hay señales previas de posible exposición a evento traumático, no como cribado universal. Evalúa reexperimentación, evitación, alteraciones cognitivas e hiperactivación.</div>
+      </div>
+      <div class="inst-body">
+        <div class="inst-row"><div class="inst-row-label">Edad</div><div class="inst-row-val">8–18 años</div></div>
+        <div class="inst-row"><div class="inst-row-label">Ítems</div><div class="inst-row-val">20 ítems · escala 0–3</div></div>
+        <div class="inst-row"><div class="inst-row-label">Activación</div><div class="inst-row-val">Condicional — solo si hay señales previas de trauma</div></div>
+        <div class="inst-row"><div class="inst-row-label">Frecuencia</div><div class="inst-row-val">Anual si activado · revisión semestral si hay alerta</div></div>
+      </div>
+      <div class="inst-refs">Foa et al. (2001, rev. 2018 DSM-5). Traducción y validación en proceso de publicación en España.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 07 ═══ -->
+<div class="section">
+  <div class="sec-num">Sección 07</div>
+  <div class="sec-title">Estructura por <em>año escolar</em></div>
+  <div class="sec-lead">Cada curso de primaria tiene una arquitectura de objetivos, instrumentos y experiencias específica, diseñada en función del neurodesarrollo típico de esa franja de edad y de la información acumulada en años anteriores.</div>
+
+  <div class="year-block" style="--yc:var(--sol);--ycl:var(--sol-l);--ycd:var(--sol-d);">
+    <div class="year-block-hdr" style="background:var(--sol-l);">
+      <div class="yb-badge" style="background:var(--sol);color:#fff;">1º Primaria · 6 años</div>
+      <div class="yb-info">
+        <div class="yb-curso" style="color:var(--sol-d);">Año 1 — Detección basal · Supervisión adulta total</div>
+        <div class="yb-title">El año que define el punto de partida de cada alumno</div>
+      </div>
+    </div>
+    <div class="yb-body">
+      <div class="yb-col">
+        <div class="yb-col-label">Objetivos clínicos</div>
+        <div class="yb-item">Establecer perfil neuropsicológico basal</div>
+        <div class="yb-item">Detectar TEA leve / alto funcionamiento</div>
+        <div class="yb-item">Señales tempranas de TDAH (inatento y hiperactivo)</div>
+        <div class="yb-item">Dificultades fonológicas previas a lectura formal</div>
+        <div class="yb-item">Estado emocional y bienestar basal al entrar al sistema</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Funcionalidades activas</div>
+        <div class="yb-item">Check-in diario con emojis (3 preguntas)</div>
+        <div class="yb-item">Juegos de memoria visual y atención</div>
+        <div class="yb-item">Historias interactivas con personajes (cognición social)</div>
+        <div class="yb-item">Actividades de conciencia fonológica</div>
+        <div class="yb-item">SDQ versión docente (paralelo a la app)</div>
+        <div class="yb-item">Mapa de relaciones sociales básico</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Instrumentos activos</div>
+        <div class="yb-item">SDQ (versión docente) — bienestar global</div>
+        <div class="yb-item">M-CHAT-R/F adaptado — TEA (con apoyo adulto)</div>
+        <div class="yb-item">Conners Early Childhood — TDAH temprano</div>
+        <div class="yb-item">PROLEC-R subescalas — fonología y letras</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Formato y UX</div>
+        <div class="yb-item">Supervisión adulta 100% (docente o familia)</div>
+        <div class="yb-item">Sesiones máximo 8 minutos</div>
+        <div class="yb-item">Interfaz 100% visual, sin texto extenso</div>
+        <div class="yb-item">Personaje Lua como guía en todas las pantallas</div>
+        <div class="yb-item">Audio opcional para instrucciones</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-block" style="--yc:var(--sol);--ycl:var(--sol-l);--ycd:var(--sol-d);">
+    <div class="year-block-hdr" style="background:var(--sol-l);">
+      <div class="yb-badge" style="background:var(--sol);color:#fff;">2º Primaria · 7 años</div>
+      <div class="yb-info">
+        <div class="yb-curso" style="color:var(--sol-d);">Año 2 — Primer seguimiento longitudinal · Comparativa con año anterior</div>
+        <div class="yb-title">Dislexia con lectura establecida · Primer radar de bullying</div>
+      </div>
+    </div>
+    <div class="yb-body">
+      <div class="yb-col">
+        <div class="yb-col-label">Objetivos clínicos</div>
+        <div class="yb-item">Confirmar o descartar señales del año anterior</div>
+        <div class="yb-item">Dislexia: lectura formal establecida → señales más claras</div>
+        <div class="yb-item">Primer cribado de bullying activo</div>
+        <div class="yb-item">Ansiedad escolar y de separación emergente</div>
+        <div class="yb-item">Identificar primeros signos de altas capacidades</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Funcionalidades activas</div>
+        <div class="yb-item">Check-in ampliado: + pregunta sobre recreo y relaciones</div>
+        <div class="yb-item">Juegos de lectura y fonología (PROLEC-R completo)</div>
+        <div class="yb-item">Escenarios sociales básicos (bullying y exclusión)</div>
+        <div class="yb-item">SCARED versión simplificada (ansiedad)</div>
+        <div class="yb-item">Comparativa automática IA con perfil de 1º</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Instrumentos activos</div>
+        <div class="yb-item">PROLEC-R completo — dislexia</div>
+        <div class="yb-item">SCARED simplificado — ansiedad</div>
+        <div class="yb-item">SDQ — bienestar global (docente + autoinforme básico)</div>
+        <div class="yb-item">Olweus adaptado Fase 1 — bullying</div>
+        <div class="yb-item">SNAP-IV — TDAH (versión docente)</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Hitos del sistema</div>
+        <div class="yb-item">Primer informe longitudinal comparativo generado</div>
+        <div class="yb-item">Sesiones hasta 10 minutos</div>
+        <div class="yb-item">Introducción de frases cortas de elección (texto mínimo)</div>
+        <div class="yb-item">Alertas automáticas IA activadas si hay cambio brusco</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-block" style="--yc:var(--bosque);--ycl:var(--bosque-l);--ycd:var(--bosque-d);">
+    <div class="year-block-hdr" style="background:var(--bosque-l);">
+      <div class="yb-badge" style="background:var(--bosque);color:#fff;">3º Primaria · 8 años</div>
+      <div class="yb-info">
+        <div class="yb-curso" style="color:var(--bosque-d);">Año 3 — Autoinforme real · CDI-2 y SCARED activos</div>
+        <div class="yb-title">El niño tiene voz propia. Depresión y TOC emergen.</div>
+      </div>
+    </div>
+    <div class="yb-body">
+      <div class="yb-col">
+        <div class="yb-col-label">Objetivos clínicos</div>
+        <div class="yb-item">Primer autoinforme real de estado de ánimo</div>
+        <div class="yb-item">Detección de depresión infantil (CDI-2 activado)</div>
+        <div class="yb-item">TOC emergente: rituales y pensamientos repetitivos</div>
+        <div class="yb-item">Estrés postraumático tras eventos vitales</div>
+        <div class="yb-item">Consolidación diagnóstica diferencial del perfil TDAH (3 años de datos)</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Funcionalidades activas</div>
+        <div class="yb-item">Check-in con opción de texto corto libre</div>
+        <div class="yb-item">CDI-2 versión corta integrado como "cuestionario de Lua"</div>
+        <div class="yb-item">Preguntas específicas para TOC (rituales, compulsiones)</div>
+        <div class="yb-item">Termómetro de intensidad emocional (escala 1–5 visual)</div>
+        <div class="yb-item">Informe de 3 años generado al final del curso</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Instrumentos activos</div>
+        <div class="yb-item">CDI-2 versión corta — depresión infantil</div>
+        <div class="yb-item">SCARED completo — todos los subtipos de ansiedad</div>
+        <div class="yb-item">SNAP-IV autoinforme — TDAH (primera vez autoinforme)</div>
+        <div class="yb-item">CPSS-V condicional — trauma si hay señales previas</div>
+        <div class="yb-item">SDQ autoinforme — primera versión autoinforme del alumno</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Hitos del sistema</div>
+        <div class="yb-item">Primer autoinforme clínico real del alumno</div>
+        <div class="yb-item">Informe longitudinal de 3 años completo</div>
+        <div class="yb-item">Sesiones hasta 12 minutos</div>
+        <div class="yb-item">Texto libre desbloqueado (análisis semántico IA)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-block" style="--yc:var(--bosque);--ycl:var(--bosque-l);--ycd:var(--bosque-d);">
+    <div class="year-block-hdr" style="background:var(--bosque-l);">
+      <div class="yb-badge" style="background:var(--bosque);color:#fff;">4º Primaria · 9 años</div>
+      <div class="yb-info">
+        <div class="yb-curso" style="color:var(--bosque-d);">Año 4 — Relaciones complejas · Presión académica · Negligencia</div>
+        <div class="yb-title">El grupo de iguales lo es todo. El bullying se vuelve sofisticado.</div>
+      </div>
+    </div>
+    <div class="yb-body">
+      <div class="yb-col">
+        <div class="yb-col-label">Objetivos clínicos</div>
+        <div class="yb-item">Mapeo de dinámica de grupo: víctima, agresor, observador</div>
+        <div class="yb-item">Ansiedad de rendimiento académico emergente</div>
+        <div class="yb-item">Autoconcepto académico: creencias limitantes cronificadas</div>
+        <div class="yb-item">Detección de señales de negligencia parental</div>
+        <div class="yb-item">Ciberbullying: primeros dispositivos propios</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Funcionalidades activas</div>
+        <div class="yb-item">Sociograma digital: visualización de red de iguales</div>
+        <div class="yb-item">Escenarios complejos de bullying (agresor vs. observador)</div>
+        <div class="yb-item">Preguntas específicas sobre experiencia digital y online</div>
+        <div class="yb-item">Escala de autoconcepto AF-5 simplificada</div>
+        <div class="yb-item">Preguntas de bienestar básico (sueño, alimentación, higiene)</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Instrumentos activos</div>
+        <div class="yb-item">Olweus completo — bullying físico y relacional</div>
+        <div class="yb-item">MASC-2 — ansiedad social completa</div>
+        <div class="yb-item">AF-5 adaptado — autoconcepto multidimensional</div>
+        <div class="yb-item">CDI-2 — depresión infantil (seguimiento)</div>
+        <div class="yb-item">Indicadores de negligencia (protocolo propio)</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Hitos del sistema</div>
+        <div class="yb-item">Primer sociograma digital de la clase</div>
+        <div class="yb-item">Activación de módulo de seguridad digital</div>
+        <div class="yb-item">Sesiones hasta 12 minutos, autonomía plena</div>
+        <div class="yb-item">4 años de datos: perfil con alta fiabilidad predictiva</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-block" style="--yc:var(--cielo);--ycl:var(--cielo-l);--ycd:var(--cielo-d);">
+    <div class="year-block-hdr" style="background:var(--cielo-l);">
+      <div class="yb-badge" style="background:var(--cielo);color:#fff;">5º Primaria · 10 años</div>
+      <div class="yb-info">
+        <div class="yb-curso" style="color:var(--cielo-d);">Año 5 — Preadolescencia · Identidad · Imagen corporal · Protocolo abuso sexual activo</div>
+        <div class="yb-title">Los primeros cambios. El cuerpo, la identidad y la pertenencia.</div>
+      </div>
+    </div>
+    <div class="yb-body">
+      <div class="yb-col">
+        <div class="yb-col-label">Objetivos clínicos</div>
+        <div class="yb-item">Imagen corporal: primeras señales de dismorfia o insatisfacción</div>
+        <div class="yb-item">Identidad de género: detección sin juicio, con seguridad</div>
+        <div class="yb-item">Ansiedad social intensa: miedo al juicio de iguales</div>
+        <div class="yb-item">PHQ-A activado: depresión adolescente emergente</div>
+        <div class="yb-item">Protocolo de abuso sexual: edad de mayor riesgo estadístico</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Funcionalidades activas</div>
+        <div class="yb-item">Check-in con preguntas sobre cuerpo e identidad (formato seguro)</div>
+        <div class="yb-item">PHQ-A versión junior desbloqueado</div>
+        <div class="yb-item">Módulo de "situaciones difíciles" para detección indirecta de abuso</div>
+        <div class="yb-item">Preguntas de identidad en espacio seguro y confidencial</div>
+        <div class="yb-item">MASC-2 completo: ansiedad social</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Instrumentos activos</div>
+        <div class="yb-item">PHQ-A adaptado — depresión adolescente (primera activación)</div>
+        <div class="yb-item">MASC-2 completo — ansiedad social</div>
+        <div class="yb-item">CPSS-V — trauma (activo si hay señales)</div>
+        <div class="yb-item">Protocolo de detección de abuso sexual (indicadores indirectos)</div>
+        <div class="yb-item">SIQ-Jr — ideación autolesiva (primera activación condicional)</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Hitos del sistema</div>
+        <div class="yb-item">Máxima activación de protocolos de protección</div>
+        <div class="yb-item">SIQ-Jr activado condicionalmente por primera vez</div>
+        <div class="yb-item">Sesiones hasta 15 minutos</div>
+        <div class="yb-item">Espacio de identidad activado: respuestas 100% confidenciales</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="year-block" style="--yc:var(--cielo);--ycl:var(--cielo-l);--ycd:var(--cielo-d);">
+    <div class="year-block-hdr" style="background:var(--cielo-l);">
+      <div class="yb-badge" style="background:var(--cielo);color:#fff;">6º Primaria · 11 años</div>
+      <div class="yb-info">
+        <div class="yb-curso" style="color:var(--cielo-d);">Año 6 — Cierre del ciclo · Informe de transición a Mento.IA</div>
+        <div class="yb-title">Perfil longitudinal completo. El puente hacia la adolescencia.</div>
+      </div>
+    </div>
+    <div class="yb-body">
+      <div class="yb-col">
+        <div class="yb-col-label">Objetivos clínicos</div>
+        <div class="yb-item">Perfil longitudinal completo: 6 años integrados</div>
+        <div class="yb-item">Cribado final de cobertura total: todos los protocolos</div>
+        <div class="yb-item">Detectar lo que en 5 años no se ha detectado aún</div>
+        <div class="yb-item">Primer autoconocimiento: el alumno descubre sus fortalezas</div>
+        <div class="yb-item">Generar informe de transición para Mento.IA</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Funcionalidades activas</div>
+        <div class="yb-item">Cribado final completo distribuido en 4 semanas</div>
+        <div class="yb-item">Primer "espejo positivo": devolución de fortalezas al alumno</div>
+        <div class="yb-item">Informe de transición generado por IA para orientador de secundaria</div>
+        <div class="yb-item">Entrevista estructurada de cierre (con orientador, fuera de la app)</div>
+        <div class="yb-item">Activación y precarga de perfil en Mento.IA</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Instrumentos activos</div>
+        <div class="yb-item">Batería completa: ASSQ + SNAP-IV + PROLEC-R + SDQ</div>
+        <div class="yb-item">PHQ-A + GAD-7 adaptado + CDI-2</div>
+        <div class="yb-item">Olweus + protocolo de protección completo</div>
+        <div class="yb-item">SIQ-Jr si hay señales previas</div>
+        <div class="yb-item">KBIT-2 subescala — revisión final de altas capacidades</div>
+      </div>
+      <div class="yb-col">
+        <div class="yb-col-label">Hitos del sistema</div>
+        <div class="yb-item">Informe longitudinal de 6 años completo generado</div>
+        <div class="yb-item">Primera devolución positiva al alumno</div>
+        <div class="yb-item">Protocolo de 4 semanas de cribado final</div>
+        <div class="yb-item">Activación de Mento.IA con perfil precargado</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 08 ═══ -->
+<div class="section alt">
+  <div class="sec-num">Sección 08</div>
+  <div class="sec-title">Sistema de alertas y <em>protocolo de actuación</em></div>
+  <div class="sec-lead">El sistema de alertas de Mind.IA es el puente entre los datos recogidos por la plataforma y la actuación profesional del orientador. Está diseñado para ser preciso, escalonado y accionable — nunca alarmista ni paralizante.</div>
+
+  <div class="alert-levels">
+    <div class="al-card">
+      <div class="al-top" style="background:var(--coral-l);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:var(--coral-d);margin-bottom:6px;">🔴 NIVEL CRÍTICO · Actuar en menos de 24 horas</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;margin-bottom:8px;">Protocolo urgente de protección</div>
+        <div style="font-size:13px;color:var(--coral-d);line-height:1.5;">Se activa ante señales de abuso físico, emocional o sexual, ideación autolesiva, violencia doméstica activa o situación de riesgo inmediato para la integridad del menor.</div>
+      </div>
+      <div class="al-bottom">
+        <div style="font-weight:700;margin-bottom:6px;font-size:13px;">Cadena de actuación:</div>
+        <div style="font-size:12px;color:var(--tinta2);line-height:1.6;">1. Notificación inmediata al orientador con informe de señales<br>2. Guía de actuación paso a paso integrada en la plataforma<br>3. Orientador → Dirección del centro<br>4. Comunicación a Servicios Sociales / Fiscalía de Menores si procede<br>5. Documentación automática de todas las actuaciones</div>
+      </div>
+    </div>
+    <div class="al-card">
+      <div class="al-top" style="background:var(--sol-l);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:var(--sol-d);margin-bottom:6px;">🟡 NIVEL MEDIO · Revisar en la semana en curso</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;margin-bottom:8px;">Seguimiento prioritario</div>
+        <div style="font-size:13px;color:var(--sol-d);line-height:1.5;">Patrón consolidado de ansiedad, indicadores de TDAH o depresión moderada, bullying identificado en fase inicial, cambio brusco de estado emocional sin causa conocida.</div>
+      </div>
+      <div class="al-bottom">
+        <div style="font-weight:700;margin-bottom:6px;font-size:13px;">Cadena de actuación:</div>
+        <div style="font-size:12px;color:var(--tinta2);line-height:1.6;">1. Notificación al orientador con nivel de evidencia explícito<br>2. Orientador revisa perfil longitudinal del alumno<br>3. Decisión: observación ampliada / cita con el alumno / comunicación a familia<br>4. Registro de actuación en la plataforma<br>5. Seguimiento automático a 30 días</div>
+      </div>
+    </div>
+    <div class="al-card">
+      <div class="al-top" style="background:var(--cielo-l);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:var(--cielo-d);margin-bottom:6px;">🔵 NIVEL PREVENTIVO · Próximo mes</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;margin-bottom:8px;">Perfil en construcción</div>
+        <div style="font-size:13px;color:var(--cielo-d);line-height:1.5;">Señales leves o aisladas que no justifican intervención inmediata pero que requieren monitorización. La IA las marca para seguimiento y escala automáticamente si el patrón se consolida.</div>
+      </div>
+      <div class="al-bottom">
+        <div style="font-weight:700;margin-bottom:6px;font-size:13px;">Cadena de actuación:</div>
+        <div style="font-size:12px;color:var(--tinta2);line-height:1.6;">1. Señal registrada en el perfil del alumno<br>2. Monitorización automática durante 30 días<br>3. El orientador recibe resumen mensual de señales preventivas<br>4. Escalado automático a nivel medio si el patrón se consolida<br>5. Sin acción requerida salvo que haya cambio</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Principios del sistema de alertas</h2>
+  <ul class="doc-list">
+    <li><strong>Ponderación longitudinal:</strong> Una señal aislada nunca genera una alerta de nivel medio o crítico. El sistema requiere convergencia de señales en múltiples vectores y a lo largo del tiempo.</li>
+    <li><strong>Explicabilidad:</strong> Cada alerta incluye el detalle de qué señales la han generado, con qué frecuencia, en qué vectores y qué nivel de confianza estadística tiene. El orientador nunca recibe una alerta sin contexto.</li>
+    <li><strong>El profesional puede anular:</strong> El orientador puede marcar cualquier alerta como "revisada y descartada" con un comentario. El sistema aprende de estas correcciones.</li>
+    <li><strong>Trazabilidad completa:</strong> Toda alerta generada y toda actuación registrada queda documentada en el historial del alumno, disponible para derivaciones externas.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 09 ═══ -->
+<div class="section">
+  <div class="sec-num">Sección 09</div>
+  <div class="sec-title">El rol del <em>orientador</em></div>
+  <div class="sec-lead">Mind.IA no reemplaza al orientador. Le devuelve el tiempo y la capacidad que el sistema le ha robado: el tiempo que pasa apagando fuegos, el tiempo que no tiene para observar, el tiempo que se le escapa entre derivaciones tardías y casos invisibles.</div>
+
+  <h2>Antes y después de Mind.IA</h2>
+  <table class="doc-table">
+    <thead><tr><th>Dimensión</th><th>Sin Mind.IA</th><th>Con Mind.IA</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Detección</strong></td><td>Por derivación (sesgo hacia casos visibles). Los perfiles internalizantes no llegan nunca.</td><td>Universal y sistemática. Todos los alumnos, independientemente de si "dan problemas" o no.</td></tr>
+      <tr><td><strong>Datos disponibles</strong></td><td>Observación informal, notas del docente, impresión clínica. Sin longitudinalidad.</td><td>Perfil longitudinal actualizado, 12 instrumentos clínicos, datos de 30/60/90 días.</td></tr>
+      <tr><td><strong>Tiempo de respuesta</strong></td><td>Derivación cuando el problema es ya visible y significativo. Generalmente tarde.</td><td>Alerta en las primeras semanas de aparición del patrón. Intervención preventiva.</td></tr>
+      <tr><td><strong>Documentación</strong></td><td>Manual, fragmentada, difícil de trasladar a otros profesionales o servicios.</td><td>Informe automático exportable, con evidencia clínica estructurada, listo para derivación.</td></tr>
+      <tr><td><strong>Cobertura</strong></td><td>Los alumnos que "no dan problemas" son invisibles al sistema.</td><td>Todos los alumnos tienen perfil activo. La invisibilidad deja de ser un factor de riesgo.</td></tr>
+      <tr><td><strong>Transición de curso</strong></td><td>El orientador de secundaria recibe al alumno sin contexto previo.</td><td>Informe de transición completo. Mento.IA recibe el perfil precargado de 6 años.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Formación y acompañamiento del profesional</h2>
+  <p>Mind.IA incluye un programa de onboarding y acompañamiento continuo para el orientador del centro:</p>
+  <ul class="doc-list">
+    <li><strong>Formación inicial (8h):</strong> Protocolo de implementación, calibración de parámetros de alerta para el perfil del centro, interpretación de informes y gestión del panel.</li>
+    <li><strong>Revisión semestral:</strong> El equipo clínico de Mind.IA analiza los datos agregados del centro y propone ajustes al protocolo de actuación.</li>
+    <li><strong>Línea de consulta clínica:</strong> Acceso a psicólogos especializados del equipo de Mind.IA para casos complejos o dudosos.</li>
+    <li><strong>Comunidad de práctica:</strong> Red de orientadores usuarios de Mind.IA para compartir experiencias y protocolos de actuación.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 10 ═══ -->
+<div class="section alt">
+  <div class="sec-num">Sección 10</div>
+  <div class="sec-title">Marco ético, legal <em>y de privacidad</em></div>
+  <div class="sec-lead">El marco ético y legal no es un apartado de cumplimiento normativo. Es la columna vertebral del proyecto. Sin él, Mind.IA no tiene razón de ser.</div>
+
+  <div class="ethics-grid">
+    <div class="eth-card">
+      <div class="eth-icon">🔒</div>
+      <div class="eth-title">RGPD y Ley Orgánica 3/2018 (LOPDGDD)</div>
+      <div class="eth-text">Los datos de menores están sujetos al máximo nivel de protección bajo la normativa europea. Mind.IA opera con consentimiento informado explícito de las familias, almacenamiento cifrado de extremo a extremo, anonimización de datos para análisis agregados, y acceso restringido exclusivamente al orientador del centro. Los datos no se comparten con terceros, no se utilizan para entrenamiento de modelos sin consentimiento adicional y pueden ser solicitados para eliminación en cualquier momento.</div>
+    </div>
+    <div class="eth-card">
+      <div class="eth-icon">📚</div>
+      <div class="eth-title">LOMLOE y atención a la diversidad</div>
+      <div class="eth-text">La Ley Orgánica 3/2020 establece la obligación de los centros de atender a la diversidad del alumnado y de identificar de forma temprana las necesidades educativas especiales. Mind.IA proporciona la infraestructura para que este mandato legal sea ejecutable en la práctica, convirtiendo una obligación abstracta en un sistema operativo concreto para el orientador y el equipo docente.</div>
+    </div>
+    <div class="eth-card">
+      <div class="eth-icon">⚖️</div>
+      <div class="eth-title">Detectar ≠ Diagnosticar</div>
+      <div class="eth-text">Este principio es absolutamente irrenunciable. Mind.IA es un sistema de cribado y detección de señales de riesgo. No emite diagnósticos clínicos. No etiqueta a los alumnos. No comunica resultados de cribado a las familias ni a los propios alumnos. Todo diagnóstico clínico debe realizarse por un profesional sanitario cualificado (psicólogo clínico, neuropediatra, psiquiatra infantil) en el ámbito del sistema sanitario. La escuela detecta y deriva con evidencia. La sanidad diagnostica.</div>
+    </div>
+    <div class="eth-card">
+      <div class="eth-icon">🛡️</div>
+      <div class="eth-title">Protocolo de abuso: cadena legal clara</div>
+      <div class="eth-text">Ante indicadores de abuso, la plataforma activa el protocolo específico pero siempre a través del orientador, quien es el responsable legal de las actuaciones. La cadena es: Mind.IA genera alerta con evidencia → orientador valora → dirección del centro → comunicación obligatoria a Servicios Sociales de Protección a la Infancia (según artículo 13 de la Ley Orgánica 1/1996 de Protección Jurídica del Menor) → Fiscalía de Menores si procede. La plataforma documenta toda la cadena de actuación para protección legal del profesional.</div>
+    </div>
+    <div class="eth-card">
+      <div class="eth-icon">🧒</div>
+      <div class="eth-title">El alumno no recibe resultados de cribado</div>
+      <div class="eth-text">Los resultados de los protocolos de evaluación, las alertas generadas y el perfil neuropsicológico son datos exclusivos del orientador del centro. El alumno nunca recibe puntuaciones, etiquetas, comparaciones o retroalimentación clínica a través de la plataforma. Su experiencia en Mind.IA es siempre positiva, normalizadora y orientada al acompañamiento y el reconocimiento de sus fortalezas.</div>
+    </div>
+    <div class="eth-card">
+      <div class="eth-icon">🤝</div>
+      <div class="eth-title">Consentimiento informado y reversibilidad</div>
+      <div class="eth-text">Antes de la incorporación de cualquier alumno a Mind.IA, la familia recibe información completa sobre: qué datos se recogen, cómo se utilizan, quién tiene acceso, qué se hace con las alertas y cómo pueden solicitar la eliminación de los datos. El consentimiento es explícito, reversible en cualquier momento y documentado. La participación es siempre voluntaria.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 11 ═══ -->
+<div class="section">
+  <div class="sec-num">Sección 11</div>
+  <div class="sec-title">Integración con <em>Mento.IA</em> — Ecosistema MyPath.IA</div>
+  <div class="sec-lead">Mind.IA no termina en 6º de primaria. Es el primer eslabón de un ecosistema longitudinal que acompaña al alumno desde los 6 hasta los 22 años, con continuidad de perfil, continuidad de datos y continuidad de propósito.</div>
+
+  <p>Al finalizar 6º de primaria, el sistema genera un <strong>Informe de Transición</strong> que sintetiza los seis años de datos en un documento estructurado para el orientador de secundaria. Este informe contiene: el perfil neuropsicológico consolidado del alumno, las alertas históricas y su resolución, las áreas de fortaleza identificadas, las áreas de dificultad persistente y las recomendaciones de actuación para la etapa de secundaria.</p>
+
+  <p>Este informe alimenta directamente <strong>Mento.IA</strong>, la plataforma del ecosistema MyPath.IA diseñada para los 12–18 años, cuyo eje central en los dos primeros años de la ESO es el autoconocimiento. El autoconocimiento de Mento.IA no es un ejercicio abstracto: es la lectura consciente, por primera vez, del perfil que Mind.IA ha estado construyendo durante seis años. El adolescente llega a Mento.IA con un espejo ya construido.</p>
+
+  <div class="callout co-lila">
+    <div class="callout-title">La diferencia que genera la continuidad</div>
+    <div class="callout-body">Sin Mind.IA, Mento.IA le pregunta al alumno de 12 años "¿cómo eres?" y el alumno responde desde la intuición o desde lo que cree que debería decir. Con Mind.IA, Mento.IA tiene seis años de datos reales sobre cómo aprende, qué le cuesta, cómo se relaciona, cómo gestiona el estrés y qué situaciones le generan malestar. El autoconocimiento pasa de ser una encuesta a ser un proceso de reconocimiento con evidencia.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 12 ═══ -->
+<div class="section alt">
+  <div class="sec-num">Sección 12</div>
+  <div class="sec-title">Limitaciones y <em>consideraciones críticas</em></div>
+  <div class="sec-lead">La honestidad intelectual exige reconocer las limitaciones del sistema. Presentar Mind.IA sin sus limitaciones sería científicamente deshonesto y éticamente inapropiado.</div>
+
+  <h2>Limitaciones metodológicas</h2>
+  <ul class="doc-list">
+    <li><strong>Sesgos de respuesta:</strong> Los autoinformes de niños son susceptibles de deseabilidad social, especialmente en edades tempranas. El sistema intenta mitigar este sesgo mediante el diseño de preguntas indirectas y la validación cruzada con datos conductuales.</li>
+    <li><strong>Ausencia de observación directa:</strong> Mind.IA no puede sustituir la observación clínica directa. Las señales que genera son datos para el profesional, no equivalentes a una evaluación clínica presencial.</li>
+    <li><strong>Variabilidad normal vs. patológica:</strong> Distinguir variabilidad normal del estado emocional de patrones clínicamente significativos es un reto estadístico y clínico. El umbral de activación de alertas está calibrado para minimizar falsos negativos, lo que implica aceptar una tasa de falsos positivos que el orientador debe gestionar.</li>
+    <li><strong>Dependencia de la calidad del dato:</strong> Si el alumno completa los check-ins de forma aleatoria o sin implicación, la calidad de los datos se degrada. El diseño de la experiencia busca maximizar la implicación, pero no puede garantizarla.</li>
+    <li><strong>Adaptación cultural:</strong> Los instrumentos utilizados tienen validación española, pero la diversidad cultural dentro de España (y la población migrante) puede requerir adaptaciones adicionales para garantizar la equivalencia de medida.</li>
+  </ul>
+
+  <h2>Consideraciones éticas adicionales</h2>
+  <ul class="doc-list">
+    <li><strong>Riesgo de sobreetiquetado:</strong> Cualquier sistema de detección genera el riesgo de que las señales se conviertan en etiquetas prematuramente. La formación del orientador y el principio de Detectar ≠ Diagnosticar son las principales salvaguardas contra este riesgo.</li>
+    <li><strong>Equidad de acceso:</strong> Si Mind.IA solo está disponible en colegios privados y concertados, el sistema podría ampliar la brecha de detección entre poblaciones con diferente nivel socioeconómico. El modelo de expansión debe contemplar vías de acceso para centros públicos.</li>
+    <li><strong>Dependencia tecnológica:</strong> La calidad del sistema depende de la calidad de los algoritmos de IA, que deben ser auditables, transparentes y revisados periódicamente por el comité científico de Mind.IA.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECCIÓN 13 ═══ -->
+<div class="section">
+  <div class="sec-num">Sección 13</div>
+  <div class="sec-title">Referencias <em>bibliográficas</em></div>
+  <div class="sec-lead">Las referencias que siguen son el fundamento científico del que se nutre Mind.IA. No son decorativas: cada instrumento, cada protocolo y cada principio de diseño tiene respaldo en la literatura revisada por pares.</div>
+
+  <ul class="bib-list">
+    <li class="bib-item">American Psychiatric Association (2013). <cite>Diagnostic and Statistical Manual of Mental Disorders (DSM-5)</cite>. Washington, DC: APA. — Base nosológica para todos los instrumentos de cribado utilizados.</li>
+    <li class="bib-item">Birmaher, B., Khetarpal, S., Brent, D., Cully, M., Balach, L., Kaufman, J., & Neer, S. M. (1997). <cite>The Screen for Child Anxiety Related Emotional Disorders (SCARED): Scale construction and psychometric characteristics</cite>. Journal of the American Academy of Child and Adolescent Psychiatry, 36(4), 545–553.</li>
+    <li class="bib-item">Cuetos, F., Rodríguez, B., Ruano, E., & Arribas, D. (2007). <cite>PROLEC-R. Batería de Evaluación de los Procesos Lectores, Revisada</cite>. Madrid: TEA Ediciones.</li>
+    <li class="bib-item">Del Barrio, V., & Carrasco, M.A. (2004). <cite>CDI. Inventario de Depresión Infantil. Adaptación española</cite>. Madrid: TEA Ediciones.</li>
+    <li class="bib-item">Ehlers, S., & Gillberg, C. (1993). <cite>The epidemiology of Asperger syndrome. A total population study</cite>. Journal of Child Psychology and Psychiatry, 34(8), 1327–1350.</li>
+    <li class="bib-item">Foa, E.B., Johnson, K.M., Feeny, N.C., & Treadwell, K.R.T. (2001). <cite>The Child PTSD Symptom Scale: A preliminary examination of its psychometric properties</cite>. Journal of Clinical Child Psychology, 30(3), 376–384.</li>
+    <li class="bib-item">García, F., & Musitu, G. (1999). <cite>AF-5. Autoconcepto Forma 5</cite>. Madrid: TEA Ediciones.</li>
+    <li class="bib-item">Goodman, R. (1997). <cite>The Strengths and Difficulties Questionnaire: A research note</cite>. Journal of Child Psychology and Psychiatry, 38(5), 581–586.</li>
+    <li class="bib-item">Heckman, J.J. (2006). <cite>Skill formation and the economics of investing in disadvantaged children</cite>. Science, 312(5782), 1900–1902. — Evidencia del retorno de la inversión en intervención temprana.</li>
+    <li class="bib-item">Kessler, R.C., Berglund, P., Demler, O., Jin, R., Merikangas, K.R., & Walters, E.E. (2005). <cite>Lifetime prevalence and age-of-onset distributions of DSM-IV disorders in the National Comorbidity Survey Replication</cite>. Archives of General Psychiatry, 62(6), 593–602.</li>
+    <li class="bib-item">Kovacs, M. (2011). <cite>CDI 2: Children's Depression Inventory 2nd Edition</cite>. Toronto: Multi-Health Systems.</li>
+    <li class="bib-item">March, J.S. (2012). <cite>MASC 2: Multidimensional Anxiety Scale for Children — Second Edition</cite>. Toronto: Multi-Health Systems.</li>
+    <li class="bib-item">Miranda, A., Jarque, S., & Rosel, J. (2006). <cite>Treatment of children with ADHD: Psychopedagogical program at school versus psychostimulant medication</cite>. Psicothema, 18(3), 335–341. — Validación española de instrumentos TDAH.</li>
+    <li class="bib-item">Ministerio de Educación y Formación Profesional (2023). <cite>Datos y cifras del sistema educativo español. Curso 2022–2023</cite>. Madrid: MEFP.</li>
+    <li class="bib-item">Ministerio de Sanidad (2022). <cite>Estrategia de Salud Mental del Sistema Nacional de Salud 2022–2026</cite>. Madrid: Ministerio de Sanidad.</li>
+    <li class="bib-item">Olweus, D. (1996). <cite>The Revised Olweus Bully/Victim Questionnaire</cite>. Bergen: Mimeo, University of Bergen.</li>
+    <li class="bib-item">Organización Mundial de la Salud (2020). <cite>Global status report on preventing violence against children</cite>. Ginebra: OMS.</li>
+    <li class="bib-item">Organización Mundial de la Salud (2022). <cite>World mental health report: Transforming mental health for all</cite>. Ginebra: OMS.</li>
+    <li class="bib-item">Ortega, R., Del Rey, R., & Casas, J.A. (2010). <cite>Knowing, building and living together on internet and social networks</cite>. Journal of Psychology, 221(4), 1–8.</li>
+    <li class="bib-item">Rodríguez-Hernández, P.J., Betancort, M., Ramírez-Santana, G.M., García, R., Sanz-Álvarez, E.J., & De las Cuevas-Castresana, C. (2012). <cite>Psychometric properties of the parent and teacher versions of the Strength and Difficulties Questionnaire (SDQ) in a Spanish sample</cite>. Revista de Psiquiatría y Salud Mental, 5(1), 21–29.</li>
+    <li class="bib-item">Shonkoff, J.P., & Phillips, D.A. (Eds.) (2000). <cite>From neurons to neighborhoods: The science of early childhood development</cite>. Washington, DC: National Academy Press.</li>
+    <li class="bib-item">Swanson, J.M., Schuck, S., Mann, M., Carlson, C., Hartman, K., Sergeant, J.A., Clevenger, W., Wasdell, M., & McCleary, R. (2001). <cite>Categorical and Dimensional Definitions and Evaluations of Symptoms of ADHD: The SNAP and the SWAN Rating Scales</cite>. Available at: www.adhd.net.</li>
+    <li class="bib-item">UNICEF (2021). <cite>The State of the World's Children 2021: On My Mind — Promoting, protecting and caring for children's mental health</cite>. Nueva York: UNICEF.</li>
+    <li class="bib-item">UNICEF España (2021). <cite>La infancia en España 2021</cite>. Madrid: UNICEF Comité Español.</li>
+    <li class="bib-item">World Health Organization & UNICEF (2023). <cite>Mental health of adolescents</cite>. Fact sheet. Ginebra: OMS.</li>
+  </ul>
+</div>
+
+</div>
+
+<div class="doc-footer">
+  <div class="df-brand">Mind<span>.</span>IA</div>
+  <div class="df-txt">Documento Técnico-Pedagógico v1.0 · 2025 · Uso exclusivo profesional</div>
+  <div class="df-txt">MyPath.IA ecosystem · Todos los derechos reservados</div>
+</div>
+
+</body>
+</html>
