@@ -256,6 +256,30 @@ export async function resetPassword(personId: string): Promise<ActionResult> {
   return done(null, sent ? "Contraseña nueva enviada por mail" : "La contraseña cambió pero el mail no salió: volvé a intentar");
 }
 
+// Genera una contraseña temporal y la devuelve para mostrarla una sola vez en pantalla (no se guarda en ningún lado).
+// Crea la cuenta si no existía. La persona tiene que elegir una propia al ingresar.
+export async function temporaryPassword(personId: string): Promise<{ ok: true; password: string; email: string } | { ok: false; error: string }> {
+  if (!uuid.safeParse(personId).success) return { ok: false, error: "Datos inválidos" };
+  const svc = serviceClient();
+  if (!svc) return { ok: false, error: "Falta configurar SUPABASE_SECRET_KEY en Vercel" };
+  const { data, error } = await rpc("admin_password_target", { p_person: personId });
+  if (error) return { ok: false, error };
+  const target = (data as Array<{ auth_user_id: string | null; email: string }> | null)?.[0];
+  if (!target) return { ok: false, error: "La persona no existe o está eliminada" };
+
+  const password = generatePassword();
+  if (target.auth_user_id) {
+    const { error: e } = await svc.auth.admin.updateUserById(target.auth_user_id, { password });
+    if (e) return { ok: false, error: "No pudimos cambiar la contraseña" };
+  } else {
+    const { data: created, error: e } = await svc.auth.admin.createUser({ email: target.email, password, email_confirm: true });
+    if (e || !created.user) return { ok: false, error: "No pudimos crear la cuenta de acceso" };
+    await rpc("admin_link_account", { p_person: personId, p_auth: created.user.id });
+  }
+  revalidatePath("/admin", "layout");
+  return { ok: true, password, email: target.email };
+}
+
 // ─────────────────────────────────────────────────────────────
 // Mails de bienvenida
 // ─────────────────────────────────────────────────────────────
