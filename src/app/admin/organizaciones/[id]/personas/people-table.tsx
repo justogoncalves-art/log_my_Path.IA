@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useState, useTransition } from "react";
 import {
   changeEmail,
   deletePerson,
@@ -8,6 +8,7 @@ import {
   setMembershipActive,
   setPersonClasses,
   setPersonModules,
+  temporaryPassword,
 } from "@/app/admin/actions";
 import { btnGhostCls, inputCls, Result, useAction } from "@/app/admin/ui";
 import type { PersonRow } from "@/lib/admin-data";
@@ -97,6 +98,10 @@ function PersonActions({ orgId, p, classes, modules }: { orgId: string; p: Perso
   const [cls, setCls] = useState<string[]>(currentClasses);
   const [mods, setMods] = useState<string[]>(p.modules);
   const [email, setEmail] = useState(p.email);
+  // Contraseña temporal: se muestra una sola vez y no se guarda en ningún lado
+  const [temp, setTemp] = useState<{ password: string; email: string } | { error: string } | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [tempPending, startTemp] = useTransition();
 
   return (
     <div className="grid gap-5 md:grid-cols-3">
@@ -173,6 +178,44 @@ function PersonActions({ orgId, p, classes, modules }: { orgId: string; p: Perso
           >
             {p.has_account ? "Nueva contraseña por mail" : "Crear acceso y mandar por mail"}
           </button>
+        ) : null}
+        {!p.deleted ? (
+          <button
+            className={btnGhostCls}
+            disabled={tempPending}
+            onClick={() => {
+              if (!window.confirm(`¿Generar una contraseña nueva para ${p.first_name} y verla en pantalla? La que tenga ahora deja de servir.`)) return;
+              setCopied(false);
+              startTemp(async () => {
+                const r = await temporaryPassword(p.person_id);
+                setTemp(r.ok ? { password: r.password, email: r.email } : { error: r.error });
+              });
+            }}
+          >
+            {tempPending ? "Generando…" : "Generar contraseña y mostrarla"}
+          </button>
+        ) : null}
+        {temp && "password" in temp ? (
+          <div role="status" className="flex w-full flex-wrap items-center gap-3 rounded-lg border border-celeste/40 bg-celeste/10 px-4 py-3">
+            <span className="text-sm">
+              Usuario: <strong>{temp.email}</strong> · Contraseña: <code className="rounded bg-surface px-2 py-0.5 font-mono text-base font-semibold tracking-wider">{temp.password}</code>
+            </span>
+            <button
+              className={btnGhostCls}
+              onClick={async () => {
+                await navigator.clipboard.writeText(temp.password).catch(() => {});
+                setCopied(true);
+              }}
+            >
+              {copied ? "Copiada" : "Copiar"}
+            </button>
+            <button className={btnGhostCls} onClick={() => setTemp(null)}>
+              Ocultar
+            </button>
+            <span className="w-full text-xs text-muted">Se muestra una sola vez y no queda guardada. Al ingresar, la persona tiene que elegir una propia.</span>
+          </div>
+        ) : temp && "error" in temp ? (
+          <p role="alert" className="w-full text-sm text-danger">{temp.error}</p>
         ) : null}
         {!p.deleted ? (
           <button
