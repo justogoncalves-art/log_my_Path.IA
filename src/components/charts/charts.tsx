@@ -82,6 +82,76 @@ export function BarList({ data, max, seeData, valueLabel, reference }: {
   );
 }
 
+// Línea en el tiempo (series largas: mediciones cada pocos minutos). Área suave, último valor destacado,
+// valor al pasar el mouse por cada tramo y la tabla "Ver datos".
+export function LineChart({ data, max, height = 160, seeData, valueLabel, unit = "" }: {
+  data: Datum[]; max?: number; height?: number; seeData: string; valueLabel: string; unit?: string;
+}) {
+  const values = data.map((d) => d.value);
+  const peak = Math.max(...values, 0);
+  const top = max ?? (peak > 0 ? niceCeil(peak * 1.15) : 1);
+  const W = 1000;
+  const n = data.length;
+  const x = (i: number) => (n <= 1 ? W / 2 : (i / (n - 1)) * W);
+  const y = (v: number) => height - (Math.min(v, top) / top) * (height - 4) - 2;
+  const line = data.map((d, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(d.value).toFixed(1)}`).join(" ");
+  const area = `${line} L${x(n - 1).toFixed(1)},${height} L${x(0).toFixed(1)},${height} Z`;
+  const last = data[n - 1];
+  const fmt = (v: number) => `${Math.round(v * 10) / 10}${unit}`;
+  const avg = n ? values.reduce((a, b) => a + b, 0) / n : 0;
+  // Zonas para el mouse: una por punto (o por grupo, si hay muchos)
+  const step = Math.max(1, Math.ceil(n / 120));
+  const zones = data.filter((_, i) => i % step === 0);
+  return (
+    <figure>
+      <div className="mb-3 flex flex-wrap items-baseline gap-x-5 gap-y-1 text-sm">
+        <span>
+          <span className="font-display text-2xl font-bold">{last ? (last.hint ?? fmt(last.value)) : "—"}</span>
+          <span className="ml-1.5 text-xs text-muted">última</span>
+        </span>
+        <span className="text-xs text-muted">Máx. {fmt(peak)} · Prom. {fmt(avg)}</span>
+      </div>
+      <div className="relative" style={{ height }}>
+        {[1, 0.5, 0].map((f) => (
+          <div key={f} className="pointer-events-none absolute inset-x-0 border-t border-dashed border-line" style={{ top: `${(1 - f) * 100}%` }}>
+            {/* En conteos no tiene sentido una marca fraccionaria (0,5 usuarios) */}
+            {unit || Number.isInteger(top * f) ? <span className="absolute -top-2 right-0 bg-surface pl-1 text-[10px] text-muted">{fmt(top * f)}</span> : null}
+          </div>
+        ))}
+        <svg viewBox={`0 0 ${W} ${height}`} preserveAspectRatio="none" className="absolute inset-0 h-full w-full text-opulent" role="img" aria-label={`${valueLabel}: última ${last ? fmt(last.value) : "sin datos"}, máximo ${fmt(peak)}`}>
+          <path d={area} fill="currentColor" fillOpacity={0.1} />
+          <path d={line} fill="none" stroke="currentColor" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+          {zones.map((d, i) => {
+            const idx = i * step;
+            const w = (W / Math.max(zones.length, 1));
+            return (
+              <rect key={idx} x={Math.max(0, x(idx) - w / 2)} y={0} width={w} height={height} fill="transparent" className="hover:fill-celeste/10">
+                <title>{`${d.label}: ${d.hint ?? fmt(d.value)}`}</title>
+              </rect>
+            );
+          })}
+        </svg>
+        {last ? (
+          <span className="pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-opulent" style={{ left: `${(x(n - 1) / W) * 100}%`, top: `${(y(last.value) / height) * 100}%` }} />
+        ) : null}
+      </div>
+      <div className="mt-1.5 flex justify-between text-[10px] text-muted">
+        <span>{data[0]?.label}</span>
+        <span>{data[Math.floor((n - 1) / 2)]?.label}</span>
+        <span>{last?.label}</span>
+      </div>
+      <DataTable data={data} label={seeData} valueLabel={valueLabel} />
+    </figure>
+  );
+}
+
+// Redondea hacia arriba a un número "lindo" para el eje (1, 2, 5, 10, 20, 50…)
+function niceCeil(v: number) {
+  const p = 10 ** Math.floor(Math.log10(v));
+  const m = v / p;
+  return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p;
+}
+
 // Número destacado
 export function Kpi({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (

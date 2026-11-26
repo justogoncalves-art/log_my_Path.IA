@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChartCard, ColumnChart, Kpi } from "@/components/charts/charts";
+import { ChartCard, Kpi, LineChart } from "@/components/charts/charts";
 import { createClient } from "@/lib/supabase/server";
 import { HealthControls } from "./controls";
 
@@ -64,14 +64,13 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
     d.series
       .filter((s) => s.source === source && num(s.m[key]) != null)
       .map((s) => ({ label: timeFmt.format(new Date(s.at)), value: num(s.m[key])!, hint: `${Math.round(num(s.m[key])! * 10) / 10}${unit}` }));
-  const every = (n: number) => Math.max(1, Math.round(n / 8));
   const charts = [
-    { title: "CPU de la base", sub: "% de uso", data: series("server", "cpu_pct", " %"), max: 100 },
-    { title: "RAM de la base", sub: "% de uso", data: series("server", "mem_pct", " %"), max: 100 },
-    { title: "Usuarios conectados", sub: "Activos en los últimos 5 minutos", data: series("db", "users_5m") },
-    { title: "Tiempo de respuesta de la base", sub: "Milisegundos", data: series("server", "db_ms", " ms") },
-    { title: "Conexiones a la base", sub: `Máximo ${num(db.conn_max) ?? "—"}`, data: series("db", "conn_total") },
-    { title: "Intentos de login fallidos", sub: "En los 15 minutos previos a cada medición", data: series("db", "login_fail_15m") },
+    { title: "CPU de la base", sub: "% de uso", data: series("server", "cpu_pct", " %"), max: 100, unit: " %" },
+    { title: "RAM de la base", sub: "% de uso", data: series("server", "mem_pct", " %"), max: 100, unit: " %" },
+    { title: "Usuarios conectados", sub: "Activos en los últimos 5 minutos", data: series("db", "users_5m"), max: undefined, unit: "" },
+    { title: "Tiempo de respuesta de la base", sub: "Milisegundos", data: series("server", "db_ms", " ms"), max: undefined, unit: " ms" },
+    { title: "Conexiones a la base", sub: `Máximo ${num(db.conn_max) ?? "—"}`, data: series("db", "conn_total"), max: num(db.conn_max) ?? undefined, unit: "" },
+    { title: "Intentos de login fallidos", sub: "En los 15 minutos previos a cada medición", data: series("db", "login_fail_15m"), max: undefined, unit: "" },
   ];
 
   return (
@@ -135,7 +134,7 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
         {charts.map((c) => (
           <ChartCard key={c.title} title={c.title} sub={c.sub}>
             {c.data.length ? (
-              <ColumnChart data={c.data} max={c.max} height={150} seeData="Ver datos" valueLabel={c.title} labelEvery={every(c.data.length)} />
+              <LineChart data={c.data} max={c.max} height={150} seeData="Ver datos" valueLabel={c.title} unit={c.unit} />
             ) : (
               <p className="text-sm text-muted">Sin mediciones en este período.</p>
             )}
