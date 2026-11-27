@@ -13,11 +13,11 @@ export default async function MailsPage({ params }: { params: Promise<{ id: stri
           Podés programar mails, pero para que salgan faltan cargar en Vercel SUPABASE_SECRET_KEY, RESEND_API_KEY y CRON_SECRET.
         </p>
       ) : null}
-      <section className="rounded-xl border border-line bg-surface p-6">
+      <section className="rounded-2xl border border-line bg-surface p-6">
         <h2 className="font-display text-lg font-semibold">Programados y enviados</h2>
         <CampaignList campaigns={campaigns} classNames={classNames} />
       </section>
-      <section className="rounded-xl border border-line bg-surface p-6">
+      <section className="rounded-2xl border border-line bg-surface p-6">
         <h2 className="font-display text-lg font-semibold">Programar mail de bienvenida</h2>
         <p className="mt-1 text-sm text-muted">
           Sale el día elegido a las 7 h (hora Argentina), o al instante con “Enviar ahora”. A cada persona se le genera una contraseña al

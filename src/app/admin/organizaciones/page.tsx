@@ -27,7 +27,7 @@ export default async function OrgsPage() {
           <OrgCard key={o.id} o={o} />
         ))}
       </div>
-      {!active.length ? <p className="mt-8 rounded-xl border border-line bg-surface p-6 text-muted">Todavía no hay organizaciones. Empezá con «Nueva organización».</p> : null}
+      {!active.length ? <p className="mt-8 rounded-2xl border border-line bg-surface p-6 text-muted">Todavía no hay organizaciones. Empezá con «Nueva organización».</p> : null}
 
       {inactive.length ? (
         <section className="mt-10">

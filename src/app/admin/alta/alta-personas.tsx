@@ -158,7 +158,7 @@ export function AltaPersonas({ orgs, initialOrg, lockOrg = false, onSaved }: { o
       {!org ? (
         <p className="rounded-xl border border-line bg-surface p-5 text-muted">Elegí la organización para empezar.</p>
       ) : tab === "excel" ? (
-        <section className="rounded-xl border border-line bg-surface p-6">
+        <section className="rounded-2xl border border-line bg-surface p-6">
           <h2 className="font-display text-lg font-semibold">Excel del colegio</h2>
           <p className="mt-1 text-sm text-muted">
             Columnas: Dni, Tipo de documento (opcional, DNI por defecto), Nombre, Apellido, Mail, Tipo (Alumno, Docente o
@@ -176,7 +176,7 @@ export function AltaPersonas({ orgs, initialOrg, lockOrg = false, onSaved }: { o
           />
         </section>
       ) : (
-        <form action={onSingle} className="grid grid-cols-1 gap-4 rounded-xl border border-line bg-surface p-6 md:grid-cols-3">
+        <form action={onSingle} className="grid grid-cols-1 gap-4 rounded-2xl border border-line bg-surface p-6 md:grid-cols-3">
           <label className="block">
             <span className="mb-1.5 block font-display text-sm font-medium">Tipo de documento</span>
             <select name="doc_type" className={inputCls} defaultValue="dni">
@@ -240,7 +240,7 @@ export function AltaPersonas({ orgs, initialOrg, lockOrg = false, onSaved }: { o
       ) : null}
 
       {results ? (
-        <section className="rounded-xl border border-line bg-surface p-6">
+        <section className="rounded-2xl border border-line bg-surface p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2 text-sm">
               {(Object.keys(STATUS_LABEL) as ImportResult["status"][]).map((s) =>
