@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
+import { Icon } from "@/components/icon";
 import { BarList, ChartCard, ColumnChart, Kpi } from "@/components/charts/charts";
 import { getDict } from "@/lib/i18n";
 import { RIASEC_NAMES } from "@/lib/i18n-campus";
@@ -7,7 +8,7 @@ import { STAFF_TABS, staffText, type StaffLang, type StaffTab } from "@/lib/i18n
 import { signPlayback } from "@/lib/mux";
 import { programName } from "@/lib/program-names";
 import { getChapterContent } from "@/lib/programs";
-import { classReport, classStats, classStudents, programDocuments, staffClasses, type ClassStats } from "@/lib/staff";
+import { classReport, classStats, classStudents, programDocuments, staffClasses, type ClassStats, type StaffStudent } from "@/lib/staff";
 import { requireStaff } from "../access";
 import { ClassSummary } from "./class-summary";
 import { MirrorPlayer } from "./mirror-player";
@@ -42,57 +43,111 @@ export default async function StaffMentoPage({ searchParams }: { searchParams: P
     return `/docente/mento?${u.toString()}`;
   };
 
+  const students = klass && program ? await classStudents(klass.class_id, program.id) : [];
+  const n = students.length;
+  const avg = n ? Math.round((students.reduce((a, x) => a + (x.total ? x.completed / x.total : 0), 0) / n) * 100) : 0;
+  const withReport = students.filter((x) => x.report_status === "listo").length;
+  const started = students.filter((x) => x.completed > 0 && x.report_status !== "listo").length;
+  const notStarted = n - withReport - started;
+  const seg = (v: number) => (n ? `${(v / n) * 100}%` : "0%");
+
   return (
     <div className="min-h-screen">
       <AppHeader t={t} lang={lang} orgName={me.organizationName} firstName={me.firstName} isAdmin={me.isAdmin} />
       <main className="mx-auto w-full max-w-[1600px] px-5 pb-24 pt-8 md:px-10">
-        <div className="flex flex-wrap items-end justify-between gap-5">
-          <div>
-            <p className="eyebrow">{s.eyebrow}</p>
-            <h1 className="mt-2 font-display text-3xl font-bold md:text-4xl">{s.title}</h1>
-          </div>
-          {klass ? (
-            <div className="flex flex-wrap gap-3">
-              <UrlSelect
-                name="clase"
-                label={s.klass}
-                value={klass.class_id}
-                reset={["programa", "cap"]}
-                options={classes.map((c) => ({ value: c.class_id, label: `${c.class_name} · ${c.organization_name} (${c.students})` }))}
-              />
-              {program ? (
+        <section className="rounded-2xl border border-line bg-surface p-6">
+          <div className="flex flex-wrap items-start justify-between gap-5">
+            <div className="flex min-w-0 items-start gap-4">
+              <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-opulent text-white">
+                <Icon name="personas" size={24} />
+              </span>
+              <div className="min-w-0">
+                <p className="eyebrow">{s.eyebrow}</p>
+                <h1 className="mt-1 font-display text-3xl font-bold text-balance md:text-4xl">{klass ? klass.class_name : s.title}</h1>
+                {klass ? (
+                  <p className="mt-1 text-muted">
+                    {klass.organization_name} · {program ? programName(program.title, program.language) : s.noProgram}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+            {klass ? (
+              <div className="flex flex-wrap gap-3">
                 <UrlSelect
-                  name="programa"
-                  label={s.program}
-                  value={program.id}
-                  reset={["cap"]}
-                  options={klass.programs.map((p) => ({ value: p.id, label: programName(p.title, p.language) }))}
+                  name="clase"
+                  label={s.klass}
+                  value={klass.class_id}
+                  reset={["programa", "cap"]}
+                  options={classes.map((c) => ({ value: c.class_id, label: `${c.class_name} · ${c.organization_name} (${c.students})` }))}
                 />
-              ) : null}
+                {program ? (
+                  <UrlSelect
+                    name="programa"
+                    label={s.program}
+                    value={program.id}
+                    reset={["cap"]}
+                    options={klass.programs.map((p) => ({ value: p.id, label: programName(p.title, p.language) }))}
+                  />
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+          {program && n ? (
+            <div className="mt-6 grid gap-6 lg:grid-cols-2">
+              <div>
+                <div className="flex items-baseline justify-between text-sm">
+                  <span className="font-semibold">{s.classProgress}</span>
+                  <span className="font-display text-2xl font-bold tabular-nums">{avg} %</span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-line" aria-hidden>
+                  <div className={`h-full rounded-full ${avg >= 100 ? "bg-ok" : "bg-opulent"}`} style={{ width: `${avg}%` }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex h-2 overflow-hidden rounded-full bg-line lg:mt-7" aria-hidden>
+                  <span className="bg-ok" style={{ width: seg(withReport) }} />
+                  <span className="bg-[#c98a1b]" style={{ width: seg(started) }} />
+                  <span className="bg-[#e5487a]/70" style={{ width: seg(notStarted) }} />
+                </div>
+                <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+                  <span>
+                    <span className="font-bold text-ok">✓</span> {withReport} {s.withReport}
+                  </span>
+                  <span>
+                    <span className="font-bold text-[#7a5310]">⌛</span> {started} {s.inProgress}
+                  </span>
+                  <span>
+                    <span className="font-bold text-[#c2185b]">✗</span> {notStarted} {s.notStarted}
+                  </span>
+                </p>
+              </div>
             </div>
           ) : null}
-        </div>
+        </section>
 
         {!klass ? (
-          <p className="mt-10 rounded-2xl border border-line bg-surface p-6 text-muted">{s.noClasses}</p>
+          <p className="mt-8 rounded-2xl border border-line bg-surface p-6 text-muted">{s.noClasses}</p>
         ) : !program ? (
-          <p className="mt-10 rounded-2xl border border-line bg-surface p-6 text-muted">{s.noProgram}</p>
+          <p className="mt-8 rounded-2xl border border-line bg-surface p-6 text-muted">{s.noProgram}</p>
         ) : (
           <>
-            <nav aria-label={s.title} className="mt-8 flex gap-1 overflow-x-auto border-b border-line">
+            <nav aria-label={s.title} className="mt-5 flex gap-1 overflow-x-auto rounded-xl border border-line bg-surface p-1">
               {STAFF_TABS.map((k) => (
                 <Link
                   key={k}
                   href={q({ tab: k })}
                   aria-current={tab === k ? "page" : undefined}
-                  className={`whitespace-nowrap border-b-2 px-4 py-3 font-display text-sm font-medium ${tab === k ? "border-opulent text-opulent" : "border-transparent text-muted hover:text-ink"}`}
+                  className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 font-display text-sm font-medium transition-colors ${
+                    tab === k ? "bg-opulent text-white shadow-sm" : "text-muted hover:bg-oat hover:text-ink"
+                  }`}
                 >
+                  <Icon name={TAB_ICONS[k]} />
                   {s.tabs[k]}
                 </Link>
               ))}
             </nav>
-            <div className="mt-8">
-              {tab === "seguimiento" ? <Tracking lang={lang} classId={klass.class_id} programId={program.id} /> : null}
+            <div className="mt-6">
+              {tab === "seguimiento" ? <Tracking lang={lang} classId={klass.class_id} programId={program.id} students={students} /> : null}
               {tab === "contenido" ? <Content lang={lang} programId={program.id} chapters={program.chapters} cap={Number(sp.cap) || 1} q={q} personId={me.personId} /> : null}
               {tab === "estadisticas" ? <Stats lang={lang} classId={klass.class_id} programId={program.id} /> : null}
               {tab === "resumen" ? <Summary lang={lang} classId={klass.class_id} programId={program.id} /> : null}
@@ -105,16 +160,18 @@ export default async function StaffMentoPage({ searchParams }: { searchParams: P
   );
 }
 
+const TAB_ICONS: Record<StaffTab, string> = { seguimiento: "personas", contenido: "video", estadisticas: "grafico", resumen: "ia", guia: "libro", actividades: "archivo" };
+
 // ── Seguimiento ──────────────────────────────────────────────
-async function Tracking({ lang, classId, programId }: { lang: StaffLang; classId: string; programId: string }) {
+function Tracking({ lang, classId, programId, students }: { lang: StaffLang; classId: string; programId: string; students: StaffStudent[] }) {
   const s = staffText(lang);
-  const students = await classStudents(classId, programId);
   const now = nowMs();
   const n = students.length;
   const avg = n ? Math.round((students.reduce((a, x) => a + (x.total ? x.completed / x.total : 0), 0) / n) * 100) : 0;
   const finished = students.filter((x) => x.finished_at).length;
   const ready = students.filter((x) => x.report_status === "listo").length;
-  const active7 = students.filter((x) => x.last_seen && now - new Date(x.last_seen).getTime() < 7 * 86400000).length;
+  const weekAgo = now - 7 * 86400000;
+  const active7 = students.filter((x) => x.last_seen && new Date(x.last_seen).getTime() >= weekAgo).length;
   const avgMin = n ? Math.round(students.reduce((a, x) => a + x.seconds, 0) / n / 60) : 0;
   const rows: Row[] = students.map((x) => ({
     id: x.person_id,
@@ -131,20 +188,58 @@ async function Tracking({ lang, classId, programId }: { lang: StaffLang; classId
     report: x.report_status,
     finished: !!x.finished_at,
   }));
+  // Necesitan atención: sin empezar o sin conexión hace más de 7 días (y sin terminar)
+  const attention = rows.filter((r) => !r.finished && (r.completed === 0 || !r.lastSeen || new Date(r.lastSeen).getTime() < weekAgo));
+  const href = (id: string) => `/docente/mento/alumno/${id}?clase=${classId}&programa=${programId}`;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       <div className="grid gap-4 sm:grid-cols-3 xl:grid-cols-6">
-        <Kpi label={s.kpiStudents} value={String(n)} />
-        <Kpi label={s.kpiProgress} value={`${avg}%`} />
-        <Kpi label={s.kpiFinished} value={String(finished)} sub={s.ofN(n)} />
-        <Kpi label={s.kpiReports} value={String(ready)} sub={s.ofN(n)} />
-        <Kpi label={s.kpiActive7} value={String(active7)} sub={s.ofN(n)} />
-        <Kpi label={s.kpiMinutes} value={s.minutes(avgMin)} />
+        <Kpi icon="personas" label={s.kpiStudents} value={String(n)} />
+        <Kpi icon="grafico" label={s.kpiProgress} value={`${avg}%`} bar={avg} />
+        <Kpi icon="check" label={s.kpiFinished} value={String(finished)} sub={s.ofN(n)} />
+        <Kpi icon="ia" label={s.kpiReports} value={String(ready)} sub={s.ofN(n)} />
+        <Kpi icon="estado" label={s.kpiActive7} value={String(active7)} sub={s.ofN(n)} />
+        <Kpi icon="reloj" label={s.kpiMinutes} value={s.minutes(avgMin)} />
       </div>
+
+      <section className={`rounded-2xl border p-5 ${attention.length ? "border-[#c98a1b]/40 bg-[#f5e3c0]/25" : "border-ok/30 bg-ok/5"}`}>
+        <div className="flex items-center gap-3">
+          <span className={`inline-flex size-9 shrink-0 items-center justify-center rounded-xl ${attention.length ? "bg-[#c98a1b]/15 text-[#7a5310]" : "bg-ok/15 text-ok"}`}>
+            <Icon name={attention.length ? "alerta" : "check"} />
+          </span>
+          <div>
+            <h2 className="font-display font-bold">
+              {s.attention} {attention.length ? `· ${attention.length}` : ""}
+            </h2>
+            <p className="text-sm text-muted">{attention.length ? s.attentionLead : s.allGood}</p>
+          </div>
+        </div>
+        {attention.length ? (
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {attention.slice(0, 12).map((r) => (
+              <li key={r.id}>
+                <Link href={href(r.id)} className="flex items-center gap-2 rounded-full border border-line bg-surface py-1 pl-1 pr-3 text-sm hover:border-celeste">
+                  <span className="inline-flex size-7 items-center justify-center rounded-full bg-opulent/10 font-display text-xs font-bold text-opulent">{initials(r.name)}</span>
+                  <span className="font-medium">{r.name}</span>
+                  <span className="text-xs text-muted">· {r.completed === 0 ? s.notStartedShort : s.inactiveShort(r.lastSeenLabel)}</span>
+                </Link>
+              </li>
+            ))}
+            {attention.length > 12 ? <li className="self-center text-sm text-muted">{s.more(attention.length - 12)}</li> : null}
+          </ul>
+        ) : null}
+      </section>
+
       <StudentsTable lang={lang} rows={rows} hrefBase="/docente/mento/alumno" hrefQuery={`?clase=${classId}&programa=${programId}`} now={now} />
     </div>
   );
+}
+
+// "Pérez, Ana" → "AP"
+function initials(name: string) {
+  const [last = "", first = ""] = name.split(",").map((x) => x.trim());
+  return `${first.slice(0, 1)}${last.slice(0, 1)}`.toUpperCase();
 }
 
 // ── Contenido (espejo de lo que ve el alumno, sin guardar nada) ──

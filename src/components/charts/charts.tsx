@@ -1,3 +1,5 @@
+import { Icon } from "@/components/icon";
+
 // Gráficos simples en HTML (sin librería): barras finas con punta redondeada, el valor al pasar el mouse
 // y siempre una tabla "Ver datos" con los números. Una sola serie: un solo color de la marca.
 
@@ -153,11 +155,23 @@ function niceCeil(v: number) {
 }
 
 // Número destacado
-export function Kpi({ label, value, sub }: { label: string; value: string; sub?: string }) {
+export function Kpi({ label, value, sub, icon, bar }: { label: string; value: string; sub?: string; icon?: string; bar?: number }) {
   return (
     <div className="rounded-2xl border border-line bg-surface p-5">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p>
-      <p className="mt-2 font-display text-3xl font-bold">{value}</p>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p>
+        {icon ? (
+          <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-opulent/10 text-opulent">
+            <Icon name={icon} />
+          </span>
+        ) : null}
+      </div>
+      <p className="mt-2 font-display text-3xl font-bold tabular-nums">{value}</p>
+      {bar !== undefined ? (
+        <span className="mt-2 block h-1.5 overflow-hidden rounded-full bg-line" aria-hidden>
+          <span className="block h-full rounded-full bg-celeste" style={{ width: `${Math.min(bar, 100)}%` }} />
+        </span>
+      ) : null}
       {sub ? <p className="mt-1 text-sm text-muted">{sub}</p> : null}
     </div>
   );
