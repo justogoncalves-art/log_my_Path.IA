@@ -6,8 +6,12 @@ import { CampaignList, WelcomeForm } from "../[id]/mails/welcome";
 import { getOrg, listCampaigns, listPrograms, listResellers, orgClasses, orgModules, orgSummary } from "@/lib/admin-data";
 import { isCountryCode } from "@/lib/countries";
 import { programName } from "@/lib/program-names";
+import { NavIcon } from "../../nav";
+import { PageHeader } from "../../page-header";
 
 const STEPS = ["Organización", "Personas", "Clases", "Módulos y licencias", "Programas", "Mail de bienvenida", "Revisión"];
+const ICONS = ["orgs", "personas", "clases", "resumen", "programas", "mail", "revisar"];
+const HINTS = ["Nombre, tipo y país", "Excel del colegio", "Nivel y año", "Fechas y cupos", "Por clase", "Usuario y contraseña", "Antes de terminar"];
 
 // Asistente de alta: cada paso guarda en la base, así se puede cortar y retomar (?org=…&paso=…)
 export default async function NewOrgWizard({ searchParams }: { searchParams: Promise<{ org?: string; paso?: string }> }) {
@@ -17,38 +21,71 @@ export default async function NewOrgWizard({ searchParams }: { searchParams: Pro
   const step = org ? Math.min(Math.max(Number(sp.paso) || 1, 1), STEPS.length) : 1;
   const href = (n: number) => (org ? `/admin/organizaciones/nueva?org=${org.id}&paso=${n}` : "/admin/organizaciones/nueva");
 
+  const pct = Math.round(((step - 1) / (STEPS.length - 1)) * 100);
   return (
     <div className="mx-auto w-full max-w-[1600px]">
       <Link href="/admin/organizaciones" className="text-sm text-muted hover:text-ink">
         ← Organizaciones
       </Link>
-      <p className="eyebrow mt-4">Alta paso a paso</p>
-      <h1 className="mt-2 font-display text-3xl font-bold">{org ? org.name : "Nueva organización"}</h1>
+      <div className="mt-3">
+        <PageHeader icon="orgs" eyebrow="Alta paso a paso" title={org ? org.name : "Nueva organización"} lead="Cada paso se guarda solo: podés cortar y retomar cuando quieras." />
+      </div>
 
-      <ol className="mt-6 grid gap-2 sm:grid-cols-4 xl:grid-cols-7">
-        {STEPS.map((label, i) => {
-          const n = i + 1;
-          const current = n === step;
-          const reachable = !!org || n === 1;
-          const inner = (
-            <span
-              className={`flex h-full items-center gap-2.5 rounded-xl border px-3 py-2.5 text-sm ${
-                current ? "border-opulent bg-opulent text-white" : n < step ? "border-celeste/50 bg-celeste/10" : "border-line bg-surface text-muted"
-              }`}
-            >
-              <span className={`inline-flex size-6 shrink-0 items-center justify-center rounded-full font-display text-xs font-bold ${current ? "bg-white text-opulent" : "bg-line text-ink"}`}>
-                {n < step ? "✓" : n}
+      {/* Avance general */}
+      <div className="mt-6 rounded-2xl border border-line bg-surface px-5 py-4">
+        <div className="flex items-baseline justify-between text-sm">
+          <span className="font-display font-semibold">
+            Paso {step} de {STEPS.length} · {STEPS[step - 1]}
+          </span>
+          <span className="tabular-nums text-muted">{pct} %</span>
+        </div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-line" aria-hidden>
+          <div className="h-full rounded-full bg-gradient-to-r from-celeste to-opulent transition-[width] duration-500" style={{ width: `${Math.max(pct, 4)}%` }} />
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+        {/* Pasos */}
+        <ol className="flex gap-2 overflow-x-auto xl:sticky xl:top-6 xl:h-fit xl:flex-col xl:gap-0 xl:overflow-visible">
+          {STEPS.map((label, i) => {
+            const n = i + 1;
+            const current = n === step;
+            const done = n < step;
+            const reachable = !!org || n === 1;
+            const inner = (
+              <span
+                className={`group relative flex min-w-44 items-center gap-3 rounded-xl px-3 py-3 transition-colors xl:min-w-0 ${
+                  current ? "bg-opulent text-white shadow-sm" : reachable ? "hover:bg-surface" : "opacity-50"
+                }`}
+              >
+                <span
+                  className={`relative z-10 inline-flex size-9 shrink-0 items-center justify-center rounded-full border-2 [&>svg]:size-4 ${
+                    current ? "border-white bg-white text-opulent" : done ? "border-ok bg-ok text-white" : "border-line bg-surface text-muted"
+                  }`}
+                >
+                  {done ? "✓" : <NavIcon name={ICONS[i]} />}
+                </span>
+                <span className="min-w-0">
+                  <span className={`block font-mono text-[10px] uppercase tracking-[0.15em] ${current ? "text-white/70" : "text-muted"}`}>Paso {n}</span>
+                  <span className="block font-display text-sm font-semibold leading-tight">{label}</span>
+                  <span className={`hidden text-xs xl:block ${current ? "text-white/75" : "text-muted"}`}>{HINTS[i]}</span>
+                </span>
               </span>
-              <span className="font-display font-medium leading-tight">{label}</span>
-            </span>
-          );
-          return <li key={label}>{reachable && !current ? <Link href={href(n)}>{inner}</Link> : inner}</li>;
-        })}
-      </ol>
+            );
+            return (
+              <li key={label} className="relative shrink-0 xl:pb-1">
+                {/* Línea que une los pasos (escritorio) */}
+                {n < STEPS.length ? <span className={`absolute left-[29px] top-12 hidden h-[calc(100%-36px)] w-0.5 xl:block ${done ? "bg-ok" : "bg-line"}`} aria-hidden /> : null}
+                {reachable && !current ? <Link href={href(n)}>{inner}</Link> : inner}
+              </li>
+            );
+          })}
+        </ol>
 
-      <section className="mt-8 rounded-2xl border border-line bg-surface p-6 md:p-8">
-        <Step step={step} org={org} />
-      </section>
+        <section className="rounded-2xl border border-line bg-surface p-6 md:p-8">
+          <Step step={step} org={org} />
+        </section>
+      </div>
     </div>
   );
 }
@@ -168,9 +205,26 @@ async function Step({ step, org }: { step: number; org: Awaited<ReturnType<typeo
   return (
     <>
       <StepHeader title="Revisión" text="Controlá que esté todo antes de terminar. Los avisos en amarillo no impiden finalizar." />
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        {[
+          { n: checks.filter((c) => c.ok).length, label: "Listos", cls: "bg-ok/10 text-ok" },
+          { n: checks.filter((c) => !c.ok && c.warn).length, label: "Avisos", cls: "bg-[#f5e3c0]/60 text-[#7a5310]" },
+          { n: blocking, label: "Obligatorios pendientes", cls: blocking ? "bg-danger/10 text-danger" : "bg-oat/60 text-muted" },
+        ].map((b) => (
+          <div key={b.label} className={`rounded-xl px-4 py-3 ${b.cls}`}>
+            <p className="font-display text-3xl font-bold tabular-nums">{b.n}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide">{b.label}</p>
+          </div>
+        ))}
+      </div>
       <ul className="mt-6 flex flex-col gap-2">
         {checks.map((c, i) => (
-          <li key={i} className="flex items-center justify-between gap-3 rounded-xl border border-line px-4 py-3 text-sm">
+          <li
+            key={i}
+            className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm ${
+              c.ok ? "border-line" : c.warn ? "border-[#c98a1b]/40 bg-[#f5e3c0]/25" : "border-danger/30 bg-danger/5"
+            }`}
+          >
             <span className="flex items-center gap-3">
               <span
                 className={`inline-flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
@@ -196,8 +250,8 @@ async function Step({ step, org }: { step: number; org: Awaited<ReturnType<typeo
         {blocking ? (
           <span className="text-sm text-danger">Faltan {blocking} puntos obligatorios.</span>
         ) : (
-          <Link href={`/admin/organizaciones/${id}`} className="rounded-lg bg-opulent px-5 py-2.5 font-display text-sm font-semibold text-white">
-            Finalizar alta →
+          <Link href={`/admin/organizaciones/${id}/personas`} className="rounded-lg bg-ok px-6 py-3 font-display text-sm font-semibold text-white shadow-sm hover:bg-ok/90">
+            ✓ Finalizar alta
           </Link>
         )}
       </div>
