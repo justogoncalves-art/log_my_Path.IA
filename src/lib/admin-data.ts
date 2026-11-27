@@ -276,3 +276,22 @@ export async function orgSummary(orgId: string): Promise<OrgSummary> {
     campaigns: campaigns ?? 0,
   };
 }
+
+// Tablero del admin (solo conteos, sin datos personales)
+export type DashboardOrg = {
+  id: string; name: string; kind: string; country: string; active: boolean; reseller: string | null;
+  staff: number; students: number; with_account: number; active7: number; reports: number; in_progress: number; not_started: number; avg_pct: number;
+};
+export type Dashboard = {
+  orgs: DashboardOrg[];
+  totals: { orgs: number; students: number; staff: number; reports: number; active7: number; avg_pct: number };
+  today: number;
+  activity: { day: string; users: number }[];
+  alerts_1h: number;
+  critical_1h: number;
+};
+export async function adminDashboard(): Promise<Dashboard | null> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("admin_dashboard");
+  return (data ?? null) as Dashboard | null;
+}
