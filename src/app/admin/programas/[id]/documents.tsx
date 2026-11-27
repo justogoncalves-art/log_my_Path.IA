@@ -37,7 +37,7 @@ export function ProgramDocuments({ code, language, docs }: { code: string; langu
     });
 
   return (
-    <section className="mt-8 rounded-xl border border-line bg-surface p-6">
+    <section className="mt-8 rounded-2xl border border-line bg-surface p-6">
       <h2 className="font-display text-lg font-semibold">Documentos para el docente</h2>
       <p className="mt-1 text-sm text-muted">
         Los ven automáticamente los docentes de las clases que tienen este programa (pestañas «Guía didáctica» y «Actividades»).

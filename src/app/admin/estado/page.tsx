@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChartCard, Kpi, LineChart } from "@/components/charts/charts";
 import { createClient } from "@/lib/supabase/server";
+import { PageHeader } from "../page-header";
 import { HealthControls } from "./controls";
 
 // Estado de la plataforma: lo mide la base cada 5 minutos y el servidor suma CPU, RAM y disco.
@@ -41,7 +42,7 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
     return (
       <div className="mx-auto w-full max-w-[1600px]">
         <h1 className="font-display text-3xl font-bold">Estado de la plataforma</h1>
-        <p className="mt-6 rounded-xl border border-line bg-surface p-6 text-muted">Todavía no hay mediciones: falta aplicar la migración del monitoreo en la base.</p>
+        <p className="mt-6 rounded-2xl border border-line bg-surface p-6 text-muted">Todavía no hay mediciones: falta aplicar la migración del monitoreo en la base.</p>
       </div>
     );
   }
@@ -75,14 +76,12 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="mx-auto w-full max-w-[1600px]">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-display text-3xl font-bold">Estado de la plataforma</h1>
-          <p className="mt-1 text-sm text-muted">
-            Medición automática cada 5 minutos.{" "}
-            {d.db?.at ? `Última: ${timeFmt.format(new Date(String(d.db.at)))}.` : ""} {d.cron_ok === false ? "La tarea programada falló en las últimas ejecuciones." : ""}
-          </p>
-        </div>
+      <PageHeader
+        icon="estado"
+        eyebrow="General"
+        title="Estado de la plataforma"
+        lead={`Medición automática cada 5 minutos.${d.db?.at ? ` Última: ${timeFmt.format(new Date(String(d.db.at)))}.` : ""}${d.cron_ok === false ? " La tarea programada falló en las últimas ejecuciones." : ""}`}
+      >
         <nav className="flex gap-1 rounded-lg border border-line bg-surface p-1 text-sm" aria-label="Período">
           {Object.entries(RANGES).map(([k, label]) => (
             <Link key={k} href={`/admin/estado?h=${k}`} aria-current={Number(k) === hours ? "page" : undefined} className={`rounded-md px-3 py-1.5 ${Number(k) === hours ? "bg-opulent text-white" : "hover:bg-line/40"}`}>
@@ -90,9 +89,9 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
             </Link>
           ))}
         </nav>
-      </div>
+      </PageHeader>
 
-      <p className={`mt-6 rounded-xl border px-5 py-4 font-display font-semibold ${banner[0]}`}>{banner[1]}</p>
+      <p className={`mt-6 rounded-2xl border px-5 py-4 font-display font-semibold ${banner[0]}`}>{banner[1]}</p>
 
       <h2 className="mt-8 font-display text-lg font-semibold">Servidor de la base</h2>
       <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-8">
@@ -143,7 +142,7 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
       </div>
 
       <div className="mt-8 grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <section className="rounded-xl border border-line bg-surface p-6">
+        <section className="rounded-2xl border border-line bg-surface p-6">
           <h2 className="font-display text-lg font-semibold">Alertas</h2>
           {d.alerts.length ? (
             <ul className="mt-4 flex flex-col divide-y divide-line">
@@ -162,7 +161,7 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
             <p className="mt-3 text-sm text-muted">Sin alertas.</p>
           )}
         </section>
-        <section className="rounded-xl border border-line bg-surface p-6">
+        <section className="rounded-2xl border border-line bg-surface p-6">
           <h2 className="font-display text-lg font-semibold">Seguridad · últimas 24 h</h2>
           <ul className="mt-4 flex flex-col gap-2 text-sm">
             {Object.entries(SECURITY).map(([k, label]) => (
@@ -175,7 +174,7 @@ export default async function HealthPage({ searchParams }: { searchParams: Promi
         </section>
       </div>
 
-      <section className="mt-8 rounded-xl border border-line bg-surface p-6">
+      <section className="mt-8 rounded-2xl border border-line bg-surface p-6">
         <h2 className="font-display text-lg font-semibold">Consultas más lentas</h2>
         <p className="mt-1 text-sm text-muted">Promedio por consulta desde el último reinicio de estadísticas de la base.</p>
         {d.slow_queries.length ? (

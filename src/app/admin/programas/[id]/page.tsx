@@ -6,6 +6,7 @@ import { EXCEL_LANGUAGES } from "@/lib/program-import";
 import { createClient } from "@/lib/supabase/server";
 import { ProgramDocuments } from "./documents";
 import { VideoLinker } from "./video-linker";
+import { MiniStat, PageHeader } from "../../page-header";
 
 export default async function ProgramDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -26,13 +27,25 @@ export default async function ProgramDetail({ params }: { params: Promise<{ id: 
       <Link href="/admin/programas" className="text-sm text-muted hover:text-ink">
         ← Programas
       </Link>
-      <h1 className="mt-2 font-display text-3xl font-bold">{programName(program.title, program.language)}</h1>
-      <p className="mt-2 text-muted">
-        {program.grade}º {program.level} · {program.language} · v{program.version}
-        {program.active ? "" : " · versión anterior (inactiva)"}
-      </p>
+      <div className="mt-3">
+        <PageHeader
+          icon="programas"
+          eyebrow="Programa"
+          title={programName(program.title, program.language)}
+          lead={`${program.grade}º ${program.level} · ${program.language} · v${program.version}${program.active ? "" : " · versión anterior (inactiva)"}`}
+        />
+      </div>
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <MiniStat label="Capítulos" value={program.chapters.length} />
+        <MiniStat label="Preguntas" value={program.chapters.reduce((a, c) => a + c.questions, 0)} />
+        <MiniStat
+          label="Videos"
+          value={`${program.chapters.filter((c) => c.mux_playback_id).length} de ${program.chapters.length}`}
+          tone={program.chapters.every((c) => c.mux_playback_id) ? "ok" : "bad"}
+        />
+      </div>
 
-      <section className="mt-8 rounded-xl border border-line bg-surface p-6">
+      <section className="mt-8 rounded-2xl border border-line bg-surface p-6">
         <h2 className="font-display text-lg font-semibold">Videos por capítulo</h2>
         <p className="mt-1 text-sm text-muted">
           Trae los videos del entorno MY PATH de Mux y los une por nombre de archivo:{" "}

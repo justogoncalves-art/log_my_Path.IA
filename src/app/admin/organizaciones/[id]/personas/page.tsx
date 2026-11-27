@@ -34,7 +34,7 @@ export default async function PeoplePage({
 
   return (
     <div className="flex flex-col gap-5">
-      <form className="grid items-end gap-3 rounded-xl border border-line bg-surface p-4 md:grid-cols-[2fr_1fr_1fr_1fr_auto]">
+      <form className="grid items-end gap-3 rounded-2xl border border-line bg-surface p-4 md:grid-cols-[2fr_1fr_1fr_1fr_auto]">
         <label className="block">
           <span className="mb-1 block font-display text-sm font-medium">Buscar</span>
           <input name="q" defaultValue={filters.q} placeholder="Nombre, mail o DNI" className={inputCls} />

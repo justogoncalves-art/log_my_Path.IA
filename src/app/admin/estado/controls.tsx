@@ -6,7 +6,7 @@ import { ActionForm, btnGhostCls, inputCls, Label, Result, useAction } from "@/a
 export function HealthControls({ appUrl, enabled }: { appUrl: string; enabled: boolean }) {
   const { pending, result, run } = useAction();
   return (
-    <section className="mt-8 rounded-xl border border-line bg-surface p-6">
+    <section className="mt-8 rounded-2xl border border-line bg-surface p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="font-display text-lg font-semibold">Configuración</h2>
         <div className="flex items-center gap-3">
