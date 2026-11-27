@@ -25,6 +25,37 @@ function status(p: PersonRow) {
   return { label: "Activo", cls: "bg-ok/15 text-ok" };
 }
 
+// Avance del alumno en sus programas
+function Progress({ p }: { p: PersonRow }) {
+  if (!p.progress) return <span className="text-muted">—</span>;
+  const { pct, completed, total } = p.progress;
+  return (
+    <span className="flex items-center gap-2" title={`${completed} de ${total} capítulos`}>
+      <span className="h-1.5 w-20 overflow-hidden rounded-full bg-line" aria-hidden>
+        <span className={`block h-full rounded-full ${pct >= 100 ? "bg-ok" : "bg-opulent"}`} style={{ width: `${pct}%` }} />
+      </span>
+      <span className="font-display font-semibold tabular-nums">{pct} %</span>
+    </span>
+  );
+}
+
+// Reporte: ✓ listo · ⌛ en proceso del programa · ✗ no comenzó
+const REPORT = {
+  reporte: { icon: "✓", label: "Reporte generado", cls: "bg-ok/15 text-ok" },
+  en_proceso: { icon: "⌛", label: "En proceso del programa", cls: "bg-[#c98a1b]/15 text-[#7a5310]" },
+  sin_comenzar: { icon: "✗", label: "No comenzó el programa", cls: "bg-[#e5487a]/12 text-[#c2185b]" },
+} as const;
+
+function ReportStatus({ p }: { p: PersonRow }) {
+  if (!p.progress) return <span className="text-muted">—</span>;
+  const r = REPORT[p.progress.status];
+  return (
+    <span title={r.label} aria-label={r.label} className={`inline-flex size-7 items-center justify-center rounded-full text-sm font-bold ${r.cls}`}>
+      {r.icon}
+    </span>
+  );
+}
+
 function lastSeen(v: string | null) {
   if (!v) return "—";
   return new Date(v).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "2-digit" });
@@ -35,13 +66,15 @@ export function PeopleTable({ orgId, rows, classes, modules }: { orgId: string; 
   if (!rows.length) return <p className="rounded-xl border border-line bg-surface p-5 text-muted">No hay personas con ese filtro.</p>;
   return (
     <div className="overflow-x-auto rounded-xl border border-line bg-surface">
-      <table className="w-full min-w-[820px] border-collapse text-sm">
+      <table className="w-full min-w-[980px] border-collapse text-sm">
         <thead className="text-left text-xs text-muted">
           <tr>
             <th className="border-b border-line px-4 py-3 font-semibold">Persona</th>
             <th className="border-b border-line px-4 py-3 font-semibold">Tipo</th>
             <th className="border-b border-line px-4 py-3 font-semibold">Clase</th>
             <th className="border-b border-line px-4 py-3 font-semibold">Estado</th>
+            <th className="border-b border-line px-4 py-3 font-semibold">Avance</th>
+            <th className="border-b border-line px-4 py-3 font-semibold">Reporte</th>
             <th className="border-b border-line px-4 py-3 font-semibold">Última conexión</th>
             <th className="border-b border-line px-4 py-3" />
           </tr>
@@ -64,6 +97,12 @@ export function PeopleTable({ orgId, rows, classes, modules }: { orgId: string; 
                   <td className="border-b border-line/60 px-4 py-3">
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${s.cls}`}>{s.label}</span>
                   </td>
+                  <td className="border-b border-line/60 px-4 py-3">
+                    <Progress p={p} />
+                  </td>
+                  <td className="border-b border-line/60 px-4 py-3">
+                    <ReportStatus p={p} />
+                  </td>
                   <td className="border-b border-line/60 px-4 py-3 text-muted">{lastSeen(p.last_seen)}</td>
                   <td className="border-b border-line/60 px-4 py-3 text-right">
                     <button className={btnGhostCls} aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : p.person_id)}>
@@ -73,7 +112,7 @@ export function PeopleTable({ orgId, rows, classes, modules }: { orgId: string; 
                 </tr>
                 {isOpen ? (
                   <tr>
-                    <td colSpan={6} className="border-b border-line bg-oat/40 px-4 py-4">
+                    <td colSpan={8} className="border-b border-line bg-oat/40 px-4 py-4">
                       <PersonActions orgId={orgId} p={p} classes={classes} modules={modules} />
                     </td>
                   </tr>

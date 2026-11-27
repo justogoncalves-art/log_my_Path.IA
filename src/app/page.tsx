@@ -8,6 +8,8 @@ import { getDict } from "@/lib/i18n";
 export default async function HomePage() {
   const [me, { t, lang }] = await Promise.all([getMe(), getDict()]);
   if (me.mustChangePassword) redirect("/cambiar-contrasena");
+  // El admin de My Path sin organización propia trabaja en el panel
+  if (me.isAdmin && !me.organizationId) redirect("/admin");
 
   const modules = me.organizationId ? await getMyModules(me.organizationId) : [];
   const isStudent = me.role === "alumno";
