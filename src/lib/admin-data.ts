@@ -115,6 +115,8 @@ export type PersonRow = {
   last_seen: string | null;
   modules: string[];
   total: number;
+  // Solo alumnos: avance en sus programas y estado del reporte
+  progress?: { completed: number; total: number; pct: number; status: "reporte" | "en_proceso" | "sin_comenzar" };
 };
 
 export async function listPeople(
@@ -133,6 +135,15 @@ export async function listPeople(
     p_offset: (f.page - 1) * pageSize,
   });
   const rows = (data ?? []) as PersonRow[];
+  const students = rows.filter((r) => r.role === "alumno").map((r) => r.person_id);
+  if (students.length) {
+    const { data: prog } = await supabase.rpc("admin_people_progress", { p_org: orgId, p_people: students });
+    const map = new Map(((prog ?? []) as ({ person_id: string } & NonNullable<PersonRow["progress"]>)[]).map((x) => [x.person_id, x]));
+    for (const r of rows) {
+      const x = map.get(r.person_id);
+      if (r.role === "alumno") r.progress = x ? { completed: x.completed, total: x.total, pct: x.pct, status: x.status } : { completed: 0, total: 0, pct: 0, status: "sin_comenzar" };
+    }
+  }
   return { rows, total: rows[0]?.total ?? 0 };
 }
 
