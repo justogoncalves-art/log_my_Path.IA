@@ -79,33 +79,38 @@ export function StudentsTable({ lang, rows, hrefBase, hrefQuery, now }: { lang: 
               return (
                 <tr key={r.id} className="hover:bg-oat/50">
                   <td className="border-b border-line/60 px-4 py-3">
-                    <Link href={`${hrefBase}/${r.id}${hrefQuery}`} className="font-semibold hover:underline">
+                    <Link href={`${hrefBase}/${r.id}${hrefQuery}`} className="flex items-center gap-3 font-semibold hover:text-opulent">
+                      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-opulent/10 font-display text-xs font-bold text-opulent">{initials(r.name)}</span>
                       {r.name}
                     </Link>
                   </td>
                   <td className="border-b border-line/60 px-4 py-3">
                     <div className="flex items-center gap-2">
                       <span className="h-1.5 w-24 overflow-hidden rounded-full bg-line" aria-hidden>
-                        <span className="block h-full rounded-full bg-celeste" style={{ width: `${pct}%` }} />
+                        <span className={`block h-full rounded-full ${pct >= 100 ? "bg-ok" : "bg-opulent"}`} style={{ width: `${pct}%` }} />
                       </span>
+                      <span className="font-display text-sm font-semibold tabular-nums">{pct} %</span>
                       <span className="text-xs text-muted">
-                        {r.completed}/{r.total}
+                        ({r.completed}/{r.total})
                       </span>
                     </div>
                   </td>
                   <td className="border-b border-line/60 px-4 py-3 text-muted">{r.finished ? s.finished : r.nextPosition ? `${r.nextPosition}. ${r.nextTitle}` : "—"}</td>
                   <td className="border-b border-line/60 px-4 py-3">
-                    {r.lastSeenLabel}
-                    <span className="block text-xs text-muted">{s.days30(r.days30, r.minutes30)}</span>
+                    <span className="flex items-center gap-2">
+                      <span className={`size-2 shrink-0 rounded-full ${seenTone(r.lastSeen, now)}`} aria-hidden />
+                      {r.lastSeenLabel}
+                    </span>
+                    <span className="block pl-4 text-xs text-muted">{s.days30(r.days30, r.minutes30)}</span>
                   </td>
                   <td className="border-b border-line/60 px-4 py-3">{s.minutes(r.minutes)}</td>
                   <td className="border-b border-line/60 px-4 py-3">
                     {r.report === "listo" ? (
-                      <span className="rounded-full bg-ok/15 px-2.5 py-0.5 text-xs font-semibold text-ok">{s.reportReady}</span>
-                    ) : r.finished ? (
-                      <span className="rounded-full bg-celeste/15 px-2.5 py-0.5 text-xs font-semibold text-opulent">{s.reportPending}</span>
+                      <Badge icon="✓" label={s.reportReady} cls="bg-ok/15 text-ok" />
+                    ) : r.completed > 0 ? (
+                      <Badge icon="⌛" label={r.finished ? s.reportPending : s.filterInProgress} cls="bg-[#c98a1b]/15 text-[#7a5310]" />
                     ) : (
-                      <span className="text-muted">{s.reportNone}</span>
+                      <Badge icon="✗" label={s.filterNotStarted} cls="bg-[#e5487a]/12 text-[#c2185b]" />
                     )}
                   </td>
                   <td className="border-b border-line/60 px-4 py-3 text-right">
@@ -120,5 +125,27 @@ export function StudentsTable({ lang, rows, hrefBase, hrefQuery, now }: { lang: 
         </table>
       </div>
     </div>
+  );
+}
+
+// Iniciales: "Pérez, Ana" → "AP"
+function initials(name: string) {
+  const [last = "", first = ""] = name.split(",").map((x) => x.trim());
+  return `${first.slice(0, 1)}${last.slice(0, 1)}`.toUpperCase();
+}
+
+// Verde: entró en los últimos 2 días · ámbar: en la semana · gris: hace más (o nunca)
+function seenTone(iso: string | null, now: number) {
+  if (!iso) return "bg-line";
+  const d = now - new Date(iso).getTime();
+  return d < 2 * 86400000 ? "bg-ok" : d < 7 * 86400000 ? "bg-[#c98a1b]" : "bg-muted/40";
+}
+
+function Badge({ icon, label, cls }: { icon: string; label: string; cls: string }) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${cls}`}>
+      <span aria-hidden>{icon}</span>
+      {label}
+    </span>
   );
 }

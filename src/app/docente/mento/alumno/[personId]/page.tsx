@@ -37,6 +37,7 @@ export default async function StaffStudentPage({ params, searchParams }: {
   const back = `/docente/mento?clase=${klass.class_id}&programa=${program.id}`;
   const name = `${student.first_name} ${student.last_name}`;
   const now = nowMs();
+  const pct = student.total ? Math.round((student.completed / student.total) * 100) : 0;
   const dateFmt = new Intl.DateTimeFormat(lang, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
   return (
@@ -48,9 +49,26 @@ export default async function StaffStudentPage({ params, searchParams }: {
         </Link>
         <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
           <section className="rounded-2xl border border-line bg-surface p-6 md:p-8">
-            <p className="eyebrow">{s.studentFile}</p>
-            <h1 className="mt-2 font-display text-3xl font-bold">{name}</h1>
-            <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-full bg-opulent font-display text-lg font-bold text-white">
+                {student.first_name.slice(0, 1)}
+                {student.last_name.slice(0, 1)}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="eyebrow">{s.studentFile}</p>
+                <h1 className="mt-1 font-display text-3xl font-bold">{name}</h1>
+              </div>
+              <div className="text-right">
+                <p className="font-display text-3xl font-bold tabular-nums">{pct} %</p>
+                <p className="text-xs text-muted">
+                  {student.completed}/{student.total} · {programName(program.title, program.language)}
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-line" aria-hidden>
+              <div className={`h-full rounded-full ${pct >= 100 ? "bg-ok" : "bg-opulent"}`} style={{ width: `${pct}%` }} />
+            </div>
+            <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
               <Info label={s.age} value={age !== null ? s.years(age) : "—"} />
               <Info label={s.email} value={student.email} />
               <Info label={s.colLastSeen} value={student.last_seen ? dateFmt.format(new Date(student.last_seen)) : s.never} />
@@ -63,7 +81,7 @@ export default async function StaffStudentPage({ params, searchParams }: {
               {chapters.map((c) => {
                 const done = c.status === "completed";
                 return (
-                  <li key={c.chapter_position} className="rounded-xl border border-line p-4">
+                  <li key={c.chapter_position} className={`rounded-xl border p-4 ${done ? "border-ok/30 bg-ok/5" : c.status === "pendiente" ? "border-line" : "border-celeste/40 bg-celeste/5"}`}>
                     <div className="flex items-center justify-between gap-3">
                       <span className="font-mono text-xs text-muted">{s.chapterOf(c.chapter_position, chapters.length)}</span>
                       <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${done ? "bg-ok/10 text-ok" : c.status === "pendiente" ? "bg-line text-muted" : "bg-celeste/15 text-opulent"}`}>
@@ -106,7 +124,7 @@ export default async function StaffStudentPage({ params, searchParams }: {
 
 function Info({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0">
+    <div className="min-w-0 rounded-xl bg-oat/60 px-4 py-3">
       <dt className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</dt>
       <dd className="mt-1 break-words">{value}</dd>
     </div>
